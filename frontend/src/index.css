@@ -1,0 +1,293 @@
+@tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  @layer base {
+    :root {
+      --background: 0 0% 100%;
+      --foreground: 222.2 84% 4.9%;
+
+      --card: 0 0% 100%;
+      --card-foreground: 222.2 84% 4.9%;
+
+      --popover: 0 0% 100%;
+      --popover-foreground: 222.2 84% 4.9%;
+
+      --primary: 222.2 47.4% 11.2%;
+      --primary-foreground: 210 40% 98%;
+
+      --secondary: 210 40% 96.1%;
+      --secondary-foreground: 222.2 47.4% 11.2%;
+
+      --muted: 210 40% 96.1%;
+      --muted-foreground: 215.4 16.3% 46.9%;
+
+      --accent: 210 40% 96.1%;
+      --accent-foreground: 222.2 47.4% 11.2%;
+
+      --destructive: 0 84.2% 60.2%;
+      --destructive-foreground: 210 40% 98%;
+
+      --border: 214.3 31.8% 91.4%;
+      --input: 214.3 31.8% 91.4%;
+      --ring: 222.2 84% 4.9%;
+
+      --radius: 0.5rem;
+    }
+
+    .dark {
+      --background: 222.2 84% 4.9%;
+      --foreground: 210 40% 98%;
+
+      --card: 222.2 84% 4.9%;
+      --card-foreground: 210 40% 98%;
+
+      --popover: 222.2 84% 4.9%;
+      --popover-foreground: 210 40% 98%;
+
+      --primary: 210 40% 98%;
+      --primary-foreground: 222.2 47.4% 11.2%;
+
+      --secondary: 217.2 32.6% 17.5%;
+      --secondary-foreground: 210 40% 98%;
+
+      --muted: 217.2 32.6% 17.5%;
+      --muted-foreground: 215 20.2% 65.1%;
+
+      --accent: 217.2 32.6% 17.5%;
+      --accent-foreground: 210 40% 98%;
+
+      --destructive: 0 62.8% 30.6%;
+      --destructive-foreground: 210 40% 98%;
+
+      --border: 217.2 32.6% 17.5%;
+      --input: 217.2 32.6% 17.5%;
+      --ring: 212.7 26.8% 83.9%;
+    }
+  }
+
+  @layer base {
+    * {
+      @apply border-border;
+    }
+    body {
+      @apply bg-background text-foreground;
+    }
+  }
+
+
+/* Correct, production-safe font loading */
+@font-face {
+  font-family: 'Vayu Bold';
+  src: url('/assets/fonts/VayuSans-Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'HeadNew';
+  src: url('/assets/fonts/SequelSansBoldHead.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+* {
+  box-sizing: border-box;
+  /* background: black; */
+}
+
+/* animations */
+@keyframes moveUpDown1 {
+  0% {
+      transform: translateY(0);
+  }
+  50% {
+      transform: translateY(-20px);
+  }
+  100% {
+      transform: translateY(0);
+  }
+} 
+@keyframes moveUpDown2 {
+  0% {
+      transform: translateY(0);
+  }
+  50% {
+      transform: translateY(-28px);
+  }
+  100% {
+      transform: translateY(0);
+  }
+} 
+
+
+html { scroll-behavior: smooth; }
+
+/* Global Smooth Transitions */
+* {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable transitions for transform and opacity to allow faster custom animations */
+*[class*="animate-"] {
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*::selection {
+  background-color: #373738;
+  color: #ffffff;
+}
+
+body::-webkit-scrollbar {
+  display: block;
+  width: 16px;
+  background: #2C2C2C;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(167, 167, 167);
+  border-radius: 60px;
+  background-clip: content-box;
+  border: solid 3.7px transparent;
+}
+
+body::-webkit-scrollbar-button:single-button {
+  background-color: #3f3a3a;
+  display: block;
+  border-style: solid black;
+  height: 13px;
+  width: 16px;
+}
+
+/* in herosection */
+.samplecard1{
+  animation: moveUpDown1 4s ease-in-out infinite;
+}
+.samplecard2{
+  animation: moveUpDown2 4s ease-in-out infinite;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #6FEE8D, #17C964);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.gradient-text-purple {
+  background: linear-gradient(90deg, #ffffff, #AE48FF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+
+.glass {
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 15px;
+  backdrop-filter: blur(10px); 
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); 
+  border: 0.001px solid rgba(255, 255, 255, 0.032); 
+  font-size: 1.5rem;
+  width: 95vw;
+
+  margin-left: 1vw;
+  padding-left: 6vw;
+  
+}
+.glass-sm {
+  background: rgba(255, 255, 255, 0.1); 
+  border-radius: 15px;
+  backdrop-filter: blur(10px); 
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border: 0.01px solid rgba(255, 255, 255, 0.032);
+  padding: 2px;   
+}
+
+
+.green-glow-card{
+  box-shadow: 0 0 3px rgba(0, 255, 0, 0.5), 
+    0 0 29px rgba(0, 255, 0, 0.4), 
+    0 0 45px rgba(0, 255, 0, 0.3);
+}
+
+.nav-border {
+  border-top: solid 0.4px;
+  border-color: #ffffff34;
+  box-shadow: 6px 20px 80px rgba(0, 0, 0, 0.2);
+}
+
+
+.gradient-border {
+  position: relative;
+  
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 8px; 
+  background: linear-gradient(90deg, #00f, #f00, #ff8c00, #ff1493, #800080);
+  z-index: 0;
+  filter: blur(5px); 
+}
+.popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 25px;
+  background: rgba(40, 39, 39, 0.9);
+  border-radius: 15px;
+  color: white;
+  font-weight: 500;
+  animation: slideIn 0.5s ease-out forwards, fadeOut 0.5s ease-out 4s forwards;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.popup.visible {
+  opacity: 1; 
+  visibility: visible; 
+  transition: opacity 1s ease-in-out, visibility 0s 0s; 
+}
+
+.popup.hidden {
+  opacity: 0; 
+  visibility: hidden; 
+  transition: opacity 1s ease-in-out, visibility 0s 1s;
+}
+
+.superLoginBg {
+  background: url('./assets/superuser-dashboard/abstract-dark-purple-4k-uz.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+}

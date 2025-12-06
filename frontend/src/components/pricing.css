@@ -1,0 +1,211 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+}
+
+/* Header Styles */
+header {
+    width: 100%;
+    background-color: #000;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.contact {
+    font-size: 28px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+/* Pricing Container */
+.pricing_container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f4f4f9;
+    padding-top: 100px;
+    /* Space for the header */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Pricing Card Section */
+.pricing_card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin-top: 40px;
+    padding: 0 15px;
+}
+
+.pricing_card-wrapper {
+    width: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Pricing Card */
+.pricing_card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pricing_card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.15);
+}
+
+.pricing_text-overlay {
+    padding: 30px;
+    text-align: center;
+}
+
+.pricing_card .pricing_text-overlay h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    /* Dark color for the plan type */
+    margin-bottom: 10px;
+}
+
+.pricing_price {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #9764b1;
+    /* Blue color */
+    margin-bottom: 20px;
+}
+
+.pricing_details-text {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.pricing_details-text span {
+    display: block;
+    margin: 8px 0;
+    color: #777;
+}
+
+/* Pricing Purchase Button Container */
+.pricing_purchase-button-container {
+    padding: 20px;
+    background-color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.pricing_purchase-button-container.dark_container {
+    background-color: #000;
+}
+
+.pricing_back-h2 {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #411658;
+    margin-bottom: 10px;
+}
+
+.pricing_purchase-button-container .fa-solid {
+    font-size: 50px;
+    color: #34194b;
+    /* Blue color */
+    margin-bottom: 20px;
+}
+
+.pricing_purchase-button {
+    background-color: #411658;
+    /* Blue color */
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.pricing_purchase-button:hover {
+    background-color: #0056b3;
+    /* Darker blue */
+    transform: translateY(-2px);
+}
+
+.pricing_purchase-button:active {
+    transform: translateY(2px);
+}
+
+/* Light Theme Pricing Card */
+.pricing_card.light {
+    background-color: #fff;
+}
+
+.pricing_card.light .pricing_purchase-button {
+    background-color: #411658;
+    /* Blue color */
+}
+
+.pricing_card.light .pricing_purchase-button:hover {
+    background-color: #0056b3;
+    /* Darker blue */
+}
+
+.pricing_card.light .pricing_text-overlay h2 {
+    color: #333;
+    /* Dark text color for visibility on light background */
+}
+
+.pricing_card.light .pricing_details-text span {
+    color: #555;
+    /* Darker text color for better visibility */
+}
+
+/* Dark Theme Pricing Card */
+.pricing_card.dark {
+    background-color: #000;
+    color: #fff;
+}
+
+.pricing_card.dark .pricing_purchase-button {
+    background-color: #411658;
+    /* Blue color */
+}
+
+.pricing_card.dark .pricing_purchase-button:hover {
+    background-color: #0056b3;
+    /* Darker blue */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .pricing_card-container {
+        grid-template-columns: 1fr;
+        padding: 0 10px;
+    }
+}

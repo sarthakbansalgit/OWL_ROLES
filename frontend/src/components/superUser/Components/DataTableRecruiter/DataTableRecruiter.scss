@@ -1,0 +1,103 @@
+.data_table {
+  height: 660px;
+  width: 100%;
+
+  .userr {
+    display: flex;
+    align-items: center;
+
+    .userr_image {
+      height: 36px;
+      width: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+  }
+
+  .status {
+    //
+    &.active {
+      color: green;
+    }
+    &.passive {
+      color: #ff74b1;
+    }
+  }
+
+  .actionn {
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
+
+    .view_btn {
+      padding: 5px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      margin-right: 10px;
+      color: #7551f8d2;
+      border: 1px solid #7551f8bd;
+      background: none;
+    }
+
+    .delete_btn {
+      padding: 5px 12px;
+      cursor: pointer;
+      border-radius: 4px;
+      border: none;
+      color: #ff74b0f5;
+      border: 1px solid #ff74b0cb;
+      background: none;
+    }
+  }
+}
+
+
+.data_table {
+  width: 100%;
+  height: 600px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table_heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: left;
+  color: #333;
+}
+
+.userr {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userr_image {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.actionn {
+  display: flex;
+  gap: 10px;
+}
+
+.delete_btn {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.delete_btn:hover {
+  background-color: #cc0000;
+}
