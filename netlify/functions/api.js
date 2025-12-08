@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 const corsOptions = {
-    origin: ['http://localhost:3000', 'http://localhost:5173', process.env.CLIENT_URL || '*'],
+    origin: ['http://localhost:3000', 'http://localhost:5173', 'https://owlrole.netlify.app', process.env.CLIENT_URL || '*'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma']
@@ -61,17 +61,17 @@ app.use((req, res, next) => {
   }
 });
 
-// Routes
-app.use("/api/v1/user", userRoute);
-app.use("/api/v1/company", companyRoute);
-app.use("/api/v1/job", jobRoute);
-app.use("/api/v1/application", applicationRoute);
-app.use("/api/v1/blog", blogRoutes);
-app.use('/api/v1/charts', chartRoutes);
-app.use("/api/v1/b2b/analytics", b2bAnalyticsRoutes);
+// Routes - Note: Netlify strips /api prefix, so routes start from /v1
+app.use("/v1/user", userRoute);
+app.use("/v1/company", companyRoute);
+app.use("/v1/job", jobRoute);
+app.use("/v1/application", applicationRoute);
+app.use("/v1/blog", blogRoutes);
+app.use('/v1/charts', chartRoutes);
+app.use("/v1/b2b/analytics", b2bAnalyticsRoutes);
 
 // Root route
-app.get("/api", (req, res) => {
+app.get("/", (req, res) => {
     res.json({ 
         success: true, 
         message: "OWL ROLES API on Netlify 🦉"
