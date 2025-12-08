@@ -64,3 +64,4 @@ Thumbs.db
 reports/
 test-results.json
 test-results.html
+frontend/.env.production

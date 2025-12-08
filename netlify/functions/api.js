@@ -1,7 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import dotenv from "dotenv";
 import helmet from "helmet"
 import connectDB from "../../backend/utils/db.js";
 import userRoute from "../../backend/routes/user.route.js";
@@ -12,7 +11,7 @@ import applicationRoute from "../../backend/routes/application.route.js";
 import blogRoutes from "../../backend/routes/blog.route.js"
 import b2bAnalyticsRoutes from "../../backend/routes/b2b.route.js";
 
-dotenv.config({ path: '../../.env' });
+// Environment variables are already loaded by Netlify from dashboard
 
 const app = express();
 
