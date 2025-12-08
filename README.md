@@ -333,40 +333,6 @@ npm run test:coverage
 
 This project is licensed under the ISC License - see the LICENSE file for details.
 
-## 👤 Author
-
-**Sarthak Bansal**
-- GitHub: [@sarthakbansalgit](https://github.com/sarthakbansalgit)
-- Email: sarthakbansalgit@gmail.com
-
-## 📞 Support
-
-For support, email contact@owlroles.com or open an issue on GitHub.
-
-## 🔗 Links
-
-- **GitHub Repository:** https://github.com/sarthakbansalgit/OWL_ROLES
-- **Live Demo:** (Coming Soon)
-- **Documentation:** Check docs/ folder for detailed guides
-- **API Docs:** Available at `/api-docs` when running the backend
-
-## 📦 Version
-
-Current Version: **1.0.0**
-
-## 🎯 Future Enhancements
-
-- [ ] Video interview platform integration
-- [ ] AI-powered job recommendations
-- [ ] Skill assessment tests
-- [ ] Video resume support
-- [ ] Mobile app (React Native)
-- [ ] Advanced analytics dashboard
-- [ ] Two-factor authentication
-- [ ] Automated job matching
-
----
-
-**Made with ❤️ by Sarthak Bansal**
+**
 
 *Last Updated: December 2025*
