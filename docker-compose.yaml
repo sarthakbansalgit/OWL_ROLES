@@ -6,8 +6,8 @@ services:
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-dev-password}
     volumes:
       - mongodb_data:/data/db
 
@@ -26,7 +26,7 @@ services:
       - mongodb
       - redis
     environment:
-      - MONGO_URI=mongodb://root:password@mongodb:27017/cubicals?authSource=admin
+      - MONGO_URI=${MONGO_URI}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - PORT=3000

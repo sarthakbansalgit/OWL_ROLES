@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import { jest } from '@jest/globals';
 
-process.env.TEST_MONGO_URI="mongodb+srv://testDB:testDB@cluster0.y9z901n.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+// Use environment variables for test database
+process.env.TEST_MONGO_URI = process.env.TEST_MONGO_URI || 'mongodb://localhost:27017/test';
 
 // Mock Redis
 jest.mock('../utils/cache.js', () => ({
@@ -101,7 +102,7 @@ jest.mock('../models/blog.model.js', () => ({
 
 // Set test environment
 process.env.NODE_ENV = 'test';
-process.env.JWT_SECRET = 'harshtyagisrikarayushabhinav';
+process.env.JWT_SECRET = process.env.JWT_SECRET || 'test-secret-key-for-testing-only';
 
 // Connect to the test database before running tests
 beforeAll(async () => {
