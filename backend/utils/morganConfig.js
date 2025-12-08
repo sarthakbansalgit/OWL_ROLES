@@ -1,6 +1,8 @@
 import path from "path";
 import fs from "fs";
-const { createStream } = await import("rotating-file-stream");
+import rfs from "rotating-file-stream";
+
+const createStream = rfs.createStream;
 
 // Ensure logs directory exists
 const logDirectory = path.join(process.cwd(), "logs");

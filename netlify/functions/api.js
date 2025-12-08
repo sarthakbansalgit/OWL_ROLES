@@ -3,17 +3,16 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet"
-import morgan from "morgan";
-import connectDB from "../backend/utils/db.js";
-import userRoute from "../backend/routes/user.route.js";
-import companyRoute from "../backend/routes/company.route.js";
-import jobRoute from "../backend/routes/job.route.js";
-import chartRoutes from "../backend/routes/chart.route.js";
-import applicationRoute from "../backend/routes/application.route.js";
-import blogRoutes from "../backend/routes/blog.route.js"
-import b2bAnalyticsRoutes from "../backend/routes/b2b.route.js";
+import connectDB from "../../backend/utils/db.js";
+import userRoute from "../../backend/routes/user.route.js";
+import companyRoute from "../../backend/routes/company.route.js";
+import jobRoute from "../../backend/routes/job.route.js";
+import chartRoutes from "../../backend/routes/chart.route.js";
+import applicationRoute from "../../backend/routes/application.route.js";
+import blogRoutes from "../../backend/routes/blog.route.js"
+import b2bAnalyticsRoutes from "../../backend/routes/b2b.route.js";
 
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: '../../.env' });
 
 const app = express();
 
@@ -31,6 +30,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(cookieParser());
+
+// Connect DB
+connectDB();
 
 // Routes
 app.use("/api/v1/user", userRoute);
@@ -58,5 +60,6 @@ app.use((err, req, res, next) => {
     });
 });
 
-// For Netlify Functions
-export default app;
+// Export for Netlify Functions
+export { app as default };
+
