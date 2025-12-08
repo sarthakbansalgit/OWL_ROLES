@@ -28,7 +28,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 const corsOptions = {
-    origin: ['http://localhost:5173', "https://cubicles.netlify.app"],
+    origin: ['http://localhost:5173', "https://cubicles.netlify.app", "https://owl-roles-um59.vercel.app", process.env.CLIENT_URL],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma']
@@ -40,6 +40,17 @@ app.use(morgan("combined", { stream: dualStream }));
 
 const PORT = process.env.PORT || 3000;
 
+// Root route
+app.get("/", (req, res) => {
+    res.json({ 
+        success: true, 
+        message: "OWL ROLES Backend API is running! 🦉",
+        endpoints: {
+            api: "/api/v1",
+            docs: "/api-docs"
+        }
+    });
+});
 
 // api's / Router level middlewares (4)
 app.use("/api/v1/user", userRoute);
