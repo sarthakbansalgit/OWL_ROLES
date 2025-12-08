@@ -1,0 +1,62 @@
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import dotenv from "dotenv";
+import helmet from "helmet"
+import morgan from "morgan";
+import connectDB from "../backend/utils/db.js";
+import userRoute from "../backend/routes/user.route.js";
+import companyRoute from "../backend/routes/company.route.js";
+import jobRoute from "../backend/routes/job.route.js";
+import chartRoutes from "../backend/routes/chart.route.js";
+import applicationRoute from "../backend/routes/application.route.js";
+import blogRoutes from "../backend/routes/blog.route.js"
+import b2bAnalyticsRoutes from "../backend/routes/b2b.route.js";
+
+dotenv.config({ path: '../.env' });
+
+const app = express();
+
+// Middlewares
+app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
+const corsOptions = {
+    origin: ['http://localhost:3000', 'http://localhost:5173', process.env.CLIENT_URL || '*'],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma']
+}
+
+app.use(cors(corsOptions));
+app.use(cookieParser());
+
+// Routes
+app.use("/api/v1/user", userRoute);
+app.use("/api/v1/company", companyRoute);
+app.use("/api/v1/job", jobRoute);
+app.use("/api/v1/application", applicationRoute);
+app.use("/api/v1/blog", blogRoutes);
+app.use('/api/v1/charts', chartRoutes);
+app.use("/api/v1/b2b/analytics", b2bAnalyticsRoutes);
+
+// Root route
+app.get("/api", (req, res) => {
+    res.json({ 
+        success: true, 
+        message: "OWL ROLES API on Netlify 🦉"
+    });
+});
+
+// Error handling
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(err.status || 500).json({
+        success: false,
+        message: err.message || "Internal Server Error",
+    });
+});
+
+// For Netlify Functions
+export default app;
