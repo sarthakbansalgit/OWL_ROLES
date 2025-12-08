@@ -35,10 +35,10 @@ This guide will help you deploy the OWL ROLES Job Portal to production using fre
 1. Click "Add New" → "Project"
 2. Select "OWL_ROLES" repository
 3. Configure project:
-   - **Framework:** Vite
-   - **Root Directory:** `frontend`
-   - **Build Command:** `npm run build`
-   - **Output Directory:** `dist`
+   - **Framework:** Other
+   - **Root Directory:** `./`
+   - **Build Command:** `cd frontend && npm install && npm run build`
+   - **Output Directory:** `frontend/dist`
 
 ### Step 3: Set Environment Variables
 In Vercel dashboard, go to Settings → Environment Variables:
