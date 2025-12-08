@@ -85,8 +85,6 @@ MONGO_URI=<Your MongoDB Atlas Connection String>
 JWT_SECRET=<Generate a strong secret key>
 
 CLOUDINARY_NAME=<Your Cloudinary Name>
-CLOUDINARY_API_KEY=<Your Cloudinary API Key>
-CLOUDINARY_API_SECRET=<Your Cloudinary API Secret>
 
 EMAIL_USER=<Your Email>
 EMAIL_PASSWORD=<Your App Password>
@@ -279,8 +277,6 @@ NODE_ENV=production
 MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/database
 JWT_SECRET=your-super-secret-jwt-key
 CLOUDINARY_NAME=your-cloudinary-name
-CLOUDINARY_API_KEY=your-cloudinary-api-key
-CLOUDINARY_API_SECRET=your-cloudinary-api-secret
 EMAIL_USER=your-email@gmail.com
 EMAIL_PASSWORD=your-app-password
 CLIENT_URL=https://your-vercel-app.vercel.app

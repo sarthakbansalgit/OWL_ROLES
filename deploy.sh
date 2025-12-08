@@ -54,8 +54,6 @@ JWT_SECRET=your_jwt_secret_key_here
 
 # Cloudinary
 CLOUDINARY_NAME=your_cloudinary_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
 
 # Email Service
 EMAIL_USER=your_email@gmail.com
