@@ -1,5 +1,4 @@
-const BACKEND_BASE_URL = `http://localhost:3000`
-// const BACKEND_BASE_URL = `https://motionless-doro-itsaj1005-1b938d2c.koyeb.app`
+const BACKEND_BASE_URL = import.meta.env.VITE_API_URL || `http://localhost:3000`
 
 export const USER_API_END_POINT = `${BACKEND_BASE_URL}/api/v1/user`;
 export const JOB_API_END_POINT = `${BACKEND_BASE_URL}/api/v1/job`;
