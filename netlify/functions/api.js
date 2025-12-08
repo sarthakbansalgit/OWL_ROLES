@@ -30,8 +30,36 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-// Connect DB
-connectDB();
+// Connect DB on startup
+let dbConnected = false;
+
+const initDB = async () => {
+  if (!dbConnected) {
+    try {
+      await connectDB();
+      dbConnected = true;
+      console.log('Database connected for Netlify Functions');
+    } catch (error) {
+      console.error('Failed to connect database:', error);
+    }
+  }
+};
+
+// Initialize database connection
+initDB();
+
+// Add middleware to ensure DB is connected before handling requests
+app.use((req, res, next) => {
+  if (!dbConnected) {
+    console.warn('Database not yet connected, attempting reconnection...');
+    initDB().then(() => next()).catch(err => {
+      console.error('Database connection failed:', err);
+      next();
+    });
+  } else {
+    next();
+  }
+});
 
 // Routes
 app.use("/api/v1/user", userRoute);
