@@ -32,7 +32,7 @@ const Browse = () => {
     
 
     return (
-        <div className='bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 min-h-screen'>
+        <div className='bg-white min-h-screen'>
             <Navbar />
             <div className='max-w-7xl mx-auto my-8 md:my-10 px-4'>
                 <div className='mb-6 md:mb-8'>
@@ -41,7 +41,11 @@ const Browse = () => {
                 </div>
                 {filteredJobs.length === 0 ? (
                     <div className='text-center py-16 md:py-20'>
-                        <p className='text-lg md:text-xl text-gray-500'>No jobs found matching your criteria</p>
+                        <div className='inline-block'>
+                            <div className='text-6xl mb-4'>🔍</div>
+                            <p className='text-lg md:text-xl text-gray-600 font-semibold'>No jobs found matching your criteria</p>
+                            <p className='text-sm text-gray-500 mt-2'>Try adjusting your search terms</p>
+                        </div>
                     </div>
                 ) : (
                     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6'>

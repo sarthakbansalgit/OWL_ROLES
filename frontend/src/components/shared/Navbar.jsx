@@ -32,7 +32,7 @@ const Navbar = () => {
     };
 
     return (
-        <nav className='bg-white shadow-md sticky top-0 z-50'>
+        <nav className='bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200'>
             {/* Top Banner - responsive */}
             {user && user.role === 'recruiter' ? (
                 <div className='flex gap-2 justify-center items-center py-2 md:py-3 bg-gradient-to-r from-blue-100 to-blue-100 border-b border-blue-200 px-4 flex-wrap'>
@@ -158,10 +158,10 @@ const Navbar = () => {
 
                                         <button 
                                             onClick={logoutHandler}
-                                            className="w-full flex items-center text-gray-900 gap-3 p-3 rounded-lg hover:bg-red-50 transition-colors"
+                                            className="w-full flex items-center text-white bg-black hover:bg-gray-900 gap-3 p-3 rounded-lg transition-all font-medium"
                                         >
-                                            <LogOut className="w-5 h-5 text-red-600" />
-                                            <span className="text-sm font-medium">Logout</span>
+                                            <LogOut className="w-5 h-5" />
+                                            <span className="text-sm">Logout</span>
                                         </button>
                                     </div>
                                 </div>
@@ -211,7 +211,7 @@ const Navbar = () => {
                                         {user?.role === 'recruiter' && <Link to="/admin/companies" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Companies</Link>}
                                         {user?.role === 'recruiter' && <Link to="/admin/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Jobs</Link>}
                                         {user?.role === 'student' && <Link to="/profile" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Profile</Link>}
-                                        <button onClick={logoutHandler} className="w-full p-2 text-gray-700 hover:bg-red-50 rounded text-sm text-left">Logout</button>
+                                        <button onClick={logoutHandler} className="w-full p-2 text-white bg-black hover:bg-gray-900 rounded text-sm font-medium">Logout</button>
                                     </div>
                                 </div>
                             </PopoverContent>
