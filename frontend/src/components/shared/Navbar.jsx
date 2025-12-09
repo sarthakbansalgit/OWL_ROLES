@@ -97,7 +97,6 @@ const Navbar = () => {
                         ) : (
                             <>
                                 <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/">Home</Link></li>
-                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/jobs">Jobs</Link></li>
                                 <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/browse">Browse</Link></li>
                                 <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><DropDown/></li>
                             </>
@@ -206,7 +205,6 @@ const Navbar = () => {
                                     <div className="border-t border-gray-200" />
                                     <div className="space-y-2">
                                         <Link to="/" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Home</Link>
-                                        {user?.role !== 'recruiter' && <Link to="/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Jobs</Link>}
                                         {user?.role !== 'recruiter' && <Link to="/browse" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Browse</Link>}
                                         {user?.role === 'recruiter' && <Link to="/admin/companies" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Companies</Link>}
                                         {user?.role === 'recruiter' && <Link to="/admin/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Jobs</Link>}

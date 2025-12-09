@@ -80,7 +80,8 @@ const FunctionalJobs = () => {
         setLoading(true);
         try {
             const config = {
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
             };
             const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/application/apply`;
 
@@ -275,7 +276,7 @@ const FunctionalJobs = () => {
                                                 <div className="flex justify-between items-start mb-3">
                                                     <div className="flex-1">
                                                         <h3 className="font-bold text-gray-900">{job.title}</h3>
-                                                        <p className="text-gray-600 text-sm">{job.company}</p>
+                                                        <p className="text-gray-600 text-sm">{typeof job.company === 'string' ? job.company : typeof job.company === 'object' && job.company?.name ? job.company.name : 'Company'}</p>
                                                     </div>
                                                     <div className="text-right">
                                                         <div className="text-2xl font-bold text-blue-600">{matchScore}%</div>
@@ -300,7 +301,7 @@ const FunctionalJobs = () => {
                                                     <div className="flex gap-2">
                                                         {job.required_skills?.slice(0, 2).map((skill, idx) => (
                                                             <span key={idx} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                                                                {skill}
+                                                                {typeof skill === 'string' ? skill : typeof skill === 'object' && skill?.name ? skill.name : String(skill)}
                                                             </span>
                                                         ))}
                                                     </div>

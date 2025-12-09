@@ -7,11 +7,11 @@ export default function DropDown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <MenuButton className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:text-blue-300 transition-colors">
+        <MenuButton className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors">
           More
           <ChevronDownIcon 
             aria-hidden="true" 
-            className="w-4 h-4 text-blue-300 mt-0.5 transition-transform ui-open:rotate-180" 
+            className="w-4 h-4 text-gray-600 mt-0.5 transition-transform ui-open:rotate-180" 
           />
         </MenuButton>
       </div>

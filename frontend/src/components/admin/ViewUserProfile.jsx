@@ -86,7 +86,7 @@ const ViewUserProfile = () => {
                     <div className='flex items-center gap-1'>
                         {
                             user?.profile?.skills && user?.profile?.skills.length !== 0 
-                                ? user?.profile?.skills.map((item, index) => <Badge key={index}>{item}</Badge>) 
+                                ? user?.profile?.skills.map((item, index) => <Badge key={index}>{typeof item === 'string' ? item : typeof item === 'object' && item?.name ? item.name : String(item)}</Badge>) 
                                 : <span>NA</span>
                         }
                     </div>

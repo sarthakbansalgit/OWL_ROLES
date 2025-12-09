@@ -32,7 +32,7 @@ const EditableProfile = () => {
         researchAreas: user?.profile?.researchAreas || [],
         experience: user?.profile?.experience || [],
         coursesTaught: user?.profile?.coursesTaught || [],
-        applications: user?.profile?.applications || []
+        publications: user?.profile?.publications || []
     });
 
     useEffect(() => {
@@ -96,12 +96,31 @@ const EditableProfile = () => {
 
     const handleSaveProfile = async () => {
         try {
+            // Only send fields that have been modified (not empty)
+            const dataToSend = {};
+            if (editData.fullname) dataToSend.fullname = editData.fullname;
+            if (editData.email) dataToSend.email = editData.email;
+            if (editData.phoneNumber) dataToSend.phoneNumber = editData.phoneNumber;
+            if (editData.bio) dataToSend.bio = editData.bio;
+            if (editData.location) dataToSend.location = editData.location;
+            if (editData.qualifications?.length > 0) dataToSend.qualifications = editData.qualifications;
+            if (editData.researchAreas?.length > 0) dataToSend.researchAreas = editData.researchAreas;
+            if (editData.experience?.length > 0) dataToSend.experience = editData.experience;
+            if (editData.coursesTaught?.length > 0) dataToSend.coursesTaught = editData.coursesTaught;
+            if (editData.publications?.length > 0) dataToSend.publications = editData.publications;
+
+            if (Object.keys(dataToSend).length === 0) {
+                alert('Please make some changes before saving');
+                return;
+            }
+
             const config = {
-                headers: { 'Content-Type': 'application/json' }
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
             };
             const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
             
-            const response = await axios.put(apiUrl, editData, config);
+            const response = await axios.put(apiUrl, dataToSend, config);
 
             if (response.data.success) {
                 dispatch(setUser(response.data.user));
@@ -109,8 +128,8 @@ const EditableProfile = () => {
                 alert('Profile updated successfully!');
             }
         } catch (error) {
-            console.error('Error updating profile:', error);
-            alert('Failed to update profile');
+            console.error('Error updating profile:', error.response?.data || error.message);
+            alert(error.response?.data?.message || 'Failed to update profile');
         }
     };
 

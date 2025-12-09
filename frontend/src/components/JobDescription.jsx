@@ -163,7 +163,7 @@ const JobDescription = () => {
                             {(Array.isArray(singleJob.requirements) ? singleJob.requirements : singleJob.requirements.split(',')).map((req, idx) => (
                                 <li key={idx} className="text-gray-700 flex items-center gap-3 text-sm md:text-base lg:text-lg">
                                     <span className='text-blue-600 font-bold'>•</span>
-                                    {req.trim()}
+                                    {typeof req === 'string' ? req.trim() : typeof req === 'object' && req?.name ? req.name : JSON.stringify(req)}
                                 </li>
                             ))}
                         </ul>

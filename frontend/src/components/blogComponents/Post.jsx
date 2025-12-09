@@ -14,7 +14,7 @@ const Post = ({ _id, title, content, author, createdAt, image, tags }) => {
   
   const truncatedContent = content ? content.substring(0, 150) + (content.length > 150 ? '...' : '') : '';
   
-  const formattedTags = tags?.map(tag => `#${tag}`).join(' ') || '';
+  const formattedTags = tags?.map(tag => `#${typeof tag === 'string' ? tag : typeof tag === 'object' && tag?.name ? tag.name : String(tag)}`).join(' ') || '';
 
   const fallbackImage = "./src/assets/blog_default.webp";
 

@@ -72,7 +72,11 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT,()=>{
+app.listen(PORT, '0.0.0.0', ()=>{
     connectDB();
-    console.log(`Server running at port ${PORT}`);
+    console.log(`\n${'='.repeat(50)}`);
+    console.log(`✓ Server running at http://172.20.10.2:${PORT}`);
+    console.log(`✓ Or access locally: http://localhost:${PORT}`);
+    console.log(`✓ API Docs: http://172.20.10.2:${PORT}/api-docs`);
+    console.log(`${'='.repeat(50)}\n`);
 });

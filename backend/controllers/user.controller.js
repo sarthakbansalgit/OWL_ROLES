@@ -135,66 +135,144 @@ class UserController {
     // Update user profile
     async updateProfile(req, res, next) {
         try {
-            const { 
-                fullname, 
-                email, 
-                phoneNumber, 
-                bio, 
-                skills,
-                location,
-                qualifications,
-                researchAreas,
-                experience,
-                coursesTaught
-            } = req.body;
-            const file = req.file;
-            let cloudResponse;
             const userId = req.id;
+            const file = req.file;
+            
+            console.log("\n====== UPDATE PROFILE DEBUG ======");
+            console.log("User ID:", userId);
+            console.log("Request body keys:", Object.keys(req.body));
+            console.log("Full request body:", req.body);
+            console.log("File:", file ? file.filename : "No file");
 
-            const user = await User.findById(userId);
+            if (!userId) {
+                console.error("No user ID in request");
+                return res.status(400).json({ message: "User not authenticated.", success: false });
+            }
+
+            const user = await User.findById(userId).lean().exec();
             if (!user) {
+                console.error("User not found in DB");
                 return res.status(400).json({ message: "User not found.", success: false });
             }
 
-            // Update user data
-            if (fullname) user.fullname = fullname;
-            if (email) user.email = email;
-            if (phoneNumber) user.phoneNumber = phoneNumber;
-            if (bio) user.profile.bio = bio;
-            if (location) user.profile.location = location;
-            if (skills) user.profile.skills = skills.split(",");
-            if (qualifications) user.profile.qualifications = JSON.parse(qualifications);
-            if (researchAreas) user.profile.researchAreas = JSON.parse(researchAreas);
-            if (experience) user.profile.experience = JSON.parse(experience);
-            if (coursesTaught) user.profile.coursesTaught = JSON.parse(coursesTaught);
+            console.log("Current user fullname:", user.fullname);
 
-            if (file) {
-                // console.log("Resume upload triggered after getting file")
-                const fileUri = getDataUri(file);
-                const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
-                    public_id: `resume_${Date.now()}`,
-                  });
-                  const baseUrl = `https://res.cloudinary.com/${cloudinary.config().cloud_name}`;
-                  const pdfUrl = `${baseUrl}/image/upload/f_auto,q_auto/${cloudResponse.public_id}.pdf`;
-                
-                user.profile.resume = pdfUrl;
+            // Use findByIdAndUpdate for more reliable updates
+            const updateData = {};
 
-                user.profile.resumeOriginalName = file.originalname; // Save original file name
-                // console.log("File uploaded in resume")
-                // console.log(cloudResponse);
-            }else {
-                console.log("File not received from request of frontend")
+            // Add top-level fields
+            if (req.body.fullname?.trim()) updateData.fullname = req.body.fullname.trim();
+            if (req.body.email?.trim()) updateData.email = req.body.email.trim();
+            if (req.body.phoneNumber?.trim()) updateData.phoneNumber = req.body.phoneNumber.trim();
+
+            // Add profile fields
+            const profileUpdates = {};
+            if (req.body.bio?.trim()) profileUpdates.bio = req.body.bio.trim();
+            if (req.body.location?.trim()) profileUpdates.location = req.body.location.trim();
+            
+            if (req.body.skills) {
+                profileUpdates.skills = typeof req.body.skills === 'string' 
+                    ? req.body.skills.split(",").map(s => s.trim()) 
+                    : req.body.skills;
+            }
+            
+            if (req.body.qualifications?.length > 0) {
+                profileUpdates.qualifications = typeof req.body.qualifications === 'string' 
+                    ? JSON.parse(req.body.qualifications) 
+                    : req.body.qualifications;
+            }
+            
+            if (req.body.researchAreas?.length > 0) {
+                profileUpdates.researchAreas = typeof req.body.researchAreas === 'string' 
+                    ? JSON.parse(req.body.researchAreas) 
+                    : req.body.researchAreas;
+            }
+            
+            if (req.body.experience?.length > 0) {
+                profileUpdates.experience = typeof req.body.experience === 'string' 
+                    ? JSON.parse(req.body.experience) 
+                    : req.body.experience;
+            }
+            
+            if (req.body.coursesTaught?.length > 0) {
+                profileUpdates.coursesTaught = typeof req.body.coursesTaught === 'string' 
+                    ? JSON.parse(req.body.coursesTaught) 
+                    : req.body.coursesTaught;
+            }
+            
+            if (req.body.publications?.length > 0) {
+                profileUpdates.publications = typeof req.body.publications === 'string' 
+                    ? JSON.parse(req.body.publications) 
+                    : req.body.publications;
             }
 
-            await user.save();
+            // Handle file upload
+            if (file) {
+                try {
+                    const fileUri = getDataUri(file);
+                    const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+                        public_id: `resume_${Date.now()}`,
+                    });
+                    
+                    if (file.mimetype === 'application/pdf') {
+                        const baseUrl = `https://res.cloudinary.com/${cloudinary.config().cloud_name}`;
+                        const pdfUrl = `${baseUrl}/image/upload/f_auto,q_auto/${cloudResponse.public_id}.pdf`;
+                        profileUpdates.resume = pdfUrl;
+                        profileUpdates.resumeOriginalName = file.originalname;
+                        console.log("File uploaded as resume");
+                    } else if (file.mimetype.startsWith('image/')) {
+                        profileUpdates.profilePhoto = cloudResponse.secure_url;
+                        console.log("File uploaded as profile photo");
+                    }
+                } catch (fileError) {
+                    console.error("File upload error:", fileError.message);
+                    return res.status(400).json({ message: "File upload failed.", success: false });
+                }
+            }
+
+            // Merge profile updates into main update data
+            if (Object.keys(profileUpdates).length > 0) {
+                updateData.profile = profileUpdates;
+            }
+
+            console.log("Update data to apply:", updateData);
+
+            if (Object.keys(updateData).length === 0) {
+                console.warn("No updates to apply");
+                return res.status(400).json({ message: "No changes to update.", success: false });
+            }
+
+            // Update and return the new document
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                updateData,
+                { new: true, runValidators: false }
+            );
+
+            if (!updatedUser) {
+                console.error("Failed to update user");
+                return res.status(400).json({ message: "Failed to update user.", success: false });
+            }
+
+            console.log("User updated successfully");
+            console.log("Updated fullname:", updatedUser.fullname);
+            console.log("====== UPDATE COMPLETE ======\n");
 
             return res.status(200).json({
                 message: "Profile updated successfully.",
-                user: this.getUserResponse(user),
+                user: this.getUserResponse(updatedUser),
                 success: true,
             });
         } catch (error) {
-            next(error);
+            console.error("\n====== UPDATE ERROR ======");
+            console.error("Error message:", error.message);
+            console.error("Error stack:", error.stack);
+            console.error("==========================\n");
+            
+            return res.status(500).json({
+                message: error.message || "Failed to update profile",
+                success: false
+            });
         }
     }
 

@@ -123,14 +123,16 @@ const PostDetail = () => {
         const newCommentData = {
             _id: data._id,
             content: data.content,
-            author: user,
+            author: {
+              _id: user._id,
+              fullname: user.fullname,
+              email: user.email
+            },
             createdAt: data.createdAt,
         };
-
+        
         // Update comments state and sort
-        setComments(prevComments => sortCommentsByDate([newCommentData, ...prevComments]));
-
-        // Reset comment input
+        setComments(prevComments => sortCommentsByDate([newCommentData, ...prevComments]));        // Reset comment input
         setNewComment('');
         
     } catch (err) {
@@ -209,7 +211,7 @@ const PostDetail = () => {
                         key={index}
                         className="bg-blue-100 text-blue-800 text-sm px-3 py-1 rounded-full"
                       >
-                        #{tag}
+                        #{typeof tag === 'string' ? tag : typeof tag === 'object' && tag?.name ? tag.name : String(tag)}
                       </span>
                     ))}
                   </div>

@@ -19,6 +19,7 @@ const ProfileCandidate = () => {
     const [scoreAnimated, setScoreAnimated] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const resumeInputRef = useRef(null);
+    const photoInputRef = useRef(null);
     const [uploading, setUploading] = useState(false);
 
     const [editData, setEditData] = useState({
@@ -31,12 +32,54 @@ const ProfileCandidate = () => {
         researchAreas: user?.profile?.researchAreas || [],
         experience: user?.profile?.experience || [],
         coursesTaught: user?.profile?.coursesTaught || [],
-        resume: user?.profile?.resume || ''
+        publications: user?.profile?.publications || [],
+        resume: user?.profile?.resume || '',
+        profilePhoto: user?.profile?.profilePhoto || ''
     });
 
     useEffect(() => {
         setScoreAnimated(true);
     }, []);
+
+    const handlePhotoUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            alert('Please upload an image file');
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert('File size should be less than 5MB');
+            return;
+        }
+
+        setUploading(true);
+        const formData = new FormData();
+        formData.append('profilePhoto', file);
+
+        try {
+            const config = { 
+                headers: { 'Content-Type': 'multipart/form-data' },
+                withCredentials: true
+            };
+            const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
+            
+            const response = await axios.put(apiUrl, formData, config);
+
+            if (response.data.success) {
+                setEditData({ ...editData, profilePhoto: response.data.user.profile.profilePhoto });
+                dispatch(setUser(response.data.user));
+                alert('Profile photo updated successfully!');
+            }
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            alert('Failed to upload profile photo');
+        } finally {
+            setUploading(false);
+        }
+    };
 
     const handleResumeUpload = async (e) => {
         const file = e.target.files[0];
@@ -57,10 +100,13 @@ const ProfileCandidate = () => {
         formData.append('resume', file);
 
         try {
-            const config = { headers: { 'Content-Type': 'multipart/form-data' } };
+            const config = { 
+                headers: { 'Content-Type': 'multipart/form-data' },
+                withCredentials: true
+            };
             const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
             
-            const response = await axios.post(apiUrl, formData, config);
+            const response = await axios.put(apiUrl, formData, config);
 
             if (response.data.success) {
                 setEditData({ ...editData, resume: response.data.user.profile.resume });
@@ -77,10 +123,31 @@ const ProfileCandidate = () => {
 
     const handleSaveProfile = async () => {
         try {
-            const config = { headers: { 'Content-Type': 'application/json' } };
+            // Only send fields that have been modified (not empty)
+            const dataToSend = {};
+            if (editData.fullname) dataToSend.fullname = editData.fullname;
+            if (editData.email) dataToSend.email = editData.email;
+            if (editData.phoneNumber) dataToSend.phoneNumber = editData.phoneNumber;
+            if (editData.bio) dataToSend.bio = editData.bio;
+            if (editData.location) dataToSend.location = editData.location;
+            if (editData.qualifications?.length > 0) dataToSend.qualifications = editData.qualifications;
+            if (editData.researchAreas?.length > 0) dataToSend.researchAreas = editData.researchAreas;
+            if (editData.experience?.length > 0) dataToSend.experience = editData.experience;
+            if (editData.coursesTaught?.length > 0) dataToSend.coursesTaught = editData.coursesTaught;
+            if (editData.publications?.length > 0) dataToSend.publications = editData.publications;
+
+            if (Object.keys(dataToSend).length === 0) {
+                alert('Please make some changes before saving');
+                return;
+            }
+
+            const config = { 
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            };
             const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
             
-            const response = await axios.post(apiUrl, editData, config);
+            const response = await axios.put(apiUrl, dataToSend, config);
 
             if (response.data.success) {
                 dispatch(setUser(response.data.user));
@@ -88,8 +155,8 @@ const ProfileCandidate = () => {
                 alert('Profile updated successfully!');
             }
         } catch (error) {
-            console.error('Error updating profile:', error);
-            alert('Failed to update profile');
+            console.error('Error updating profile:', error.response?.data || error.message);
+            alert(error.response?.data?.message || 'Failed to update profile');
         }
     };
 
@@ -150,6 +217,26 @@ const ProfileCandidate = () => {
         setEditData({
             ...editData,
             coursesTaught: editData.coursesTaught.filter((_, i) => i !== index)
+        });
+    };
+
+    const handleAddPublication = () => {
+        setEditData({
+            ...editData,
+            publications: [...editData.publications, { title: '', journal: '', year: '', authors: '', link: '' }]
+        });
+    };
+
+    const handleUpdatePublication = (index, field, value) => {
+        const updatedPublications = [...editData.publications];
+        updatedPublications[index][field] = value;
+        setEditData({ ...editData, publications: updatedPublications });
+    };
+
+    const handleDeletePublication = (index) => {
+        setEditData({
+            ...editData,
+            publications: editData.publications.filter((_, i) => i !== index)
         });
     };
 
@@ -439,6 +526,68 @@ const ProfileCandidate = () => {
                                     ))}
                                 </div>
                             </div>
+
+                            {/* Publications */}
+                            <div className="bg-blue-50 rounded-lg p-8 border border-blue-200">
+                                <div className="flex justify-between items-center mb-6">
+                                    <h2 className="text-xl font-bold text-gray-900">Publications</h2>
+                                    <Button onClick={handleAddPublication} className="bg-blue-600 hover:bg-blue-700 h-8">
+                                        <Plus className="h-4 w-4" /> Add
+                                    </Button>
+                                </div>
+                                <div className="space-y-4">
+                                    {editData.publications.map((pub, idx) => (
+                                        <div key={idx} className="bg-white rounded-lg p-4 border border-blue-200 flex gap-4 items-start">
+                                            <div className="flex-1 space-y-3">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Publication Title"
+                                                    value={pub.title || ''}
+                                                    onChange={(e) => handleUpdatePublication(idx, 'title', e.target.value)}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none text-sm"
+                                                />
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Journal/Conference"
+                                                        value={pub.journal || ''}
+                                                        onChange={(e) => handleUpdatePublication(idx, 'journal', e.target.value)}
+                                                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none text-sm"
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Year (e.g., 2023)"
+                                                        value={pub.year || ''}
+                                                        onChange={(e) => handleUpdatePublication(idx, 'year', e.target.value)}
+                                                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none text-sm"
+                                                    />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Paper Link (URL)"
+                                                        value={pub.link || ''}
+                                                        onChange={(e) => handleUpdatePublication(idx, 'link', e.target.value)}
+                                                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none text-sm"
+                                                    />
+                                                </div>
+                                                <textarea
+                                                    placeholder="Authors (e.g., Name, et al.)"
+                                                    value={pub.authors || ''}
+                                                    onChange={(e) => handleUpdatePublication(idx, 'authors', e.target.value)}
+                                                    rows={2}
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none text-sm"
+                                                />
+                                            </div>
+                                            <Button
+                                                onClick={() => handleDeletePublication(idx)}
+                                                variant="outline"
+                                                className="h-8 px-2 border-red-300 text-red-600 hover:bg-red-50 mt-1"
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </main>
@@ -459,15 +608,23 @@ const ProfileCandidate = () => {
                             <div className="flex items-center gap-6">
                                 {/* Avatar with Badge */}
                                 <div className="relative">
-                                    <Avatar className="h-32 w-32 ring-2 ring-blue-600 ring-offset-4 ring-offset-white flex-shrink-0 shadow-lg shadow-blue-600/20">
+                                    <Avatar className="h-32 w-32 ring-2 ring-blue-600 ring-offset-4 ring-offset-white flex-shrink-0 shadow-lg shadow-blue-600/20 cursor-pointer hover:opacity-75 transition-opacity" onClick={() => photoInputRef.current?.click()}>
                                         <AvatarImage 
-                                            src={user?.profile?.profilePhoto || "https://lh3.googleusercontent.com/aida-public/AB6AXuC-d8fJZhKvx9Gp5xEe6KxYpnGqCrvt4P69HiyaQQshDIULSxcdcf8TJxFz5EeOj40QEhblQOa1I8AYl6IQIQN9jfW54oFSCm00-_JISQl1bi7MDBO4nh7R6wXUfiQIB3rtfE1uGgRlvfxFC_wsPQ4bTP6dE6mx8IIdBx9ClJrQ5o8UPlRE17L-iYGUNZuB4ZXL4BdjtL4MUbw0jERVyee3BIdkRqAqC5O-qoqDnNcWJCPUE7lygW9S5DVyRRUOcMzXbTka9YjIoQlo"} 
+                                            src={editData.profilePhoto || user?.profile?.profilePhoto || "https://lh3.googleusercontent.com/aida-public/AB6AXuC-d8fJZhKvx9Gp5xEe6KxYpnGqCrvt4P69HiyaQQshDIULSxcdcf8TJxFz5EeOj40QEhblQOa1I8AYl6IQIQN9jfW54oFSCm00-_JISQl1bi7MDBO4nh7R6wXUfiQIB3rtfE1uGgRlvfxFC_wsPQ4bTP6dE6mx8IIdBx9ClJrQ5o8UPlRE17L-iYGUNZuB4ZXL4BdjtL4MUbw0jERVyee3BIdkRqAqC5O-qoqDnNcWJCPUE7lygW9S5DVyRRUOcMzXbTka9YjIoQlo"} 
                                             className="object-cover"
                                         />
                                     </Avatar>
-                                    <div className="absolute -bottom-1 -right-1 flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 ring-2 ring-white">
-                                        <CheckCircle2 className="h-5 w-5 text-white" />
+                                    <div className="absolute -bottom-1 -right-1 flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 ring-2 ring-white cursor-pointer hover:bg-blue-700" onClick={() => photoInputRef.current?.click()}>
+                                        <Upload className="h-5 w-5 text-white" />
                                     </div>
+                                    <input
+                                        ref={photoInputRef}
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handlePhotoUpload}
+                                        className="hidden"
+                                        disabled={uploading}
+                                    />
                                 </div>
 
                                 {/* Name & Title */}
@@ -510,10 +667,10 @@ const ProfileCandidate = () => {
                                         user.profile.qualifications.map((qual, index) => (
                                             <div key={index} className="bg-blue-50 rounded-xl p-6 border border-blue-200 flex flex-col items-center text-center hover:bg-blue-100 transition-colors">
                                                 <div className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 border border-blue-300 mb-3">
-                                                    <span className="text-2xl">{qual.emoji || '📚'}</span>
+                                                    <span className="text-2xl">{typeof qual === 'object' ? (qual?.emoji || '📚') : '📚'}</span>
                                                 </div>
-                                                <h3 className="text-gray-900 font-bold text-lg">{qual.title || 'Ph.D'}</h3>
-                                                <p className="text-gray-600 text-sm">{qual.institution || qual.year}</p>
+                                                <h3 className="text-gray-900 font-bold text-lg">{typeof qual === 'string' ? qual : qual?.title || 'Ph.D'}</h3>
+                                                <p className="text-gray-600 text-sm">{typeof qual === 'object' ? (qual?.institution || qual?.year || '') : ''}</p>
                                             </div>
                                         ))
                                     ) : (
@@ -551,7 +708,7 @@ const ProfileCandidate = () => {
                                     {user?.profile?.researchAreas?.length ? (
                                         user.profile.researchAreas.map((area, idx) => (
                                             <span key={idx} className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-300">
-                                                {area}
+                                                {typeof area === 'string' ? area : typeof area === 'object' ? area?.name || 'Research Area' : String(area)}
                                             </span>
                                         ))
                                     ) : (
@@ -570,22 +727,39 @@ const ProfileCandidate = () => {
                             <section>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Publications</h2>
                                 <div className="space-y-4">
-                                    <div className="rounded-lg bg-blue-50 border border-blue-200 p-6">
-                                        <h3 className="font-bold text-gray-900 mb-1">IEEE Transactions, 2023</h3>
-                                        <p className="text-gray-600 text-sm mb-3">AI-driven Personalised Learning Paths</p>
-                                        <p className="text-gray-500 text-xs mb-4">Sharma, A., et al.</p>
-                                        <a href="#" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-2">
-                                            Read Paper → 
-                                        </a>
-                                    </div>
-                                    <div className="rounded-lg bg-blue-50 border border-blue-200 p-6">
-                                        <h3 className="font-bold text-gray-900 mb-1">Journal of Tech & Society, 2021</h3>
-                                        <p className="text-gray-600 text-sm mb-3">Challenges of NLP in Vernacular Languages</p>
-                                        <p className="text-gray-500 text-xs mb-4">Sharma, A., Patel, R.</p>
-                                        <a href="#" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-2">
-                                            Read Paper →
-                                        </a>
-                                    </div>
+                                    {user?.profile?.publications?.length ? (
+                                        user.profile.publications.map((pub, idx) => (
+                                            <div key={idx} className="rounded-lg bg-blue-50 border border-blue-200 p-6">
+                                                <h3 className="font-bold text-gray-900 mb-1">{typeof pub === 'string' ? pub : pub?.title || 'Untitled'}</h3>
+                                                <p className="text-gray-600 text-sm mb-1">{typeof pub === 'object' ? (pub?.journal || '') + ' ' + (pub?.year ? `(${pub.year})` : '') : ''}</p>
+                                                {typeof pub === 'object' && pub?.authors && <p className="text-gray-500 text-xs mb-3">{pub.authors}</p>}
+                                                {typeof pub === 'object' && pub?.link && (
+                                                    <a href={pub.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-2">
+                                                        Read Paper → 
+                                                    </a>
+                                                )}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <>
+                                            <div className="rounded-lg bg-blue-50 border border-blue-200 p-6">
+                                                <h3 className="font-bold text-gray-900 mb-1">IEEE Transactions, 2023</h3>
+                                                <p className="text-gray-600 text-sm mb-3">AI-driven Personalised Learning Paths</p>
+                                                <p className="text-gray-500 text-xs mb-4">Sharma, A., et al.</p>
+                                                <a href="#" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-2">
+                                                    Read Paper → 
+                                                </a>
+                                            </div>
+                                            <div className="rounded-lg bg-blue-50 border border-blue-200 p-6">
+                                                <h3 className="font-bold text-gray-900 mb-1">Journal of Tech & Society, 2021</h3>
+                                                <p className="text-gray-600 text-sm mb-3">Challenges of NLP in Vernacular Languages</p>
+                                                <p className="text-gray-500 text-xs mb-4">Sharma, A., Patel, R.</p>
+                                                <a href="#" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-2">
+                                                    Read Paper →
+                                                </a>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                             </section>
 
@@ -598,10 +772,10 @@ const ProfileCandidate = () => {
                                             <div key={idx} className="rounded-lg bg-blue-50 border border-blue-200 p-6 flex items-start gap-4">
                                                 <div className="h-3 w-3 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
                                                 <div className="flex-1">
-                                                    <h3 className="font-bold text-gray-900">{exp.title}</h3>
-                                                    <p className="text-gray-600 text-sm">{exp.company}</p>
-                                                    {exp.duration && <p className="text-gray-500 text-xs mt-1">{exp.duration}</p>}
-                                                    {exp.description && <p className="text-gray-600 text-sm mt-2">{exp.description}</p>}
+                                                    <h3 className="font-bold text-gray-900">{typeof exp === 'string' ? exp : exp?.title || 'Untitled'}</h3>
+                                                    <p className="text-gray-600 text-sm">{typeof exp === 'object' ? exp?.company || '' : ''}</p>
+                                                    {typeof exp === 'object' && exp?.duration && <p className="text-gray-500 text-xs mt-1">{exp.duration}</p>}
+                                                    {typeof exp === 'object' && exp?.description && <p className="text-gray-600 text-sm mt-2">{exp.description}</p>}
                                                 </div>
                                             </div>
                                         ))
@@ -635,10 +809,10 @@ const ProfileCandidate = () => {
                                     {user?.profile?.coursesTaught?.length ? (
                                         user.profile.coursesTaught.map((course, idx) => (
                                             <div key={idx} className="rounded-lg bg-blue-50 border border-blue-200 p-4 text-center">
-                                                <h3 className="font-bold text-gray-900 text-sm">{course.name}</h3>
-                                                <p className="text-gray-600 text-xs mt-1">{course.students} Students</p>
+                                                <h3 className="font-bold text-gray-900 text-sm">{typeof course === 'string' ? course : course?.name || 'Unnamed'}</h3>
+                                                <p className="text-gray-600 text-xs mt-1">{typeof course === 'object' && course?.students ? course.students + ' Students' : ''}</p>
                                                 <div className="flex items-center justify-center mt-2 text-yellow-500">
-                                                    {'★'.repeat(Math.floor(course.rating))}
+                                                    {typeof course === 'object' && course?.rating ? '★'.repeat(Math.floor(course.rating)) : ''}
                                                 </div>
                                             </div>
                                         ))

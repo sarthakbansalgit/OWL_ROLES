@@ -29,8 +29,8 @@ router.route("/login").post(login);
 // Route for user logout (GET method)
 router.route("/logout").get(logout);
 
-// Route to update user profile (POST method)
-router.route("/profile/update").post(isAuthenticated, singleUpload, updateProfile);
+// Route to update user profile (PUT method)
+router.route("/profile/update").put(isAuthenticated, singleUpload, updateProfile);
 
 // Route to generate PDF report for authenticated user
 router.get('/report', isAuthenticated, generateUserReport);
