@@ -100,7 +100,7 @@ class UserController {
                 return res.status(400).json({ message: "Account doesn't exist with the current role.", success: false });
             }
 
-            const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, { expiresIn: '1d' });
+            const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
             return res
                 .status(200)
@@ -135,7 +135,18 @@ class UserController {
     // Update user profile
     async updateProfile(req, res, next) {
         try {
-            const { fullname, email, phoneNumber, bio, skills } = req.body;
+            const { 
+                fullname, 
+                email, 
+                phoneNumber, 
+                bio, 
+                skills,
+                location,
+                qualifications,
+                researchAreas,
+                experience,
+                coursesTaught
+            } = req.body;
             const file = req.file;
             let cloudResponse;
             const userId = req.id;
@@ -150,7 +161,12 @@ class UserController {
             if (email) user.email = email;
             if (phoneNumber) user.phoneNumber = phoneNumber;
             if (bio) user.profile.bio = bio;
+            if (location) user.profile.location = location;
             if (skills) user.profile.skills = skills.split(",");
+            if (qualifications) user.profile.qualifications = JSON.parse(qualifications);
+            if (researchAreas) user.profile.researchAreas = JSON.parse(researchAreas);
+            if (experience) user.profile.experience = JSON.parse(experience);
+            if (coursesTaught) user.profile.coursesTaught = JSON.parse(coursesTaught);
 
             if (file) {
                 // console.log("Resume upload triggered after getting file")

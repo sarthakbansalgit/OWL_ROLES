@@ -109,7 +109,7 @@ const JobDescription = () => {
                             className={`w-full md:w-auto text-sm md:text-base px-6 md:px-8 py-3 md:py-6 rounded-xl transition-all ${
                                 isApplied 
                                     ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white shadow-lg'
+                                    : 'bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white shadow-lg shadow-black/40 hover:shadow-xl hover:shadow-black/50'
                             }`}
                         >
                             {isApplied ? '✓ Applied' : 'Apply Now'}

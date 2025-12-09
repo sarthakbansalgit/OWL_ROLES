@@ -108,7 +108,7 @@ const Navbar = () => {
                     {!user ? (
                         <div className='flex items-center gap-3'>
                             <Link to="/login"><Button variant="outline" className='border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold text-sm'>Login</Button></Link>
-                            <Link to="/signup"><Button className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold text-sm">Signup</Button></Link>
+                            <Link to="/signup"><Button className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold text-sm shadow-lg shadow-black/40 hover:shadow-xl hover:shadow-black/50 transition-all duration-300">Signup</Button></Link>
                         </div>
                     ) : (
                         <Popover>
@@ -175,7 +175,7 @@ const Navbar = () => {
                     {!user ? (
                         <div className='flex items-center gap-2'>
                             <Link to="/login"><Button variant="outline" className='border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold text-xs px-2 py-1'>Login</Button></Link>
-                            <Link to="/signup"><Button className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold text-xs px-2 py-1">Sign</Button></Link>
+                            <Link to="/signup"><Button className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold text-xs px-2 py-1 shadow-lg shadow-black/40 hover:shadow-xl hover:shadow-black/50 transition-all duration-300">Sign</Button></Link>
                         </div>
                     ) : (
                         <Popover>

@@ -3,8 +3,10 @@ import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
 import Home from './components/Home'
 import Jobs from './components/Jobs'
+import FunctionalJobs from './components/FunctionalJobs'
 import Browse from './components/Browse'
 import Profile from './components/Profile'
+import EditableProfile from './components/EditableProfile'
 import JobDescription from './components/JobDescription'
 import Companies from './components/admin/Companies'
 import CompanyCreate from './components/admin/CompanyCreate'
@@ -68,6 +70,14 @@ const appRouter = createBrowserRouter([
   {
     path: "/profile",
     element: <Profile />
+  },
+  {
+    path: "/edit-profile",
+    element: <EditableProfile />
+  },
+  {
+    path: "/jobs-ai",
+    element: <FunctionalJobs />
   },
   {
     path: "/learn-more",

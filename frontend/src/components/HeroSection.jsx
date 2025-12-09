@@ -76,7 +76,7 @@ const HeroSection = () => {
                                 onChange={(e) => setQuery(e.target.value)}
                                 className='search-input bg-inherit outline-none border-none w-full py-3 text-sm md:text-base transition-all duration-300'
                             />  
-                            <Button onClick={searchJobHandler} className="rounded-r-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 px-3 md:px-6 transition-all duration-300 active:scale-95">
+                            <Button onClick={searchJobHandler} className="rounded-r-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 px-3 md:px-6 transition-all duration-300 active:scale-95 shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/40">
                                 <Search className='h-5 w-5 transition-transform duration-300' />
                             </Button>
                         </div>

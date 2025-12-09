@@ -20,6 +20,33 @@ class UserModel {
           resumeOriginalName: { type: String },
           company: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
           profilePhoto: { type: String, default: "" },
+          phoneNumber: { type: String },
+          location: { type: String },
+          qualifications: [
+            {
+              title: String,
+              institution: String,
+              year: String,
+              emoji: String
+            }
+          ],
+          researchAreas: [String],
+          experience: [
+            {
+              title: String,
+              company: String,
+              description: String,
+              duration: String
+            }
+          ],
+          coursesTaught: [
+            {
+              name: String,
+              students: Number,
+              rating: Number,
+              color: String
+            }
+          ]
         },
       },
       { timestamps: true }
