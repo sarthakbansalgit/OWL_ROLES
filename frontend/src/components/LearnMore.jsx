@@ -29,7 +29,7 @@ const LearnMore = () => {
       <main className='flex-grow pt-24 pb-32 px-4 sm:px-8 max-w-7xl mx-auto w-full'>
         {/* Hero Section */}
         <div className='text-center mb-16'>
-          <h1 className='text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400'>
+          <h1 className='text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-400'>
             About Owl Roles
           </h1>
           <p className='text-lg text-gray-300 max-w-3xl mx-auto'>
@@ -45,9 +45,9 @@ const LearnMore = () => {
             {features.map(({ icon: Icon, title, description }, index) => (
               <div 
                 key={index}
-                className='group p-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-700 shadow-xl hover:border-purple-500 transition-all duration-300'
+                className='group p-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-700 shadow-xl hover:border-blue-500 transition-all duration-300'
               >
-                <div className='mb-4 text-purple-400'>
+                <div className='mb-4 text-blue-400'>
                   <Icon className='w-10 h-10' />
                 </div>
                 <h3 className='text-xl font-semibold mb-2'>{title}</h3>
@@ -65,7 +65,7 @@ const LearnMore = () => {
               {jobTips.map((tip, index) => (
                 <li 
                   key={index}
-                  className='flex items-start before:content-["▹"] before:text-purple-400 before:mr-4 before:mt-1 text-gray-300 hover:text-white transition-colors'
+                  className='flex items-start before:content-["▹"] before:text-blue-400 before:mr-4 before:mt-1 text-gray-300 hover:text-white transition-colors'
                 >
                   {tip}
                 </li>
@@ -81,7 +81,7 @@ const LearnMore = () => {
         {/* CTA Section */}
         <div className='text-center'>
           <Link to='/jobs'>
-            <button className='px-8 py-4 bg-gradient-to-r from-purple-600 to-green-800 rounded-xl text-lg font-semibold hover:scale-101 transition-transform shadow-lg hover:shadow-purple-500/20'>
+            <button className='px-8 py-4 bg-gradient-to-r from-blue-600 to-green-800 rounded-xl text-lg font-semibold hover:scale-101 transition-transform shadow-lg hover:shadow-blue-500/20'>
               Explore Job Listings →
             </button>
           </Link>

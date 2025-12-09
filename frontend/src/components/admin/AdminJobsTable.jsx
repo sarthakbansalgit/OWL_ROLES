@@ -71,8 +71,8 @@ const AdminJobsTable = () => {
             {/* Desktop Table */}
             <div className='hidden md:block overflow-x-auto'>
                 <Table>
-                    <TableHeader className="bg-gradient-to-r from-purple-50 to-pink-50 border-b-2 border-purple-100">
-                        <TableRow className="hover:bg-purple-50">
+                    <TableHeader className="bg-gradient-to-r from-blue-50 to-blue-50 border-b-2 border-blue-100">
+                        <TableRow className="hover:bg-blue-50">
                             <TableHead className="w-[220px] text-gray-700 font-bold">Company</TableHead>
                             <TableHead className="min-w-[280px] text-gray-700 font-bold">Job Title</TableHead>
                             <TableHead className="w-[140px] text-gray-700 font-bold">Posted Date</TableHead>
@@ -84,13 +84,13 @@ const AdminJobsTable = () => {
                         {filterJobs?.map((job) => (
                             <TableRow 
                                 key={job._id}
-                                className="group hover:bg-purple-50 transition-colors border-b border-gray-100"
+                                className="group hover:bg-blue-50 transition-colors border-b border-gray-100"
                             >
                                 <TableCell className="font-semibold text-gray-900">
                                     <div className="flex items-center gap-3">
-                                        <Avatar className="w-10 h-10 border-2 border-purple-200">
+                                        <Avatar className="w-10 h-10 border-2 border-blue-200">
                                             <AvatarImage src={job.company?.logo} />
-                                            <AvatarFallback className="bg-gradient-to-br from-purple-100 to-pink-100 text-purple-700 font-bold text-sm">
+                                            <AvatarFallback className="bg-gradient-to-br from-blue-100 to-blue-100 text-blue-700 font-bold text-sm">
                                                 {job.company?.name[0]}
                                             </AvatarFallback>
                                         </Avatar>
@@ -100,7 +100,7 @@ const AdminJobsTable = () => {
                                 
                                 <TableCell className="text-gray-900 font-medium">
                                     <div className='flex items-center gap-2'>
-                                        <span className='inline-block w-2 h-2 rounded-full bg-purple-500'></span>
+                                        <span className='inline-block w-2 h-2 rounded-full bg-blue-500'></span>
                                         {job.title}
                                     </div>
                                 </TableCell>
@@ -111,12 +111,12 @@ const AdminJobsTable = () => {
                                 
                                 <TableCell className="text-right">
                                     <Popover>
-                                        <PopoverTrigger className="p-2 hover:bg-purple-100 rounded-full transition">
+                                        <PopoverTrigger className="p-2 hover:bg-blue-100 rounded-full transition">
                                             <MoreHorizontal className="w-5 h-5 text-gray-600" />
                                         </PopoverTrigger>
                                         
                                         <PopoverContent 
-                                            className="w-48 p-2 rounded-xl shadow-xl border border-purple-200 bg-white"
+                                            className="w-48 p-2 rounded-xl shadow-xl border border-blue-200 bg-white"
                                             align="end"
                                         >
                                             <div className="space-y-2">
@@ -130,7 +130,7 @@ const AdminJobsTable = () => {
                                                 
                                                 <button
                                                     onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}
-                                                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-purple-50 text-gray-700 hover:text-purple-600 transition-colors text-sm font-medium"
+                                                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium"
                                                 >
                                                     <Eye className="w-4 h-4" />
                                                     <span>Applicants</span>
@@ -158,12 +158,12 @@ const AdminJobsTable = () => {
             {/* Mobile Card View */}
             <div className='md:hidden space-y-3 p-4'>
                 {filterJobs?.map((job) => (
-                    <div key={job._id} className='bg-white border border-purple-100 rounded-lg p-4 hover:shadow-md transition-shadow'>
+                    <div key={job._id} className='bg-white border border-blue-100 rounded-lg p-4 hover:shadow-md transition-shadow'>
                         <div className='flex items-center justify-between mb-3'>
                             <div className='flex items-center gap-2 flex-1'>
-                                <Avatar className='w-8 h-8 border-2 border-purple-200 flex-shrink-0'>
+                                <Avatar className='w-8 h-8 border-2 border-blue-200 flex-shrink-0'>
                                     <AvatarImage src={job.company?.logo} />
-                                    <AvatarFallback className='bg-gradient-to-br from-purple-100 to-pink-100 text-purple-700 font-bold text-xs'>
+                                    <AvatarFallback className='bg-gradient-to-br from-blue-100 to-blue-100 text-blue-700 font-bold text-xs'>
                                         {job.company?.name[0]}
                                     </AvatarFallback>
                                 </Avatar>
@@ -173,15 +173,15 @@ const AdminJobsTable = () => {
                                 </div>
                             </div>
                             <Popover>
-                                <PopoverTrigger className='p-2 hover:bg-purple-100 rounded-full flex-shrink-0'>
+                                <PopoverTrigger className='p-2 hover:bg-blue-100 rounded-full flex-shrink-0'>
                                     <MoreHorizontal className='w-4 h-4 text-gray-600' />
                                 </PopoverTrigger>
-                                <PopoverContent className='w-40 p-2 rounded-lg shadow-lg border border-purple-200'>
+                                <PopoverContent className='w-40 p-2 rounded-lg shadow-lg border border-blue-200'>
                                     <div className='space-y-1'>
                                         <button onClick={() => navigate(`/admin/jobs/edit/${job._id}`)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-blue-50 text-blue-600 font-medium'>
                                             <Edit2 className='w-3 h-3' /> Edit
                                         </button>
-                                        <button onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-purple-50 text-purple-600 font-medium'>
+                                        <button onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-blue-50 text-blue-600 font-medium'>
                                             <Eye className='w-3 h-3' /> Applicants
                                         </button>
                                         <button onClick={() => handleDeleteJob(job._id)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-red-50 text-red-600 font-medium'>

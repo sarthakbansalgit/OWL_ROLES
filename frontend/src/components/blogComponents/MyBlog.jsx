@@ -38,7 +38,7 @@ const MyBlog = ({ blog, onDelete }) => {
       <div className="flex items-center justify-between mt-4">
         <Link 
           to={`/blog/post/${blog._id}`}
-          className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-lg hover:from-purple-600 hover:to-indigo-600 transition-all"
+          className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:from-blue-600 hover:to-indigo-600 transition-all"
         >
           Read More
         </Link>

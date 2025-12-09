@@ -102,7 +102,7 @@ const Login = () => {
                                 name="email"
                                 onChange={changeEventHandler}
                                 placeholder="you@example.com"
-                                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition'
+                                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
                             />
                         </div>
 
@@ -118,7 +118,7 @@ const Login = () => {
                                 name="password"
                                 onChange={changeEventHandler}
                                 placeholder="••••••••"
-                                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition'
+                                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
                             />
                         </div>
 
@@ -132,16 +132,16 @@ const Login = () => {
                                     onClick={() => setInput({ ...input, role: 'student' })}
                                     className={`relative p-4 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-2 ${
                                         input.role === 'student'
-                                            ? 'border-purple-500 bg-purple-50'
+                                            ? 'border-blue-500 bg-blue-50'
                                             : 'border-gray-200 bg-white hover:border-gray-300'
                                     }`}
                                 >
-                                    <User className={`w-5 h-5 ${input.role === 'student' ? 'text-purple-600' : 'text-gray-600'}`} />
-                                    <span className={`text-sm font-semibold ${input.role === 'student' ? 'text-purple-600' : 'text-gray-700'}`}>
+                                    <User className={`w-5 h-5 ${input.role === 'student' ? 'text-blue-600' : 'text-gray-600'}`} />
+                                    <span className={`text-sm font-semibold ${input.role === 'student' ? 'text-blue-600' : 'text-gray-700'}`}>
                                         Candidate
                                     </span>
                                     {input.role === 'student' && (
-                                        <div className='absolute top-2 right-2 w-5 h-5 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs'>
+                                        <div className='absolute top-2 right-2 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs'>
                                             ✓
                                         </div>
                                     )}
@@ -173,14 +173,14 @@ const Login = () => {
                         {/* Login Button */}
                         {
                             loading ? (
-                                <Button className="w-full py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition"> 
+                                <Button className="w-full py-2 bg-gradient-to-r from-blue-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition"> 
                                     <Loader2 className='mr-2 h-4 w-4 animate-spin' /> 
                                     Logging in...
                                 </Button>
                             ) : (
                                 <Button 
                                     type="submit" 
-                                    className="w-full py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition"
+                                    className="w-full py-2 bg-gradient-to-r from-blue-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition"
                                 >
                                     Login
                                 </Button>
@@ -189,7 +189,7 @@ const Login = () => {
 
                         {/* Signup Link */}
                         <div className='text-center text-sm text-gray-600'>
-                            Don't have an account? <Link to="/signup" className='text-purple-600 font-semibold hover:text-purple-700 transition'>Signup</Link>
+                            Don't have an account? <Link to="/signup" className='text-blue-600 font-semibold hover:text-blue-700 transition'>Signup</Link>
                         </div>
                     </form>
                 </div>

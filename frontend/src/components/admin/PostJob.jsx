@@ -80,17 +80,17 @@ const PostJob = () => {
     }
 
     return (
-        <div className='bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen'>
+        <div className='bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 min-h-screen'>
             <Navbar />
 
             <div className='flex items-center justify-center w-full my-4 md:my-5 px-4'>
                 
-                <form onSubmit = {submitHandler} className='p-4 md:p-8 max-w-4xl w-full border-2 border-purple-200 shadow-2xl rounded-lg md:rounded-2xl bg-white'>
+                <form onSubmit = {submitHandler} className='p-4 md:p-8 max-w-4xl w-full border-2 border-blue-200 shadow-2xl rounded-lg md:rounded-2xl bg-white'>
                     {/* Back Button */}
                     <button
                         type="button"
                         onClick={() => navigate(-1)}
-                        className="flex items-center gap-2 p-2 mb-4 md:mb-6 rounded-lg text-xs md:text-sm text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all"
+                        className="flex items-center gap-2 p-2 mb-4 md:mb-6 rounded-lg text-xs md:text-sm text-white bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 transition-all"
                     >
                         <ArrowLeft className="h-4 md:h-5 w-4 md:w-5" />
                         <span className="font-medium">Back</span>
@@ -108,7 +108,7 @@ const PostJob = () => {
                                 placeholder="e.g., Senior Developer"
                                 value={input.title}
                                 onChange={changeEventHandler}
-                                className="focus-visible:ring-purple-500 border-gray-200 mt-1 text-sm"
+                                className="focus-visible:ring-blue-500 border-gray-200 mt-1 text-sm"
                             />
                         </div>
                         <div>
@@ -119,7 +119,7 @@ const PostJob = () => {
                                 placeholder="Job description"
                                 value={input.description}
                                 onChange={changeEventHandler}
-                                className="focus-visible:ring-purple-500 border-gray-200 mt-1 text-sm"
+                                className="focus-visible:ring-blue-500 border-gray-200 mt-1 text-sm"
                             />
                         </div>
                         <div>
@@ -130,7 +130,7 @@ const PostJob = () => {
                                 placeholder="e.g., React, Node.js, MongoDB"
                                 value={input.requirements}
                                 onChange={changeEventHandler}
-                                className="focus-visible:ring-purple-500 border-gray-200 mt-1 text-sm"
+                                className="focus-visible:ring-blue-500 border-gray-200 mt-1 text-sm"
                             />
                         </div>
                         <div>
@@ -141,7 +141,7 @@ const PostJob = () => {
                                 value={input.salary}
                                 placeholder="e.g., 12"
                                 onChange={changeEventHandler}
-                                className="focus-visible:ring-purple-500 border-gray-200 mt-1 text-sm"
+                                className="focus-visible:ring-blue-500 border-gray-200 mt-1 text-sm"
                             />
                         </div>
                         <div>
@@ -152,7 +152,7 @@ const PostJob = () => {
                                 placeholder="e.g., New York"
                                 value={input.location}
                                 onChange={changeEventHandler}
-                                className="focus-visible:ring-purple-500 border-gray-200 mt-1 text-sm"
+                                className="focus-visible:ring-blue-500 border-gray-200 mt-1 text-sm"
                             />
                         </div>
                         <div>
@@ -163,7 +163,7 @@ const PostJob = () => {
                                 placeholder="e.g., Full-time"
                                 value={input.jobType}
                                 onChange={changeEventHandler}
-                                className="focus-visible:ring-purple-500 border-gray-200 mt-1 text-sm"
+                                className="focus-visible:ring-blue-500 border-gray-200 mt-1 text-sm"
                             />
                         </div>
                         <div>
@@ -174,7 +174,7 @@ const PostJob = () => {
                                 placeholder="e.g., 2"
                                 value={input.experience}
                                 onChange={changeEventHandler}
-                                className="focus-visible:ring-purple-500 border-gray-200 mt-1 text-sm"
+                                className="focus-visible:ring-blue-500 border-gray-200 mt-1 text-sm"
                             />
                         </div>
                         <div>
@@ -185,7 +185,7 @@ const PostJob = () => {
                                 placeholder="e.g., 3"
                                 value={input.position}
                                 onChange={changeEventHandler}
-                                className="focus-visible:ring-purple-500 border-gray-200 mt-1 text-sm"
+                                className="focus-visible:ring-blue-500 border-gray-200 mt-1 text-sm"
                             />
                         </div>
                         {
@@ -214,7 +214,7 @@ const PostJob = () => {
                         }
                     </div> 
                     {
-                        loading ? <Button className="w-full my-4 md:my-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-sm md:text-base"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4 md:my-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 md:py-3 rounded-lg text-sm md:text-base">Post Job</Button>
+                        loading ? <Button className="w-full my-4 md:my-6 bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-sm md:text-base"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4 md:my-6 bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold py-2 md:py-3 rounded-lg text-sm md:text-base">Post Job</Button>
                     }
                     {
                         companies.length === 0 && <p className='text-xs md:text-sm text-red-600 font-semibold text-center my-3 bg-red-50 p-3 rounded-lg'>*Please register a company first, before posting a job</p>

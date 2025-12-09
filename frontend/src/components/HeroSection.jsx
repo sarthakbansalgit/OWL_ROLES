@@ -36,7 +36,7 @@ const HeroSection = () => {
     }
 
     return (
-        <div className='bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 text-center min-h-screen w-full overflow-x-hidden flex items-center py-8 md:py-0 relative'>
+        <div className='bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 text-center min-h-screen w-full overflow-x-hidden flex items-center py-8 md:py-0 relative'>
             <style>{`
                 @keyframes slideInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
                 @keyframes slideInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
@@ -62,7 +62,7 @@ const HeroSection = () => {
             <main className='flex flex-col md:flex-row mx-auto max-w-6xl w-full px-4 md:px-8 gap-8 md:gap-12 z-0'>
                 <div className='flex flex-col gap-6 justify-center flex-1 z-0'>
                     <h1 className='hero-title text-3xl md:text-5xl lg:text-6xl text-left font-bold text-gray-900 leading-tight'>
-                        Discover, Apply & <br /> Get The Career Of Your <span className='bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>Dreams</span>
+                        Discover, Apply & <br /> Get The Career Of Your <span className='bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent'>Dreams</span>
                     </h1>
                     <p className='hero-subtitle text-base md:text-lg lg:text-xl text-gray-600 my-2'>
                         Unlock endless opportunities and land your dream job with just a click!
@@ -76,33 +76,33 @@ const HeroSection = () => {
                                 onChange={(e) => setQuery(e.target.value)}
                                 className='search-input bg-inherit outline-none border-none w-full py-3 text-sm md:text-base transition-all duration-300'
                             />  
-                            <Button onClick={searchJobHandler} className="rounded-r-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-3 md:px-6 transition-all duration-300 active:scale-95">
+                            <Button onClick={searchJobHandler} className="rounded-r-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 px-3 md:px-6 transition-all duration-300 active:scale-95">
                                 <Search className='h-5 w-5 transition-transform duration-300' />
                             </Button>
                         </div>
-                        <span className='hero-badge px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 font-semibold text-xs md:text-sm text-center hover:shadow-md transition-shadow duration-300'>⭐ Best Job Hunt Website</span>
+                        <span className='hero-badge px-4 py-2 rounded-full bg-gradient-to-r from-blue-100 to-blue-100 text-blue-700 font-semibold text-xs md:text-sm text-center hover:shadow-md transition-shadow duration-300'>⭐ Best Job Hunt Website</span>
                     </div>
                 </div>
 
                 {/* Right section - decorative cards - hidden on mobile */}
                 <div className='hidden lg:flex flex-col gap-8 flex-1 justify-center items-end'>
-                    <div className='hero-card bg-white rounded-2xl shadow-lg p-6 border-2 border-purple-100 hover:shadow-2xl hover:border-purple-300 transition-all duration-300 hover:scale-105 float-animation cursor-pointer group'>
+                    <div className='hero-card bg-white rounded-2xl shadow-lg p-6 border-2 border-blue-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 hover:scale-105 float-animation cursor-pointer group'>
                         <div className='text-center'>
-                            <p className='text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300'>Hired!</p>
+                            <p className='text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300'>Hired!</p>
                             <p className='text-gray-500 text-sm mt-1'>Join thousands</p>
                         </div>
                     </div>
 
                     <div className='hero-card bg-white rounded-2xl shadow-lg p-6 border-2 border-blue-100 hover:shadow-2xl hover:border-blue-300 transition-all duration-300 hover:scale-105 cursor-pointer group' style={{animationDelay: '0.2s'}}>
-                        <h3 className='text-sm font-semibold text-gray-700 mb-3 group-hover:text-purple-600 transition-colors duration-300'>Quick Search</h3>
+                        <h3 className='text-sm font-semibold text-gray-700 mb-3 group-hover:text-blue-600 transition-colors duration-300'>Quick Search</h3>
                         <div className='flex gap-2'>
                             <input  
                                 type="text"
                                 placeholder='Search...'
                                 onChange={(e) => setQuery(e.target.value)}
-                                className='border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-300'
+                                className='border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300'
                             />   
-                            <Button onClick={searchJobHandler} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 rounded-lg transition-all duration-300 active:scale-95">
+                            <Button onClick={searchJobHandler} className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 rounded-lg transition-all duration-300 active:scale-95">
                                 <Search className='h-4 w-4' />
                             </Button>
                         </div>

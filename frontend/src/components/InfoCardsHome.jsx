@@ -32,7 +32,7 @@ const InfoCardsHome = () => {
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-6xl mx-auto px-4'>
       {features.map((feature, idx) => (
-        <div key={idx} className='bg-white rounded-lg md:rounded-2xl p-4 md:p-6 shadow-md hover:shadow-lg border border-purple-100 transition-all hover:border-purple-300'>
+        <div key={idx} className='bg-white rounded-lg md:rounded-2xl p-4 md:p-6 shadow-md hover:shadow-lg border border-blue-100 transition-all hover:border-blue-300'>
           <div className='flex gap-3 md:gap-4 items-start'>
             <Avatar className='w-12 md:w-14 h-12 md:h-14 flex-shrink-0'>
               <AvatarImage src={feature.icon} alt={feature.title} />

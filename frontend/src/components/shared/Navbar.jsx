@@ -35,16 +35,16 @@ const Navbar = () => {
         <nav className='bg-white shadow-md sticky top-0 z-50'>
             {/* Top Banner - responsive */}
             {user && user.role === 'recruiter' ? (
-                <div className='flex gap-2 justify-center items-center py-2 md:py-3 bg-gradient-to-r from-purple-100 to-pink-100 border-b border-purple-200 px-4 flex-wrap'>
+                <div className='flex gap-2 justify-center items-center py-2 md:py-3 bg-gradient-to-r from-blue-100 to-blue-100 border-b border-blue-200 px-4 flex-wrap'>
                     <span className='hidden sm:inline'>🚀</span>
-                    <span className='text-purple-700 font-semibold text-xs md:text-sm'>Recruiter Dashboard Active</span>
+                    <span className='text-blue-700 font-semibold text-xs md:text-sm'>Recruiter Dashboard Active</span>
                     <Popover>
                         <PopoverTrigger asChild>
-                            <button className='ml-2 px-3 md:px-4 py-1 md:py-2 rounded-full bg-white border-2 border-purple-600 text-purple-600 font-semibold hover:bg-purple-50 transition text-xs md:text-sm'>
+                            <button className='ml-2 px-3 md:px-4 py-1 md:py-2 rounded-full bg-white border-2 border-blue-600 text-blue-600 font-semibold hover:bg-blue-50 transition text-xs md:text-sm'>
                                 Pro Features →
                             </button>
                         </PopoverTrigger>
-                        <PopoverContent className="bg-white text-gray-900 p-4 rounded-xl border border-purple-200 shadow-lg">
+                        <PopoverContent className="bg-white text-gray-900 p-4 rounded-xl border border-blue-200 shadow-lg">
                             <div className="flex items-center gap-2">
                                 <span>⭐</span>
                                 <p className="text-sm font-medium">Logout to visit homepage</p>
@@ -53,11 +53,11 @@ const Navbar = () => {
                     </Popover>
                 </div>
             ) : (
-                <div className='flex gap-2 justify-center items-center py-2 md:py-3 bg-gradient-to-r from-blue-100 to-purple-100 border-b border-blue-200 px-4 flex-wrap'>
+                <div className='flex gap-2 justify-center items-center py-2 md:py-3 bg-gradient-to-r from-blue-100 to-blue-100 border-b border-blue-200 px-4 flex-wrap'>
                     <span className='hidden sm:inline'>🚀</span>
                     <span className='text-blue-700 font-semibold text-xs md:text-sm'>Discover Amazing Opportunities</span>
                     <Link to='/pricing'>
-                        <button className='ml-2 px-3 md:px-4 py-1 md:py-2 rounded-full bg-white border-2 border-purple-600 text-purple-600 font-semibold hover:bg-purple-50 transition text-xs md:text-sm'>
+                        <button className='ml-2 px-3 md:px-4 py-1 md:py-2 rounded-full bg-white border-2 border-blue-600 text-blue-600 font-semibold hover:bg-blue-50 transition text-xs md:text-sm'>
                             Explore Pro →
                         </button>
                     </Link>
@@ -71,9 +71,9 @@ const Navbar = () => {
                     {user && user.role === 'recruiter' ? (
                         <Popover>
                             <PopoverTrigger asChild>
-                                <h1 className='font-bold text-xl md:text-3xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent cursor-pointer'>Owl Roles</h1>
+                                <h1 className='font-bold text-xl md:text-3xl bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent cursor-pointer'>Owl Roles</h1>
                             </PopoverTrigger>
-                            <PopoverContent className="bg-white text-gray-900 p-3 rounded-xl border border-purple-200 shadow-lg">
+                            <PopoverContent className="bg-white text-gray-900 p-3 rounded-xl border border-blue-200 shadow-lg">
                                 <div className="flex items-center gap-2">
                                     <span>😊</span>
                                     <p className="text-sm font-medium">Logout to visit homepage</p>
@@ -81,7 +81,7 @@ const Navbar = () => {
                             </PopoverContent>
                         </Popover>
                     ) : (
-                        <Link to='/'><h1 className='font-bold text-xl md:text-3xl bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>Owl Roles</h1></Link>
+                        <Link to='/'><h1 className='font-bold text-xl md:text-3xl bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent'>Owl Roles</h1></Link>
                     )}
                 </div>
 
@@ -90,16 +90,16 @@ const Navbar = () => {
                     <ul className='flex font-semibold items-center gap-8'>
                         {user && user.role === 'recruiter' ? (
                             <>
-                                <li className='text-gray-700 hover:text-purple-600 transition-colors cursor-pointer'><Link to="/admin/companies">Companies</Link></li>
-                                <li className='text-gray-700 hover:text-purple-600 transition-colors cursor-pointer'><Link to="/admin/jobs">Jobs</Link></li>
-                                <li className='text-gray-700 hover:text-purple-600 transition-colors cursor-pointer'><DropDown/></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/admin/companies">Companies</Link></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/admin/jobs">Jobs</Link></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><DropDown/></li>
                             </>
                         ) : (
                             <>
-                                <li className='text-gray-700 hover:text-purple-600 transition-colors cursor-pointer'><Link to="/">Home</Link></li>
-                                <li className='text-gray-700 hover:text-purple-600 transition-colors cursor-pointer'><Link to="/jobs">Jobs</Link></li>
-                                <li className='text-gray-700 hover:text-purple-600 transition-colors cursor-pointer'><Link to="/browse">Browse</Link></li>
-                                <li className='text-gray-700 hover:text-purple-600 transition-colors cursor-pointer'><DropDown/></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/">Home</Link></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/jobs">Jobs</Link></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/browse">Browse</Link></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><DropDown/></li>
                             </>
                         )}
                     </ul>
@@ -107,13 +107,13 @@ const Navbar = () => {
                     {/* Auth Section - desktop */}
                     {!user ? (
                         <div className='flex items-center gap-3'>
-                            <Link to="/login"><Button variant="outline" className='border-2 border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold text-sm'>Login</Button></Link>
-                            <Link to="/signup"><Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold text-sm">Signup</Button></Link>
+                            <Link to="/login"><Button variant="outline" className='border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold text-sm'>Login</Button></Link>
+                            <Link to="/signup"><Button className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold text-sm">Signup</Button></Link>
                         </div>
                     ) : (
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Avatar className="cursor-pointer border-3 border-purple-600 hover:border-pink-600 transition">
+                                <Avatar className="cursor-pointer border-3 border-blue-600 hover:border-blue-600 transition">
                                     <AvatarImage 
                                         src={user?.profile?.profilePhoto || "https://tse3.mm.bing.net/th/id/OIP.Wkn4_kVHLYYZOOy7FMnFXwHaHa?pid=ImgDet&w=188&h=188&c=7&dpr=1.5"} 
                                         alt="profile-img" 
@@ -124,7 +124,7 @@ const Navbar = () => {
                                 <div className="space-y-4">
                                     {/* Profile Section */}
                                     <div className="flex gap-3 items-center">
-                                        <Avatar className="w-12 h-12 border-2 border-purple-300">
+                                        <Avatar className="w-12 h-12 border-2 border-blue-300">
                                             <AvatarImage 
                                                 src={user?.profile?.profilePhoto || "https://tse3.mm.bing.net/th/id/OIP.Wkn4_kVHLYYZOOy7FMnFXwHaHa?pid=ImgDet&w=188&h=188&c=7&dpr=1.5"} 
                                                 alt="@user" 
@@ -146,10 +146,10 @@ const Navbar = () => {
                                         {user?.role === 'student' && (
                                             <Link 
                                                 to="/profile" 
-                                                className="flex items-center justify-between p-3 rounded-lg hover:bg-purple-50 transition-colors"
+                                                className="flex items-center justify-between p-3 rounded-lg hover:bg-blue-50 transition-colors"
                                             >
                                                 <div className="flex items-center gap-3">
-                                                    <User2 className="w-5 h-5 text-purple-600" />
+                                                    <User2 className="w-5 h-5 text-blue-600" />
                                                     <span className="text-sm text-gray-900 font-medium">View Profile</span>
                                                 </div>
                                                 <span className="text-gray-400">→</span>
@@ -174,13 +174,13 @@ const Navbar = () => {
                 <div className='md:hidden flex items-center gap-2'>
                     {!user ? (
                         <div className='flex items-center gap-2'>
-                            <Link to="/login"><Button variant="outline" className='border border-purple-600 text-purple-600 hover:bg-purple-50 font-semibold text-xs px-2 py-1'>Login</Button></Link>
-                            <Link to="/signup"><Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold text-xs px-2 py-1">Sign</Button></Link>
+                            <Link to="/login"><Button variant="outline" className='border border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold text-xs px-2 py-1'>Login</Button></Link>
+                            <Link to="/signup"><Button className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold text-xs px-2 py-1">Sign</Button></Link>
                         </div>
                     ) : (
                         <Popover>
                             <PopoverTrigger asChild>
-                                <Avatar className="cursor-pointer border-2 border-purple-600 hover:border-pink-600 transition w-10 h-10">
+                                <Avatar className="cursor-pointer border-2 border-blue-600 hover:border-blue-600 transition w-10 h-10">
                                     <AvatarImage 
                                         src={user?.profile?.profilePhoto || "https://tse3.mm.bing.net/th/id/OIP.Wkn4_kVHLYYZOOy7FMnFXwHaHa?pid=ImgDet&w=188&h=188&c=7&dpr=1.5"} 
                                         alt="profile-img" 
@@ -190,7 +190,7 @@ const Navbar = () => {
                             <PopoverContent className="w-72 bg-white border border-gray-200 rounded-2xl shadow-xl p-4">
                                 <div className="space-y-4">
                                     <div className="flex gap-3 items-center">
-                                        <Avatar className="w-10 h-10 border-2 border-purple-300">
+                                        <Avatar className="w-10 h-10 border-2 border-blue-300">
                                             <AvatarImage 
                                                 src={user?.profile?.profilePhoto || "https://tse3.mm.bing.net/th/id/OIP.Wkn4_kVHLYYZOOy7FMnFXwHaHa?pid=ImgDet&w=188&h=188&c=7&dpr=1.5"} 
                                                 alt="@user" 
@@ -205,12 +205,12 @@ const Navbar = () => {
                                     </div>
                                     <div className="border-t border-gray-200" />
                                     <div className="space-y-2">
-                                        <Link to="/" className="block p-2 text-gray-700 hover:bg-purple-50 rounded text-sm">Home</Link>
-                                        {user?.role !== 'recruiter' && <Link to="/jobs" className="block p-2 text-gray-700 hover:bg-purple-50 rounded text-sm">Jobs</Link>}
-                                        {user?.role !== 'recruiter' && <Link to="/browse" className="block p-2 text-gray-700 hover:bg-purple-50 rounded text-sm">Browse</Link>}
-                                        {user?.role === 'recruiter' && <Link to="/admin/companies" className="block p-2 text-gray-700 hover:bg-purple-50 rounded text-sm">Companies</Link>}
-                                        {user?.role === 'recruiter' && <Link to="/admin/jobs" className="block p-2 text-gray-700 hover:bg-purple-50 rounded text-sm">Jobs</Link>}
-                                        {user?.role === 'student' && <Link to="/profile" className="block p-2 text-gray-700 hover:bg-purple-50 rounded text-sm">Profile</Link>}
+                                        <Link to="/" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Home</Link>
+                                        {user?.role !== 'recruiter' && <Link to="/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Jobs</Link>}
+                                        {user?.role !== 'recruiter' && <Link to="/browse" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Browse</Link>}
+                                        {user?.role === 'recruiter' && <Link to="/admin/companies" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Companies</Link>}
+                                        {user?.role === 'recruiter' && <Link to="/admin/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Jobs</Link>}
+                                        {user?.role === 'student' && <Link to="/profile" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Profile</Link>}
                                         <button onClick={logoutHandler} className="w-full p-2 text-gray-700 hover:bg-red-50 rounded text-sm text-left">Logout</button>
                                     </div>
                                 </div>

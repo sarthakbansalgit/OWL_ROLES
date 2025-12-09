@@ -7,11 +7,11 @@ export default function DropDown() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <MenuButton className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:text-purple-300 transition-colors">
+        <MenuButton className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:text-blue-300 transition-colors">
           More
           <ChevronDownIcon 
             aria-hidden="true" 
-            className="w-4 h-4 text-purple-300 mt-0.5 transition-transform ui-open:rotate-180" 
+            className="w-4 h-4 text-blue-300 mt-0.5 transition-transform ui-open:rotate-180" 
           />
         </MenuButton>
       </div>
@@ -29,7 +29,7 @@ export default function DropDown() {
                   focus ? 'bg-gray-700/50 text-white' : 'text-gray-300'
                 }`}
               >
-                <Users className="w-4 h-4 text-purple-400" />
+                <Users className="w-4 h-4 text-blue-400" />
                 Community
               </Link>
             )}
@@ -43,7 +43,7 @@ export default function DropDown() {
                   focus ? 'bg-gray-700/50 text-white' : 'text-gray-300'
                 }`}
               >
-                <BookOpen className="w-4 h-4 text-purple-400" />
+                <BookOpen className="w-4 h-4 text-blue-400" />
                 Learn
               </Link>
             )}
@@ -57,7 +57,7 @@ export default function DropDown() {
                   focus ? 'bg-gray-700/50 text-white' : 'text-gray-300'
                 }`}
               >
-                <Info className="w-4 h-4 text-purple-400" />
+                <Info className="w-4 h-4 text-blue-400" />
                 About
               </Link>
             )}

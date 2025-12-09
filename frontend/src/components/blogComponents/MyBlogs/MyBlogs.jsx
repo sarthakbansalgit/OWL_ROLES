@@ -89,7 +89,7 @@ const MyBlogs = () => {
             <Button
               variant="contained"
               startIcon={<AddIcon className="text-white" />}
-              className="w-full sm:w-auto bg-purple-600 text-white hover:bg-purple-700 shadow-sm hover:shadow-md transition-all"
+              className="w-full sm:w-auto bg-blue-600 text-white hover:bg-blue-700 shadow-sm hover:shadow-md transition-all"
             >
               Create New
             </Button>
@@ -99,7 +99,7 @@ const MyBlogs = () => {
         {/* Main Content */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
           <div className="p-6 border-b border-gray-100">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-purple-300 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-300 bg-clip-text text-transparent">
               My Blog Posts
             </h1>
           </div>
@@ -122,7 +122,7 @@ const MyBlogs = () => {
                     color="primary"
                     size="large"
                     startIcon={<AddIcon />}
-                    className="bg-purple-600 text-white hover:bg-purple-700"
+                    className="bg-blue-600 text-white hover:bg-blue-700"
                   >
                     Write First Blog
                   </Button>

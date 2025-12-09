@@ -23,7 +23,7 @@ const CategoryCarousel = () => {
     }
 
     return (
-        <div className='bg-gradient-to-b from-purple-50 to-blue-50 py-8 md:py-12 relative overflow-hidden'>
+        <div className='bg-gradient-to-b from-blue-50 to-blue-50 py-8 md:py-12 relative overflow-hidden'>
             <style>{`
                 @keyframes slideInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
                 .category-heading { animation: slideInRight 0.8s ease-out; }
@@ -37,7 +37,7 @@ const CategoryCarousel = () => {
             <InfoCardsHome className='my-8 md:my-12'/>
             <div className='max-w-6xl mx-auto px-4'>
                 <h2 className='category-heading text-2xl md:text-4xl font-bold text-gray-900 mb-6 md:mb-8 text-center'>
-                    Explore by <span className='bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>Category</span>
+                    Explore by <span className='bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent'>Category</span>
                 </h2>
                 <Carousel className="w-full">
                     <CarouselContent className='flex gap-3 md:gap-4'>
@@ -46,7 +46,7 @@ const CategoryCarousel = () => {
                                 <CarouselItem key={index} className="basis-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4">
                                     <Button 
                                         onClick={()=>searchJobHandler(cat)} 
-                                        className='category-btn w-full rounded-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-4 md:py-6 text-sm md:text-base shadow-lg'
+                                        className='category-btn w-full rounded-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold py-4 md:py-6 text-sm md:text-base shadow-lg'
                                         style={{animationDelay: `${index * 0.1}s`}}
                                     >
                                         {cat}
@@ -55,8 +55,8 @@ const CategoryCarousel = () => {
                             ))
                         }
                     </CarouselContent>
-                    <CarouselPrevious className='hidden md:flex hover:bg-purple-600 hover:text-white transition-all duration-300 active:scale-90' />
-                    <CarouselNext className='hidden md:flex hover:bg-purple-600 hover:text-white transition-all duration-300 active:scale-90' />
+                    <CarouselPrevious className='hidden md:flex hover:bg-blue-600 hover:text-white transition-all duration-300 active:scale-90' />
+                    <CarouselNext className='hidden md:flex hover:bg-blue-600 hover:text-white transition-all duration-300 active:scale-90' />
                 </Carousel>
             </div>
         </div>

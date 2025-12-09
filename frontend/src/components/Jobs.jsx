@@ -29,7 +29,7 @@ const Jobs = () => {
     };
 
     return (
-        <div className='bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen'>
+        <div className='bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 min-h-screen'>
             <Navbar />
             <div className='max-w-7xl mx-auto mt-4 md:mt-5 px-4'>
                 {/* Mobile: Full width, Desktop: Sidebar layout */}

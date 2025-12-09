@@ -8,11 +8,11 @@ const LatestJobs = () => {
     const {allJobs} = useSelector(store=>store.job);
    
     return (
-        <div className='bg-gradient-to-b from-blue-50 via-purple-50 to-pink-50 py-12 md:py-16'>
+        <div className='bg-gradient-to-b from-blue-50 via-blue-50 to-blue-50 py-12 md:py-16'>
             <div className='max-w-7xl mx-auto px-4'>
                 <div className='mb-8 md:mb-12'>
                     <h1 className='text-2xl md:text-4xl lg:text-5xl font-bold text-gray-900' data-aos='fade-in'>
-                        <span className='bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent'>Latest & Top</span> Job Openings
+                        <span className='bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent'>Latest & Top</span> Job Openings
                     </h1>
                     <p className='text-gray-600 mt-2 text-sm md:text-base lg:text-lg'>Discover exciting opportunities from leading companies</p>
                 </div>

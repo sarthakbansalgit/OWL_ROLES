@@ -22,7 +22,7 @@ const Home = () => {
     }
   }, []);
   return (
-    <div className='bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen'>
+    <div className='bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 min-h-screen'>
       <Navbar/>
       <HeroSection />
       <CategoryCarousel />
