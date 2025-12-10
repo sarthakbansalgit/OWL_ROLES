@@ -28,7 +28,7 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 const corsOptions = {
-    origin: ['http://localhost:5173', "https://cubicles.netlify.app", "https://owl-roles-um59.vercel.app", process.env.CLIENT_URL],
+    origin: ['http://localhost:5173', 'http://localhost:5174', "https://cubicles.netlify.app", "https://owl-roles-um59.vercel.app", "https://owl-roles2-59yw49qv9-sarthaks-projects-ba3df7d0.vercel.app", process.env.CLIENT_URL],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma']
@@ -80,3 +80,6 @@ app.listen(PORT, '0.0.0.0', ()=>{
     console.log(`✓ API Docs: http://172.20.10.2:${PORT}/api-docs`);
     console.log(`${'='.repeat(50)}\n`);
 });
+
+// Export for Vercel
+export default app;
