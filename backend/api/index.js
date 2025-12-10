@@ -33,8 +33,25 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(cookieParser());
 
-// Morgan middleware for logging
-app.use(morgan('combined', { stream: dualStream }));
+// Morgan middleware for logging (simplified for Vercel)
+try {
+    app.use(morgan('combined', { stream: dualStream }));
+} catch (e) {
+    console.log('Morgan logging not available in production');
+}
+
+// Health check endpoint
+app.get('/', (req, res) => {
+    res.json({ 
+        message: 'OWL ROLES Backend API',
+        status: 'running',
+        timestamp: new Date()
+    });
+});
+
+app.get('/api/v1/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Backend is healthy' });
+});
 
 // Routes
 app.use("/api/v1/user", userRoute);
