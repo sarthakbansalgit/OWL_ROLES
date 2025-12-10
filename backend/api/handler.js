@@ -79,7 +79,11 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Connect to database
+// Connect to database on startup
 connectDB();
 
-export default app;
+// Export as handler for Vercel
+export default async (req, res) => {
+    // This is called for every request
+    return app(req, res);
+};
