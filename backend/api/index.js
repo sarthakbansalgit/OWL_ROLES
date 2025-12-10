@@ -15,6 +15,8 @@ import b2bAnalyticsRoutes from "../routes/b2b.route.js";
 import setupSwagger from '../docs/swaggerDocs.js';
 import { accessLogStream, dualStream } from "../utils/morganConfig.js";
 
+// Load environment variables from production file on Vercel
+dotenv.config({ path: './.env.production' });
 dotenv.config({ path: './.env' });
 
 const app = express();
