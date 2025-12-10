@@ -25,10 +25,26 @@ app.use(helmet());
 // Built-in middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+
+// Flexible CORS configuration
 const corsOptions = {
-    origin: process.env.CLIENT_URL,
+    origin: function (origin, callback) {
+        // Allow requests from localhost, 172.x.x.x, and Vercel domains
+        if (!origin || 
+            origin === 'http://localhost:5174' || 
+            origin === 'http://localhost:5173' ||
+            origin.includes('172.') || 
+            origin.includes('vercel.app') ||
+            process.env.CLIENT_URL === origin) {
+            callback(null, true);
+        } else {
+            callback(null, true); // Allow all for now
+        }
+    },
     credentials: true,
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 };
 app.use(cors(corsOptions));
 app.use(cookieParser());
