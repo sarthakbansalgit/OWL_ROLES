@@ -456,16 +456,17 @@ const ProfileCandidate = () => {
                             {/* Research Areas */}
                             <div className="bg-blue-50 rounded-lg p-8 border border-blue-200">
                                 <h2 className="text-xl font-bold text-gray-900 mb-6">Research Areas</h2>
-                                <div className="flex flex-wrap gap-2">
-                                    {editData.researchAreas.map((area, idx) => (
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {editData.researchAreas?.map((area, idx) => (
                                         <div key={idx} className="bg-blue-200 text-blue-700 px-4 py-2 rounded-full flex items-center gap-2">
-                                            <span>{area}</span>
+                                            <span>{typeof area === 'object' ? (area?.field || area?.name) : area}</span>
                                             <button
+                                                type="button"
                                                 onClick={() => setEditData({
                                                     ...editData,
                                                     researchAreas: editData.researchAreas.filter((_, i) => i !== idx)
                                                 })}
-                                                className="text-blue-900 hover:text-red-600"
+                                                className="text-blue-900 hover:text-red-600 font-bold"
                                             >
                                                 ×
                                             </button>
@@ -474,18 +475,18 @@ const ProfileCandidate = () => {
                                 </div>
                                 <input
                                     type="text"
-                                    placeholder="Add research area (press comma or Enter)"
+                                    placeholder="Add research area and press Enter"
                                     onKeyDown={(e) => {
-                                        if ((e.key === 'Enter' || e.key === ',') && e.target.value.trim()) {
+                                        if (e.key === 'Enter' && e.target.value.trim()) {
                                             setEditData({
                                                 ...editData,
-                                                researchAreas: [...editData.researchAreas, e.target.value.trim()]
+                                                researchAreas: [...editData.researchAreas, { field: e.target.value.trim() }]
                                             });
                                             e.target.value = '';
                                             e.preventDefault();
                                         }
                                     }}
-                                    className="w-full mt-4 px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
+                                    className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
                                 />
                             </div>
 
@@ -756,7 +757,7 @@ const ProfileCandidate = () => {
                                     <div className="flex flex-wrap gap-3">
                                         {user.profile.researchAreas.map((area, idx) => (
                                             <span key={idx} className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-300">
-                                                {typeof area === 'string' ? area : typeof area === 'object' ? area?.name || 'Research Area' : String(area)}
+                                                {typeof area === 'string' ? area : typeof area === 'object' ? (area?.field || area?.name || 'Research Area') : String(area)}
                                             </span>
                                         ))}
                                     </div>
