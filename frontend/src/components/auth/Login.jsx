@@ -9,7 +9,7 @@ import { USER_API_END_POINT } from '@/utils/constant'
 import { toast } from 'sonner'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLoading, setUser } from '@/redux/authSlice'
-import { Loader2, Mail, Lock, User, Briefcase } from 'lucide-react'
+import { Loader2, Mail, Lock, User, Briefcase, AlertCircle, CheckCircle2, X } from 'lucide-react'
 
 const Login = () => {
     const [input, setInput] = useState({
@@ -17,6 +17,7 @@ const Login = () => {
         password: "",
         role: "",
     });
+    const [showProfilePopup, setShowProfilePopup] = useState(false);
     const { loading,user } = useSelector(store => store.auth);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -49,7 +50,14 @@ const Login = () => {
             if (response.data.success) {
                 dispatch(setUser(response.data.user));
                 toast.success(response.data.message || "Login successful!");
-                navigate("/");
+                
+                // Show profile popup first, then redirect
+                setShowProfilePopup(true);
+                
+                // Auto redirect after 3 seconds if user doesn't click
+                setTimeout(() => {
+                    navigate("/profile");
+                }, 3000);
             } else {
                 toast.error(response.data.message || "Login failed");
             }
@@ -194,6 +202,69 @@ const Login = () => {
                     </form>
                 </div>
             </div>
+
+            {/* Profile Popup Modal */}
+            {showProfilePopup && (
+                <div className='fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4'>
+                    <div className='bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 space-y-6 animate-in fade-in scale-in'>
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setShowProfilePopup(false)}
+                            className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition'
+                        >
+                            <X className='w-6 h-6' />
+                        </button>
+
+                        {/* Success Icon */}
+                        <div className='flex justify-center'>
+                            <div className='bg-gradient-to-br from-green-400 to-green-600 rounded-full p-4'>
+                                <CheckCircle2 className='w-12 h-12 text-white' />
+                            </div>
+                        </div>
+
+                        {/* Title */}
+                        <div className='text-center space-y-2'>
+                            <h2 className='text-2xl font-bold text-gray-900'>Welcome! 🎉</h2>
+                            <p className='text-gray-600'>Login successful</p>
+                        </div>
+
+                        {/* Alert Box */}
+                        <div className='bg-blue-50 border-2 border-blue-200 rounded-lg p-4 flex gap-3'>
+                            <AlertCircle className='w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5' />
+                            <div>
+                                <p className='font-semibold text-blue-900'>Complete Your Profile</p>
+                                <p className='text-blue-700 text-sm'>Add your details and profile picture to get noticed by recruiters and stand out from the crowd!</p>
+                            </div>
+                        </div>
+
+                        {/* Action Buttons */}
+                        <div className='space-y-3 pt-2'>
+                            <button
+                                onClick={() => {
+                                    setShowProfilePopup(false);
+                                    navigate("/profile");
+                                }}
+                                className='w-full bg-gradient-to-r from-blue-600 to-blue-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transition duration-200 flex items-center justify-center gap-2'
+                            >
+                                <CheckCircle2 className='w-5 h-5' />
+                                Edit Profile Now
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowProfilePopup(false);
+                                    navigate("/");
+                                }}
+                                className='w-full bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-300 transition duration-200'
+                            >
+                                Skip for Now
+                            </button>
+                        </div>
+
+                        {/* Timer Info */}
+                        <p className='text-center text-xs text-gray-500'>Auto-redirecting in 3 seconds...</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
