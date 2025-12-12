@@ -152,7 +152,7 @@ const FunctionalJobs = () => {
         <div className="min-h-screen bg-white text-gray-900">
             <Navbar />
 
-            <main className="px-4 sm:px-10 lg:px-20 py-8 pt-24">
+            <main className="page-transition px-4 sm:px-10 lg:px-20 py-8 pt-24">
                 <div className="max-w-7xl mx-auto">
                     {/* Header */}
                     <div className="mb-8">

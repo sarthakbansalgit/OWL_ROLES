@@ -292,7 +292,7 @@ const ProfileCandidate = () => {
         return (
             <div className="min-h-screen bg-white text-gray-900">
                 <Navbar />
-                <main className="px-4 sm:px-10 lg:px-20 py-8 pt-24">
+                <main className="page-transition px-4 sm:px-10 lg:px-20 py-8 pt-24">
                     <div className="max-w-4xl mx-auto">
                         <div className="flex justify-between items-center mb-8">
                             <h1 className="text-3xl font-bold">Edit Profile</h1>
@@ -663,7 +663,7 @@ const ProfileCandidate = () => {
         <div className="min-h-screen bg-white text-gray-900">
             <Navbar />
             
-            <main className="px-4 sm:px-10 lg:px-20 py-8 pt-24">
+            <main className="page-transition px-4 sm:px-10 lg:px-20 py-8 pt-24">
                 <div className="max-w-6xl mx-auto">
                     {/* Header Section */}
                     <div className="flex flex-col gap-6 border-b border-blue-200 pb-8 mb-8">

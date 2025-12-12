@@ -22,6 +22,7 @@ class UserModel {
           profilePhoto: { type: String, default: "" },
           phoneNumber: { type: String },
           location: { type: String },
+          orcidId: { type: String },
           qualifications: [
             {
               title: String,
@@ -31,6 +32,15 @@ class UserModel {
             }
           ],
           researchAreas: [String],
+          publications: [
+            {
+              title: String,
+              journal: String,
+              year: String,
+              authors: String,
+              link: String
+            }
+          ],
           experience: [
             {
               title: String,

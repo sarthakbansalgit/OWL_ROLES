@@ -82,7 +82,7 @@ const Login = () => {
     }, []);
     
     return (
-        <div className='min-h-screen bg-gradient-to-br from-gray-950 to-gray-900'>
+        <div className='min-h-screen bg-gradient-to-br from-gray-950 to-gray-900 page-transition'>
             <Navbar />
             <div className='flex items-center justify-center min-h-[calc(100vh-100px)] px-4'>
                 <div className='w-full max-w-md'>

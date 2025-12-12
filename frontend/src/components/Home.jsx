@@ -24,11 +24,13 @@ const Home = () => {
   return (
     <div className='bg-white min-h-screen'>
       <Navbar/>
-      <HeroSection />
-      <CategoryCarousel />
-      <LatestJobs />
-      <Info1/>
-      <InfoLast/>
+      <div className='page-transition'>
+        <HeroSection />
+        <CategoryCarousel />
+        <LatestJobs />
+        <Info1/>
+        <InfoLast/>
+      </div>
       <Footer />
     </div>
   )

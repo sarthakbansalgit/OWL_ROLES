@@ -27,7 +27,11 @@ class UserController {
     // Register a new user
     async register(req, res, next) {
         try {
-            const { fullname, email, phoneNumber, password, role, bio, location, orcidId, researchAreas } = req.body;
+            const { 
+                fullname, email, phoneNumber, password, role, 
+                bio, location, orcidId, researchAreas, qualifications,
+                experience, publications, coursesTaught, demoVideo
+            } = req.body;
 
             // Validate email format
             if (!simpleEmailRegex.test(email)) {
@@ -61,24 +65,71 @@ class UserController {
             
             // Build profile object with provided fields
             const profileData = {
-                profilePhoto: cloudResponse ? cloudResponse.secure_url : null, // Handle photo upload conditionally
+                profilePhoto: cloudResponse ? cloudResponse.secure_url : null,
             };
             
-            // Add optional profile fields if provided
+            // Add profile fields
             if (bio?.trim()) profileData.bio = bio.trim();
             if (location?.trim()) profileData.location = location.trim();
             if (orcidId?.trim()) profileData.orcidId = orcidId.trim();
             
-            // Parse research areas if provided (should be JSON stringified array from frontend)
+            // Parse and add qualifications
+            if (qualifications) {
+                try {
+                    const qualsArray = typeof qualifications === 'string' ? JSON.parse(qualifications) : qualifications;
+                    if (Array.isArray(qualsArray) && qualsArray.length > 0) {
+                        profileData.qualifications = qualsArray.filter(q => q.title?.trim());
+                    }
+                } catch (parseError) {
+                    console.warn("Could not parse qualifications:", parseError);
+                }
+            }
+            
+            // Parse and add research areas
             if (researchAreas) {
                 try {
                     const areasArray = typeof researchAreas === 'string' ? JSON.parse(researchAreas) : researchAreas;
                     if (Array.isArray(areasArray) && areasArray.length > 0) {
-                        profileData.researchAreas = areasArray.map(area => ({ field: area.trim() }));
+                        profileData.researchAreas = areasArray.filter(a => a.field?.trim());
                     }
                 } catch (parseError) {
                     console.warn("Could not parse researchAreas:", parseError);
-                    // Continue without research areas if parsing fails
+                }
+            }
+
+            // Parse and add experience
+            if (experience) {
+                try {
+                    const expArray = typeof experience === 'string' ? JSON.parse(experience) : experience;
+                    if (Array.isArray(expArray) && expArray.length > 0) {
+                        profileData.experience = expArray.filter(e => e.title?.trim());
+                    }
+                } catch (parseError) {
+                    console.warn("Could not parse experience:", parseError);
+                }
+            }
+
+            // Parse and add publications
+            if (publications) {
+                try {
+                    const pubArray = typeof publications === 'string' ? JSON.parse(publications) : publications;
+                    if (Array.isArray(pubArray) && pubArray.length > 0) {
+                        profileData.publications = pubArray.filter(p => p.title?.trim());
+                    }
+                } catch (parseError) {
+                    console.warn("Could not parse publications:", parseError);
+                }
+            }
+
+            // Parse and add courses taught
+            if (coursesTaught) {
+                try {
+                    const coursesArray = typeof coursesTaught === 'string' ? JSON.parse(coursesTaught) : coursesTaught;
+                    if (Array.isArray(coursesArray) && coursesArray.length > 0) {
+                        profileData.coursesTaught = coursesArray.filter(c => c.name?.trim());
+                    }
+                } catch (parseError) {
+                    console.warn("Could not parse coursesTaught:", parseError);
                 }
             }
             

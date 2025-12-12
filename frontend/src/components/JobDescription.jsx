@@ -72,7 +72,7 @@ const JobDescription = () => {
     return (
         <>
         <Navbar/>
-        <div className="bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 min-h-screen py-8 md:py-12">
+        <div className="page-transition bg-gradient-to-br from-blue-50 via-blue-50 to-blue-50 min-h-screen py-8 md:py-12">
             <div className="max-w-6xl mx-auto px-4 py-6 md:py-12 space-y-6 md:space-y-8">
                 {/* Header Section */}
                 <div className="space-y-3 md:space-y-4">

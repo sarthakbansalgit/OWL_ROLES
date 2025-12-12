@@ -55,7 +55,8 @@ const Browse = () => {
         <div className='bg-gradient-to-b from-blue-50 to-white min-h-screen'>
             <Navbar />
             
-            {/* Hero Section */}
+            <div className='page-transition'>
+                {/* Hero Section */}
             <div className='bg-gradient-to-r from-blue-600 to-blue-700 py-8 md:py-12'>
                 <div className='max-w-7xl mx-auto px-4'>
                     <h1 className='font-bold text-3xl md:text-4xl lg:text-5xl text-white mb-4'>Browse Opportunities</h1>
@@ -199,6 +200,7 @@ const Browse = () => {
                         ))}
                     </div>
                 )}
+            </div>
             </div>
         </div>
     );
