@@ -27,7 +27,7 @@ class UserController {
     // Register a new user
     async register(req, res, next) {
         try {
-            const { fullname, email, phoneNumber, password, role } = req.body;
+            const { fullname, email, phoneNumber, password, role, bio, location, orcidId, researchAreas } = req.body;
 
             // Validate email format
             if (!simpleEmailRegex.test(email)) {
@@ -58,15 +58,37 @@ class UserController {
             }
 
             const hashedPassword = await bcrypt.hash(password, 10);
+            
+            // Build profile object with provided fields
+            const profileData = {
+                profilePhoto: cloudResponse ? cloudResponse.secure_url : null, // Handle photo upload conditionally
+            };
+            
+            // Add optional profile fields if provided
+            if (bio?.trim()) profileData.bio = bio.trim();
+            if (location?.trim()) profileData.location = location.trim();
+            if (orcidId?.trim()) profileData.orcidId = orcidId.trim();
+            
+            // Parse research areas if provided (should be JSON stringified array from frontend)
+            if (researchAreas) {
+                try {
+                    const areasArray = typeof researchAreas === 'string' ? JSON.parse(researchAreas) : researchAreas;
+                    if (Array.isArray(areasArray) && areasArray.length > 0) {
+                        profileData.researchAreas = areasArray.map(area => ({ field: area.trim() }));
+                    }
+                } catch (parseError) {
+                    console.warn("Could not parse researchAreas:", parseError);
+                    // Continue without research areas if parsing fails
+                }
+            }
+            
             await User.create({
                 fullname,
                 email,
                 phoneNumber,
                 password: hashedPassword,
                 role,
-                profile: {
-                    profilePhoto: cloudResponse ? cloudResponse.secure_url : null, // Handle photo upload conditionally
-                },
+                profile: profileData,
             });
 
             return res.status(201).json({ message: "Account created successfully.", success: true });
@@ -169,6 +191,7 @@ class UserController {
             const profileUpdates = {};
             if (req.body.bio?.trim()) profileUpdates.bio = req.body.bio.trim();
             if (req.body.location?.trim()) profileUpdates.location = req.body.location.trim();
+            if (req.body.orcidId?.trim()) profileUpdates.orcidId = req.body.orcidId.trim();
             
             if (req.body.skills) {
                 profileUpdates.skills = typeof req.body.skills === 'string' 

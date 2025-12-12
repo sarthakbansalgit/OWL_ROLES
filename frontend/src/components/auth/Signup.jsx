@@ -9,7 +9,7 @@ import { USER_API_END_POINT } from '@/utils/constant';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '@/redux/authSlice';
-import { Loader2, User, Mail, Phone, Lock, Upload, User as UserIcon, Briefcase } from 'lucide-react';
+import { Loader2, User, Mail, Phone, Lock, Upload, User as UserIcon, Briefcase, MapPin, BookOpen, Award } from 'lucide-react';
 
 const Signup = () => {
     const [input, setInput] = useState({
@@ -18,9 +18,14 @@ const Signup = () => {
         phoneNumber: "",
         password: "",
         role: "",
-        file: ""
+        file: "",
+        bio: "",
+        location: "",
+        orcidId: "",
+        researchAreas: ""
     });
 
+    const [showAdvanced, setShowAdvanced] = useState(false);
     const { loading, user } = useSelector(store => store.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -47,7 +52,7 @@ const Signup = () => {
         e.preventDefault();
     
         if (!input.fullname || !input.email || !input.phoneNumber || !input.password || !input.role) {
-            return toast.error("Please fill in all fields.");
+            return toast.error("Please fill in all required fields.");
         }
     
         // Validate phone number format
@@ -61,6 +66,15 @@ const Signup = () => {
         formData.append("phoneNumber", input.phoneNumber);
         formData.append("password", input.password);
         formData.append("role", input.role);
+        
+        // Add profile fields
+        if (input.bio) formData.append("bio", input.bio);
+        if (input.location) formData.append("location", input.location);
+        if (input.orcidId) formData.append("orcidId", input.orcidId);
+        if (input.researchAreas) {
+            const areas = input.researchAreas.split(",").map(a => a.trim());
+            formData.append("researchAreas", JSON.stringify(areas));
+        }
     
         if (input.file) {
             formData.append("file", input.file);
@@ -246,6 +260,97 @@ const Signup = () => {
                                 className='cursor-pointer px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
                             />
                             <p className='text-xs text-gray-500'>Max 5MB • JPG, PNG, GIF</p>
+                        </div>
+
+                        {/* Additional Profile Information - Collapsible */}
+                        <div className='space-y-3 border border-gray-200 rounded-lg p-4 bg-gray-50'>
+                            <button
+                                type='button'
+                                onClick={() => setShowAdvanced(!showAdvanced)}
+                                className='w-full flex items-center justify-between text-gray-700 font-semibold hover:text-blue-600 transition'
+                            >
+                                <span className='flex items-center gap-2'>
+                                    <BookOpen className='w-4 h-4' />
+                                    Professional Information (Optional)
+                                </span>
+                                <span className={`transform transition-transform ${showAdvanced ? 'rotate-180' : ''}`}>
+                                    ▼
+                                </span>
+                            </button>
+
+                            {showAdvanced && (
+                                <div className='space-y-3 pt-3 border-t border-gray-200'>
+                                    {/* Bio */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="bio" className='text-gray-700 font-semibold flex items-center gap-2'>
+                                            Bio
+                                        </Label>
+                                        <textarea
+                                            id="bio"
+                                            value={input.bio}
+                                            name="bio"
+                                            onChange={changeEventHandler}
+                                            placeholder="Tell us about yourself..."
+                                            rows="3"
+                                            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none'
+                                        />
+                                    </div>
+
+                                    {/* Location */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="location" className='text-gray-700 font-semibold flex items-center gap-2'>
+                                            <MapPin className='w-4 h-4' />
+                                            Location
+                                        </Label>
+                                        <Input
+                                            id="location"
+                                            type="text"
+                                            value={input.location}
+                                            name="location"
+                                            onChange={changeEventHandler}
+                                            placeholder="City, Country"
+                                            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
+                                        />
+                                    </div>
+
+                                    {/* ORCID ID */}
+                                    <div className="space-y-2">
+                                        <Label htmlFor="orcidId" className='text-gray-700 font-semibold flex items-center gap-2'>
+                                            ORCID iD
+                                        </Label>
+                                        <Input
+                                            id="orcidId"
+                                            type="text"
+                                            value={input.orcidId}
+                                            name="orcidId"
+                                            onChange={changeEventHandler}
+                                            placeholder="XXXX-XXXX-XXXX-XXXX"
+                                            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition'
+                                        />
+                                        <p className='text-xs text-gray-500'>Optional: Your ORCID identifier</p>
+                                    </div>
+
+                                    {/* Research Areas - Only for Candidates */}
+                                    {input.role === 'student' && (
+                                        <div className="space-y-2">
+                                            <Label htmlFor="researchAreas" className='text-gray-700 font-semibold flex items-center gap-2'>
+                                                <Award className='w-4 h-4' />
+                                                Research Areas
+                                            </Label>
+                                            <Input
+                                                id="researchAreas"
+                                                type="text"
+                                                value={input.researchAreas}
+                                                name="researchAreas"
+                                                onChange={changeEventHandler}
+                                                placeholder="e.g., Machine Learning, Data Science, Cloud Computing"
+                                                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
+                                            />
+                                            <p className='text-xs text-gray-500'>Comma-separated list of your research interests</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
 
                         {/* Signup Button */}
