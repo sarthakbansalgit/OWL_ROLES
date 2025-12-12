@@ -4,7 +4,7 @@ import Job from './Job';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchedQuery } from '@/redux/jobSlice';
 import useGetAllJobs from '@/hooks/useGetAllJobs';
-import { Search, Filter, X } from 'lucide-react';
+import { Search, Filter, X, DollarSign } from 'lucide-react';
 
 const Browse = () => {
     useGetAllJobs(); // Ensure this hook fetches and sets the allJobs data
@@ -13,6 +13,8 @@ const Browse = () => {
     const [filterOpen, setFilterOpen] = useState(false);
     const [typeFilter, setTypeFilter] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
+    const [salaryMinFilter, setSalaryMinFilter] = useState('');
+    const [salaryMaxFilter, setSalaryMaxFilter] = useState('');
     const [searchInput, setSearchInput] = useState(searchedQuery);
 
     useEffect(() => {
@@ -35,7 +37,20 @@ const Browse = () => {
         const matchesType = !typeFilter || job.jobType === typeFilter;
         const matchesLocation = !locationFilter || job.location === locationFilter;
         
-        return matchesSearch && matchesType && matchesLocation;
+        // Add salary filtering
+        let matchesSalary = true;
+        if (salaryMinFilter) {
+            const minSalary = parseInt(salaryMinFilter);
+            const salary = parseInt(job.salary || 0);
+            matchesSalary = salary >= minSalary;
+        }
+        if (salaryMaxFilter) {
+            const maxSalary = parseInt(salaryMaxFilter);
+            const salary = parseInt(job.salary || 0);
+            matchesSalary = matchesSalary && salary <= maxSalary;
+        }
+        
+        return matchesSearch && matchesType && matchesLocation && matchesSalary;
     });
 
     const handleSearch = (e) => {
@@ -48,6 +63,8 @@ const Browse = () => {
         setSearchInput('');
         setTypeFilter('');
         setLocationFilter('');
+        setSalaryMinFilter('');
+        setSalaryMaxFilter('');
         dispatch(setSearchedQuery(''));
     };
 
@@ -159,6 +176,31 @@ const Browse = () => {
                                                 <span className='text-sm text-gray-700'>{location}</span>
                                             </label>
                                         ))}
+                                    </div>
+                                </div>
+
+                                {/* Salary Range Filter */}
+                                <div>
+                                    <label className='block text-sm font-semibold text-gray-700 mb-3'>Salary Range (₹)</label>
+                                    <div className='space-y-3'>
+                                        <div>
+                                            <input
+                                                type='number'
+                                                placeholder='Min Salary'
+                                                value={salaryMinFilter}
+                                                onChange={(e) => setSalaryMinFilter(e.target.value)}
+                                                className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
+                                            />
+                                        </div>
+                                        <div>
+                                            <input
+                                                type='number'
+                                                placeholder='Max Salary'
+                                                value={salaryMaxFilter}
+                                                onChange={(e) => setSalaryMaxFilter(e.target.value)}
+                                                className='w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all'
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>

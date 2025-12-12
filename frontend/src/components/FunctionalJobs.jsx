@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Navbar from './shared/Navbar';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchedQuery } from '@/redux/jobSlice';
-import { Star, Filter, Briefcase, MapPin, Clock, AlertCircle } from 'lucide-react';
+import { Star, Filter, Briefcase, MapPin, Clock, AlertCircle, X, DollarSign, TrendingUp } from 'lucide-react';
 import { Button } from './ui/button';
 import axios from 'axios';
 
@@ -17,25 +17,28 @@ const FunctionalJobs = () => {
     const [experienceFilter, setExperienceFilter] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [typeFilter, setTypeFilter] = useState('');
+    const [salaryMinFilter, setSalaryMinFilter] = useState('');
+    const [salaryMaxFilter, setSalaryMaxFilter] = useState('');
+    const [levelFilter, setLevelFilter] = useState('');
+    const [companyFilter, setCompanyFilter] = useState('');
+    const [searchInput, setSearchInput] = useState(searchedQuery);
+    const [showFilters, setShowFilters] = useState(false);
     const [matchScores, setMatchScores] = useState({});
 
     useEffect(() => {
-        if (searchedQuery) {
-            const filteredJobs = allJobs.filter((job) => {
-                return job.title.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-                    job.description.toLowerCase().includes(searchedQuery.toLowerCase()) ||
-                    job.location.toLowerCase().includes(searchedQuery.toLowerCase());
-            });
-            setFilterJobs(filteredJobs);
-        } else {
-            setFilterJobs(allJobs);
+        let filtered = allJobs;
+
+        // Search filter
+        if (searchInput) {
+            filtered = filtered.filter(job =>
+                job.title.toLowerCase().includes(searchInput.toLowerCase()) ||
+                job.description.toLowerCase().includes(searchInput.toLowerCase()) ||
+                job.location.toLowerCase().includes(searchInput.toLowerCase()) ||
+                job.company?.name?.toLowerCase().includes(searchInput.toLowerCase())
+            );
         }
-    }, [allJobs, searchedQuery]);
 
-    // Apply filters
-    useEffect(() => {
-        let filtered = filterJobs;
-
+        // Experience filter
         if (experienceFilter) {
             filtered = filtered.filter(job => {
                 const minExp = parseInt(job.minExperience || 0);
@@ -44,15 +47,48 @@ const FunctionalJobs = () => {
             });
         }
 
+        // Location filter
         if (locationFilter) {
             filtered = filtered.filter(job =>
                 job.location.toLowerCase().includes(locationFilter.toLowerCase())
             );
         }
 
+        // Job Type filter
         if (typeFilter) {
             filtered = filtered.filter(job =>
                 (job.jobType || 'Full-time').toLowerCase() === typeFilter.toLowerCase()
+            );
+        }
+
+        // Salary filter
+        if (salaryMinFilter) {
+            const minSalary = parseInt(salaryMinFilter);
+            filtered = filtered.filter(job => {
+                const salary = parseInt(job.salary || 0);
+                return salary >= minSalary;
+            });
+        }
+
+        if (salaryMaxFilter) {
+            const maxSalary = parseInt(salaryMaxFilter);
+            filtered = filtered.filter(job => {
+                const salary = parseInt(job.salary || 0);
+                return salary <= maxSalary;
+            });
+        }
+
+        // Level filter
+        if (levelFilter) {
+            filtered = filtered.filter(job =>
+                job.level?.toLowerCase() === levelFilter.toLowerCase()
+            );
+        }
+
+        // Company filter
+        if (companyFilter) {
+            filtered = filtered.filter(job =>
+                job.company?.name?.toLowerCase().includes(companyFilter.toLowerCase())
             );
         }
 
@@ -60,10 +96,23 @@ const FunctionalJobs = () => {
         if (filtered.length > 0 && !selectedJob) {
             setSelectedJob(filtered[0]);
         }
-    }, [experienceFilter, locationFilter, typeFilter]);
+    }, [experienceFilter, locationFilter, typeFilter, salaryMinFilter, salaryMaxFilter, levelFilter, companyFilter, searchInput, allJobs, user, selectedJob]);
 
     const handleSearch = (e) => {
+        setSearchInput(e.target.value);
         dispatch(setSearchedQuery(e.target.value));
+    };
+
+    const clearAllFilters = () => {
+        setSearchInput('');
+        setExperienceFilter('');
+        setLocationFilter('');
+        setTypeFilter('');
+        setSalaryMinFilter('');
+        setSalaryMaxFilter('');
+        setLevelFilter('');
+        setCompanyFilter('');
+        dispatch(setSearchedQuery(''));
     };
 
     const handleApplyJob = async (jobId) => {
@@ -165,49 +214,161 @@ const FunctionalJobs = () => {
                     </div>
 
                     {/* Search Bar */}
-                    <div className="mb-6 flex gap-4">
+                    <div className="mb-6">
                         <input
                             type="text"
-                            placeholder="Search jobs by title, description, or location..."
-                            value={searchedQuery}
+                            placeholder="Search jobs by title, description, company, or location..."
+                            value={searchInput}
                             onChange={handleSearch}
-                            className="flex-1 px-4 py-3 border border-blue-200 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
+                            className="w-full px-4 py-3 border border-blue-200 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
                         />
                     </div>
 
-                    {/* Filters */}
-                    <div className="mb-6 flex gap-3 flex-wrap">
-                        <select
-                            value={experienceFilter}
-                            onChange={(e) => setExperienceFilter(e.target.value)}
-                            className="px-4 py-2 border border-blue-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
+                    {/* Filters Toggle Button */}
+                    <div className="mb-6">
+                        <button
+                            onClick={() => setShowFilters(!showFilters)}
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-blue-600 bg-blue-50 text-blue-600 font-semibold hover:bg-blue-100 transition"
                         >
-                            <option value="">All Experience Levels</option>
-                            <option value="0">Entry Level (0-2 years)</option>
-                            <option value="3">Mid-Level (3-5 years)</option>
-                            <option value="6">Senior (6+ years)</option>
-                        </select>
-
-                        <select
-                            value={typeFilter}
-                            onChange={(e) => setTypeFilter(e.target.value)}
-                            className="px-4 py-2 border border-blue-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
-                        >
-                            <option value="">All Job Types</option>
-                            <option value="Full-time">Full-time</option>
-                            <option value="Part-time">Part-time</option>
-                            <option value="Contract">Contract</option>
-                            <option value="Remote">Remote</option>
-                        </select>
-
-                        <input
-                            type="text"
-                            placeholder="Filter by location..."
-                            value={locationFilter}
-                            onChange={(e) => setLocationFilter(e.target.value)}
-                            className="px-4 py-2 border border-blue-200 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
-                        />
+                            <Filter className="h-5 w-5" />
+                            {showFilters ? 'Hide Filters' : 'Show Filters'}
+                        </button>
                     </div>
+
+                    {/* Detailed Filters Panel */}
+                    {showFilters && (
+                        <div className="mb-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                                {/* Job Type Filter */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Job Type</label>
+                                    <select
+                                        value={typeFilter}
+                                        onChange={(e) => setTypeFilter(e.target.value)}
+                                        className="w-full px-3 py-2 border border-blue-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-600 outline-none"
+                                    >
+                                        <option value="">All Types</option>
+                                        <option value="Full-time">Full-time</option>
+                                        <option value="Part-time">Part-time</option>
+                                        <option value="Contract">Contract</option>
+                                        <option value="Remote">Remote</option>
+                                        <option value="Internship">Internship</option>
+                                    </select>
+                                </div>
+
+                                {/* Location Filter */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Search location..."
+                                        value={locationFilter}
+                                        onChange={(e) => setLocationFilter(e.target.value)}
+                                        className="w-full px-3 py-2 border border-blue-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-600 outline-none"
+                                    />
+                                </div>
+
+                                {/* Company Filter */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Company</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Search company..."
+                                        value={companyFilter}
+                                        onChange={(e) => setCompanyFilter(e.target.value)}
+                                        className="w-full px-3 py-2 border border-blue-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-600 outline-none"
+                                    />
+                                </div>
+
+                                {/* Experience Level Filter */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Experience Level</label>
+                                    <select
+                                        value={levelFilter}
+                                        onChange={(e) => setLevelFilter(e.target.value)}
+                                        className="w-full px-3 py-2 border border-blue-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-600 outline-none"
+                                    >
+                                        <option value="">All Levels</option>
+                                        <option value="Entry">Entry Level</option>
+                                        <option value="Mid">Mid-Level</option>
+                                        <option value="Senior">Senior</option>
+                                        <option value="Executive">Executive</option>
+                                    </select>
+                                </div>
+
+                                {/* Salary Range - Min */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Min Salary (₹)</label>
+                                    <input
+                                        type="number"
+                                        placeholder="Min amount"
+                                        value={salaryMinFilter}
+                                        onChange={(e) => setSalaryMinFilter(e.target.value)}
+                                        className="w-full px-3 py-2 border border-blue-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-600 outline-none"
+                                    />
+                                </div>
+
+                                {/* Salary Range - Max */}
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Max Salary (₹)</label>
+                                    <input
+                                        type="number"
+                                        placeholder="Max amount"
+                                        value={salaryMaxFilter}
+                                        onChange={(e) => setSalaryMaxFilter(e.target.value)}
+                                        className="w-full px-3 py-2 border border-blue-300 rounded-lg bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-600 outline-none"
+                                    />
+                                </div>
+
+                                {/* Clear Filters Button */}
+                                <div className="flex items-end">
+                                    <button
+                                        onClick={clearAllFilters}
+                                        className="w-full px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-semibold rounded-lg transition"
+                                    >
+                                        <X className="w-4 h-4 inline mr-2" />
+                                        Clear All
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Active Filters Display */}
+                            {(typeFilter || locationFilter || companyFilter || levelFilter || salaryMinFilter || salaryMaxFilter) && (
+                                <div className="flex flex-wrap gap-2 pt-4 border-t border-blue-300">
+                                    {typeFilter && (
+                                        <span className="px-3 py-1 bg-blue-200 text-blue-700 rounded-full text-sm font-medium">
+                                            Type: {typeFilter}
+                                        </span>
+                                    )}
+                                    {locationFilter && (
+                                        <span className="px-3 py-1 bg-blue-200 text-blue-700 rounded-full text-sm font-medium">
+                                            Location: {locationFilter}
+                                        </span>
+                                    )}
+                                    {companyFilter && (
+                                        <span className="px-3 py-1 bg-blue-200 text-blue-700 rounded-full text-sm font-medium">
+                                            Company: {companyFilter}
+                                        </span>
+                                    )}
+                                    {levelFilter && (
+                                        <span className="px-3 py-1 bg-blue-200 text-blue-700 rounded-full text-sm font-medium">
+                                            Level: {levelFilter}
+                                        </span>
+                                    )}
+                                    {salaryMinFilter && (
+                                        <span className="px-3 py-1 bg-green-200 text-green-700 rounded-full text-sm font-medium">
+                                            Min: ₹{salaryMinFilter}
+                                        </span>
+                                    )}
+                                    {salaryMaxFilter && (
+                                        <span className="px-3 py-1 bg-green-200 text-green-700 rounded-full text-sm font-medium">
+                                            Max: ₹{salaryMaxFilter}
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
 
                     {/* Main Content */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-screen">
