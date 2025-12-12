@@ -10,6 +10,7 @@ import useGetAppliedJobs from '@/hooks/useGetAppliedJobs';
 import { ReportDownloadButton } from './DownloadReport';
 import axios from 'axios';
 import { setUser } from '@/redux/authSlice';
+import { toast } from 'sonner';
 
 const ProfileCandidate = () => {
     useGetAppliedJobs();
@@ -21,6 +22,8 @@ const ProfileCandidate = () => {
     const resumeInputRef = useRef(null);
     const photoInputRef = useRef(null);
     const [uploading, setUploading] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const saveTimeoutRef = useRef(null);
 
     const [editData, setEditData] = useState({
         fullname: user?.fullname || '',
@@ -28,6 +31,7 @@ const ProfileCandidate = () => {
         phoneNumber: user?.profile?.phoneNumber || '',
         bio: user?.profile?.bio || '',
         location: user?.profile?.location || '',
+        orcidId: user?.profile?.orcidId || '',
         qualifications: user?.profile?.qualifications || [],
         researchAreas: user?.profile?.researchAreas || [],
         experience: user?.profile?.experience || [],
@@ -40,6 +44,49 @@ const ProfileCandidate = () => {
     useEffect(() => {
         setScoreAnimated(true);
     }, []);
+
+    // Auto-save handler with debouncing
+    const autoSaveProfile = async (dataToSave) => {
+        try {
+            setIsSaving(true);
+            const config = { 
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            };
+            const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
+            
+            const response = await axios.put(apiUrl, dataToSave, config);
+
+            if (response.data.success) {
+                dispatch(setUser(response.data.user));
+                toast.success('Profile updated!');
+            }
+        } catch (error) {
+            console.error('Error auto-saving profile:', error.response?.data || error.message);
+            toast.error('Failed to save');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    // Debounced auto-save on edit
+    const handleEditChange = (field, value) => {
+        const newEditData = { ...editData, [field]: value };
+        setEditData(newEditData);
+
+        // Clear previous timeout
+        if (saveTimeoutRef.current) {
+            clearTimeout(saveTimeoutRef.current);
+        }
+
+        // Set new timeout for auto-save (2 seconds after user stops typing)
+        saveTimeoutRef.current = setTimeout(() => {
+            if (value && value.trim()) { // Only save if field has content
+                const dataToSend = { [field]: value };
+                autoSaveProfile(dataToSend);
+            }
+        }, 1500);
+    };
 
     const handlePhotoUpload = async (e) => {
         const file = e.target.files[0];
@@ -130,6 +177,7 @@ const ProfileCandidate = () => {
             if (editData.phoneNumber) dataToSend.phoneNumber = editData.phoneNumber;
             if (editData.bio) dataToSend.bio = editData.bio;
             if (editData.location) dataToSend.location = editData.location;
+            if (editData.orcidId) dataToSend.orcidId = editData.orcidId;
             if (editData.qualifications?.length > 0) dataToSend.qualifications = editData.qualifications;
             if (editData.researchAreas?.length > 0) dataToSend.researchAreas = editData.researchAreas;
             if (editData.experience?.length > 0) dataToSend.experience = editData.experience;
@@ -277,7 +325,7 @@ const ProfileCandidate = () => {
                                         <input
                                             type="email"
                                             value={editData.email}
-                                            onChange={(e) => setEditData({ ...editData, email: e.target.value })}
+                                            onChange={(e) => handleEditChange('email', e.target.value)}
                                             className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
                                         />
                                     </div>
@@ -286,7 +334,7 @@ const ProfileCandidate = () => {
                                         <input
                                             type="tel"
                                             value={editData.phoneNumber}
-                                            onChange={(e) => setEditData({ ...editData, phoneNumber: e.target.value })}
+                                            onChange={(e) => handleEditChange('phoneNumber', e.target.value)}
                                             className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
                                         />
                                     </div>
@@ -295,7 +343,7 @@ const ProfileCandidate = () => {
                                         <input
                                             type="text"
                                             value={editData.location}
-                                            onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                                            onChange={(e) => handleEditChange('location', e.target.value)}
                                             className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
                                         />
                                     </div>
@@ -304,10 +352,26 @@ const ProfileCandidate = () => {
                                     <label className="block text-sm font-medium text-gray-700 mb-2">Professional Bio</label>
                                     <textarea
                                         value={editData.bio}
-                                        onChange={(e) => setEditData({ ...editData, bio: e.target.value })}
+                                        onChange={(e) => handleEditChange('bio', e.target.value)}
                                         rows={4}
                                         className="w-full px-4 py-2 border border-blue-200 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none"
                                     />
+                                </div>
+
+                                {/* ORCID ID Input */}
+                                <div className="mt-6 bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 rounded-lg p-4">
+                                    <label className="block text-sm font-bold text-green-900 mb-2 flex items-center gap-2">
+                                        <CheckCircle2 className="w-4 h-4" />
+                                        ORCID iD (Optional)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={editData.orcidId}
+                                        onChange={(e) => handleEditChange('orcidId', e.target.value)}
+                                        placeholder="e.g., 0000-0002-1825-0097"
+                                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent outline-none font-mono"
+                                    />
+                                    <p className="text-xs text-green-700 mt-2">Get one at <a href="https://orcid.org/register" target="_blank" rel="noopener noreferrer" className="font-bold hover:underline">orcid.org</a></p>
                                 </div>
 
                                 {/* Resume Upload */}
@@ -662,73 +726,57 @@ const ProfileCandidate = () => {
                             {/* Qualifications */}
                             <section>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Qualifications</h2>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                    {user?.profile?.qualifications?.length ? (
-                                        user.profile.qualifications.map((qual, index) => (
+                                {user?.profile?.qualifications?.length ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                        {user.profile.qualifications.map((qual, index) => (
                                             <div key={index} className="bg-blue-50 rounded-xl p-6 border border-blue-200 flex flex-col items-center text-center hover:bg-blue-100 transition-colors">
                                                 <div className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 border border-blue-300 mb-3">
                                                     <span className="text-2xl">{typeof qual === 'object' ? (qual?.emoji || '📚') : '📚'}</span>
                                                 </div>
-                                                <h3 className="text-gray-900 font-bold text-lg">{typeof qual === 'string' ? qual : qual?.title || 'Ph.D'}</h3>
+                                                <h3 className="text-gray-900 font-bold text-lg">{typeof qual === 'string' ? qual : qual?.title || 'Qualification'}</h3>
                                                 <p className="text-gray-600 text-sm">{typeof qual === 'object' ? (qual?.institution || qual?.year || '') : ''}</p>
                                             </div>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <div className="bg-blue-50 rounded-xl p-6 border border-blue-200 flex flex-col items-center text-center hover:bg-blue-100 transition-colors">
-                                                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 border border-blue-300 mb-3">
-                                                    <span className="text-2xl">🎓</span>
-                                                </div>
-                                                <h3 className="text-gray-900 font-bold text-lg">Ph.D (CS)</h3>
-                                                <p className="text-gray-600 text-sm">IIT Bombay, 2016</p>
-                                            </div>
-                                            <div className="bg-blue-50 rounded-xl p-6 border border-blue-200 flex flex-col items-center text-center hover:bg-blue-100 transition-colors">
-                                                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 border border-blue-300 mb-3">
-                                                    <span className="text-2xl">⭐</span>
-                                                </div>
-                                                <h3 className="text-gray-900 font-bold text-lg">UGC-NET</h3>
-                                                <p className="text-gray-600 text-sm">Qualified in 2012</p>
-                                            </div>
-                                            <div className="bg-blue-50 rounded-xl p-6 border border-blue-200 flex flex-col items-center text-center hover:bg-blue-100 transition-colors">
-                                                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-blue-200 border border-blue-300 mb-3">
-                                                    <span className="text-2xl">🏆</span>
-                                                </div>
-                                                <h3 className="text-gray-900 font-bold text-lg">SET</h3>
-                                                <p className="text-gray-600 text-sm">Maharashtra, 2011</p>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="bg-blue-50 rounded-lg border border-blue-300 p-8 text-center">
+                                        <p className="text-gray-600 mb-3">Add your qualifications to make your profile stand out</p>
+                                        <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
+                                            <Pen className="w-4 h-4 mr-2" />
+                                            Add Qualifications
+                                        </Button>
+                                    </div>
+                                )}
                             </section>
 
                             {/* Research Areas */}
                             <section>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Research Areas</h2>
-                                <div className="flex flex-wrap gap-3">
-                                    {user?.profile?.researchAreas?.length ? (
-                                        user.profile.researchAreas.map((area, idx) => (
+                                {user?.profile?.researchAreas?.length ? (
+                                    <div className="flex flex-wrap gap-3">
+                                        {user.profile.researchAreas.map((area, idx) => (
                                             <span key={idx} className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-300">
                                                 {typeof area === 'string' ? area : typeof area === 'object' ? area?.name || 'Research Area' : String(area)}
                                             </span>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-300">AI in Education</span>
-                                            <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-300">Natural Language Processing</span>
-                                            <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-300">Digital Pedagogy</span>
-                                            <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-300">E-learning Platforms</span>
-                                            <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium border border-blue-300">Machine Learning</span>
-                                        </>
-                                    )}
-                                </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="bg-blue-50 rounded-lg border border-blue-300 p-8 text-center">
+                                        <p className="text-gray-600 mb-3">Add your research areas to showcase your expertise</p>
+                                        <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
+                                            <Pen className="w-4 h-4 mr-2" />
+                                            Add Research Areas
+                                        </Button>
+                                    </div>
+                                )}
                             </section>
 
                             {/* Publications */}
                             <section>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Publications</h2>
-                                <div className="space-y-4">
-                                    {user?.profile?.publications?.length ? (
-                                        user.profile.publications.map((pub, idx) => (
+                                {user?.profile?.publications?.length ? (
+                                    <div className="space-y-4">
+                                        {user.profile.publications.map((pub, idx) => (
                                             <div key={idx} className="rounded-lg bg-blue-50 border border-blue-200 p-6">
                                                 <h3 className="font-bold text-gray-900 mb-1">{typeof pub === 'string' ? pub : pub?.title || 'Untitled'}</h3>
                                                 <p className="text-gray-600 text-sm mb-1">{typeof pub === 'object' ? (pub?.journal || '') + ' ' + (pub?.year ? `(${pub.year})` : '') : ''}</p>
@@ -739,36 +787,25 @@ const ProfileCandidate = () => {
                                                     </a>
                                                 )}
                                             </div>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <div className="rounded-lg bg-blue-50 border border-blue-200 p-6">
-                                                <h3 className="font-bold text-gray-900 mb-1">IEEE Transactions, 2023</h3>
-                                                <p className="text-gray-600 text-sm mb-3">AI-driven Personalised Learning Paths</p>
-                                                <p className="text-gray-500 text-xs mb-4">Sharma, A., et al.</p>
-                                                <a href="#" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-2">
-                                                    Read Paper → 
-                                                </a>
-                                            </div>
-                                            <div className="rounded-lg bg-blue-50 border border-blue-200 p-6">
-                                                <h3 className="font-bold text-gray-900 mb-1">Journal of Tech & Society, 2021</h3>
-                                                <p className="text-gray-600 text-sm mb-3">Challenges of NLP in Vernacular Languages</p>
-                                                <p className="text-gray-500 text-xs mb-4">Sharma, A., Patel, R.</p>
-                                                <a href="#" className="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-2">
-                                                    Read Paper →
-                                                </a>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="bg-blue-50 rounded-lg border border-blue-300 p-8 text-center">
+                                        <p className="text-gray-600 mb-3">Add your publications to showcase your research work</p>
+                                        <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
+                                            <Pen className="w-4 h-4 mr-2" />
+                                            Add Publications
+                                        </Button>
+                                    </div>
+                                )}
                             </section>
 
                             {/* Experience */}
                             <section>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Experience</h2>
-                                <div className="space-y-4">
-                                    {user?.profile?.experience?.length ? (
-                                        user.profile.experience.map((exp, idx) => (
+                                {user?.profile?.experience?.length ? (
+                                    <div className="space-y-4">
+                                        {user.profile.experience.map((exp, idx) => (
                                             <div key={idx} className="rounded-lg bg-blue-50 border border-blue-200 p-6 flex items-start gap-4">
                                                 <div className="h-3 w-3 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
                                                 <div className="flex-1">
@@ -778,36 +815,25 @@ const ProfileCandidate = () => {
                                                     {typeof exp === 'object' && exp?.description && <p className="text-gray-600 text-sm mt-2">{exp.description}</p>}
                                                 </div>
                                             </div>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <div className="rounded-lg bg-blue-50 border border-blue-200 p-6 flex items-start gap-4">
-                                                <div className="h-3 w-3 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900">Assistant Professor</h3>
-                                                    <p className="text-gray-600 text-sm">IIT Delhi</p>
-                                                    <p className="text-gray-500 text-xs mt-1">2019 - Present</p>
-                                                </div>
-                                            </div>
-                                            <div className="rounded-lg bg-blue-50 border border-blue-200 p-6 flex items-start gap-4">
-                                                <div className="h-3 w-3 rounded-full bg-blue-600 mt-2 flex-shrink-0"></div>
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900">Lecturer</h3>
-                                                    <p className="text-gray-600 text-sm">University of Mumbai</p>
-                                                    <p className="text-gray-500 text-xs mt-1">2016 - 2019</p>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="bg-blue-50 rounded-lg border border-blue-300 p-8 text-center">
+                                        <p className="text-gray-600 mb-3">Add your work experience to stand out</p>
+                                        <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
+                                            <Pen className="w-4 h-4 mr-2" />
+                                            Add Experience
+                                        </Button>
+                                    </div>
+                                )}
                             </section>
 
                             {/* Courses Taught */}
                             <section>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Courses Taught</h2>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                    {user?.profile?.coursesTaught?.length ? (
-                                        user.profile.coursesTaught.map((course, idx) => (
+                                {user?.profile?.coursesTaught?.length ? (
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        {user.profile.coursesTaught.map((course, idx) => (
                                             <div key={idx} className="rounded-lg bg-blue-50 border border-blue-200 p-4 text-center">
                                                 <h3 className="font-bold text-gray-900 text-sm">{typeof course === 'string' ? course : course?.name || 'Unnamed'}</h3>
                                                 <p className="text-gray-600 text-xs mt-1">{typeof course === 'object' && course?.students ? course.students + ' Students' : ''}</p>
@@ -815,37 +841,71 @@ const ProfileCandidate = () => {
                                                     {typeof course === 'object' && course?.rating ? '★'.repeat(Math.floor(course.rating)) : ''}
                                                 </div>
                                             </div>
-                                        ))
-                                    ) : (
-                                        <>
-                                            <div className="rounded-lg bg-teal-50 border border-teal-200 p-4 text-center">
-                                                <h3 className="font-bold text-teal-900 text-sm">Data Structures</h3>
-                                                <p className="text-teal-600 text-xs mt-1">120 Students</p>
-                                            </div>
-                                            <div className="rounded-lg bg-purple-50 border border-purple-200 p-4 text-center">
-                                                <h3 className="font-bold text-purple-900 text-sm">Machine Learning</h3>
-                                                <p className="text-purple-600 text-xs mt-1">95 Students</p>
-                                            </div>
-                                            <div className="rounded-lg bg-orange-50 border border-orange-200 p-4 text-center">
-                                                <h3 className="font-bold text-orange-900 text-sm">Database Mgmt</h3>
-                                                <p className="text-orange-600 text-xs mt-1">80 Students</p>
-                                            </div>
-                                            <div className="rounded-lg bg-pink-50 border border-pink-200 p-4 text-center">
-                                                <h3 className="font-bold text-pink-900 text-sm">OS</h3>
-                                                <p className="text-pink-600 text-xs mt-1">110 Students</p>
-                                            </div>
-                                            <div className="rounded-lg bg-cyan-50 border border-cyan-200 p-4 text-center">
-                                                <h3 className="font-bold text-cyan-900 text-sm">Artificial AI</h3>
-                                                <p className="text-cyan-600 text-xs mt-1">85 Students</p>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="bg-blue-50 rounded-lg border border-blue-300 p-8 text-center">
+                                        <p className="text-gray-600 mb-3">Add the courses you have taught</p>
+                                        <Button onClick={() => setIsEditing(true)} className="bg-blue-600 hover:bg-blue-700">
+                                            <Pen className="w-4 h-4 mr-2" />
+                                            Add Courses
+                                        </Button>
+                                    </div>
+                                )}
                             </section>
                         </div>
 
                         {/* Right Column - 1 col */}
                         <div className="space-y-6">
+                            {/* ORCID ID Section */}
+                            <div className="rounded-xl bg-gradient-to-br from-green-50 to-emerald-50 border-2 border-green-300 p-6">
+                                <div className="flex items-start gap-3 mb-4">
+                                    <div className="bg-green-500 rounded-full p-2 mt-1">
+                                        <CheckCircle2 className="w-5 h-5 text-white" />
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="text-gray-900 font-bold text-lg">ORCID iD</h3>
+                                        <p className="text-green-700 text-xs font-medium">Link your ORCID to verify your publications</p>
+                                    </div>
+                                </div>
+                                {user?.profile?.orcidId ? (
+                                    <div className="bg-white rounded-lg p-4 border border-green-200">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-xs text-gray-500 uppercase tracking-wider">ORCID ID</p>
+                                                <p className="text-lg font-mono font-bold text-green-700 mt-1">{user.profile.orcidId}</p>
+                                            </div>
+                                            <a 
+                                                href={`https://orcid.org/${user.profile.orcidId}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg font-semibold text-sm transition"
+                                            >
+                                                Verify
+                                            </a>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="bg-white rounded-lg p-4 border border-green-200">
+                                        <p className="text-gray-600 text-sm mb-3">Add your ORCID iD to increase credibility and visibility</p>
+                                        <a 
+                                            href="https://orcid.org/register"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="block w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-semibold text-center text-sm transition mb-2"
+                                        >
+                                            Get ORCID iD
+                                        </a>
+                                        <button 
+                                            onClick={() => setIsEditing(true)}
+                                            className="block w-full bg-green-100 hover:bg-green-200 text-green-700 px-4 py-2 rounded-lg font-semibold text-sm transition"
+                                        >
+                                            Add My ORCID
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+
                             {/* AI Strength Score */}
                             <div className="rounded-xl bg-blue-50 border border-blue-200 p-8 text-center">
                                 <h3 className="text-gray-900 font-bold mb-4">AI Strength Score</h3>
