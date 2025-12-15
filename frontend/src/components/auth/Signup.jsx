@@ -173,13 +173,13 @@ const Signup = () => {
     const addResearchArea = () => {
         setInput({
             ...input,
-            researchAreas: [...input.researchAreas, { field: '' }]
+            researchAreas: [...input.researchAreas, '']
         });
     };
 
     const updateResearchArea = (idx, value) => {
         const updated = [...input.researchAreas];
-        updated[idx].field = value;
+        updated[idx] = value;
         setInput({ ...input, researchAreas: updated });
     };
 
@@ -498,7 +498,7 @@ const Signup = () => {
                                         <div key={idx} className='flex gap-2'>
                                             <Input
                                                 placeholder="e.g., Machine Learning"
-                                                value={area.field}
+                                                value={area}
                                                 onChange={(e) => updateResearchArea(idx, e.target.value)}
                                                 className='flex-1 border-blue-300'
                                             />
