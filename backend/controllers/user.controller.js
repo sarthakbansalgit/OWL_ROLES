@@ -284,17 +284,27 @@ class UserController {
             if (files.resume && files.resume[0]) {
                 try {
                     const resumeFile = files.resume[0];
+                    console.log("Resume file details:", {
+                        originalname: resumeFile.originalname,
+                        mimetype: resumeFile.mimetype,
+                        size: resumeFile.size
+                    });
+                    
                     const fileUri = getDataUri(resumeFile);
                     const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
                         resource_type: 'raw',
                         public_id: `resume_${userId}_${Date.now()}`,
                     });
                     
-                    const baseUrl = `https://res.cloudinary.com/${cloudinary.config().cloud_name}`;
-                    const pdfUrl = `${baseUrl}/raw/upload/${cloudResponse.public_id}.pdf`;
-                    profileUpdates.resume = pdfUrl;
+                    console.log("Cloudinary response for resume:", cloudResponse);
+                    
+                    // Use secure_url directly from Cloudinary response
+                    profileUpdates.resume = cloudResponse.secure_url;
                     profileUpdates.resumeOriginalName = resumeFile.originalname;
-                    console.log("Resume uploaded successfully");
+                    console.log("Resume uploaded successfully:", {
+                        url: cloudResponse.secure_url,
+                        originalName: resumeFile.originalname
+                    });
                 } catch (fileError) {
                     console.error("Resume upload error:", fileError.message);
                     return res.status(400).json({ message: "Resume upload failed.", success: false });
@@ -304,13 +314,21 @@ class UserController {
             if (files.profilePhoto && files.profilePhoto[0]) {
                 try {
                     const photoFile = files.profilePhoto[0];
+                    console.log("Profile photo details:", {
+                        originalname: photoFile.originalname,
+                        mimetype: photoFile.mimetype,
+                        size: photoFile.size
+                    });
+                    
                     const fileUri = getDataUri(photoFile);
                     const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
                         public_id: `profile_${userId}_${Date.now()}`,
                     });
                     
+                    console.log("Cloudinary response for photo:", cloudResponse);
+                    
                     profileUpdates.profilePhoto = cloudResponse.secure_url;
-                    console.log("Profile photo uploaded successfully");
+                    console.log("Profile photo uploaded successfully:", cloudResponse.secure_url);
                 } catch (fileError) {
                     console.error("Profile photo upload error:", fileError.message);
                     return res.status(400).json({ message: "Profile photo upload failed.", success: false });
@@ -322,7 +340,7 @@ class UserController {
                 updateData.profile = profileUpdates;
             }
 
-            console.log("Update data to apply:", updateData);
+            console.log("Update data to apply:", JSON.stringify(updateData, null, 2));
 
             if (Object.keys(updateData).length === 0) {
                 console.warn("No updates to apply");
@@ -332,7 +350,7 @@ class UserController {
             // Update and return the new document
             const updatedUser = await User.findByIdAndUpdate(
                 userId,
-                updateData,
+                { $set: updateData },
                 { new: true, runValidators: false }
             );
 
@@ -342,7 +360,7 @@ class UserController {
             }
 
             console.log("User updated successfully");
-            console.log("Updated fullname:", updatedUser.fullname);
+            console.log("Updated user profile:", JSON.stringify(updatedUser.profile, null, 2));
             console.log("====== UPDATE COMPLETE ======\n");
 
             return res.status(200).json({
