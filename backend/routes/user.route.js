@@ -14,14 +14,14 @@ import {
     addRecruiterByAdmin
 } from "../controllers/user.controller.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
-import { singleUpload } from "../middlewares/mutler.js"; 
+import { singleUpload, multiUpload } from "../middlewares/mutler.js"; 
 import ErrorHandler from '../middlewares/errorHandler.js';
 import cacheMiddleware from '../middlewares/cacheMiddleware.js';
 
 const router = express.Router();
 
 // Route to register a new user (POST method)
-router.route("/register").post(singleUpload, register);
+router.route("/register").post(multiUpload, register);
 
 // Route for user login (POST method)
 router.route("/login").post(login);
@@ -30,7 +30,7 @@ router.route("/login").post(login);
 router.route("/logout").get(logout);
 
 // Route to update user profile (PUT method)
-router.route("/profile/update").put(isAuthenticated, singleUpload, updateProfile);
+router.route("/profile/update").put(isAuthenticated, multiUpload, updateProfile);
 
 // Route to generate PDF report for authenticated user
 router.get('/report', isAuthenticated, generateUserReport);

@@ -209,13 +209,13 @@ class UserController {
     async updateProfile(req, res, next) {
         try {
             const userId = req.id;
-            const file = req.file;
+            const files = req.files || {};
             
             console.log("\n====== UPDATE PROFILE DEBUG ======");
             console.log("User ID:", userId);
             console.log("Request body keys:", Object.keys(req.body));
             console.log("Full request body:", req.body);
-            console.log("File:", file ? file.filename : "No file");
+            console.log("Files received:", Object.keys(files));
 
             if (!userId) {
                 console.error("No user ID in request");
@@ -280,27 +280,40 @@ class UserController {
                     : req.body.publications;
             }
 
-            // Handle file upload
-            if (file) {
+            // Handle file uploads
+            if (files.resume && files.resume[0]) {
                 try {
-                    const fileUri = getDataUri(file);
+                    const resumeFile = files.resume[0];
+                    const fileUri = getDataUri(resumeFile);
                     const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
-                        public_id: `resume_${Date.now()}`,
+                        resource_type: 'raw',
+                        public_id: `resume_${userId}_${Date.now()}`,
                     });
                     
-                    if (file.mimetype === 'application/pdf') {
-                        const baseUrl = `https://res.cloudinary.com/${cloudinary.config().cloud_name}`;
-                        const pdfUrl = `${baseUrl}/image/upload/f_auto,q_auto/${cloudResponse.public_id}.pdf`;
-                        profileUpdates.resume = pdfUrl;
-                        profileUpdates.resumeOriginalName = file.originalname;
-                        console.log("File uploaded as resume");
-                    } else if (file.mimetype.startsWith('image/')) {
-                        profileUpdates.profilePhoto = cloudResponse.secure_url;
-                        console.log("File uploaded as profile photo");
-                    }
+                    const baseUrl = `https://res.cloudinary.com/${cloudinary.config().cloud_name}`;
+                    const pdfUrl = `${baseUrl}/raw/upload/${cloudResponse.public_id}.pdf`;
+                    profileUpdates.resume = pdfUrl;
+                    profileUpdates.resumeOriginalName = resumeFile.originalname;
+                    console.log("Resume uploaded successfully");
                 } catch (fileError) {
-                    console.error("File upload error:", fileError.message);
-                    return res.status(400).json({ message: "File upload failed.", success: false });
+                    console.error("Resume upload error:", fileError.message);
+                    return res.status(400).json({ message: "Resume upload failed.", success: false });
+                }
+            }
+
+            if (files.profilePhoto && files.profilePhoto[0]) {
+                try {
+                    const photoFile = files.profilePhoto[0];
+                    const fileUri = getDataUri(photoFile);
+                    const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+                        public_id: `profile_${userId}_${Date.now()}`,
+                    });
+                    
+                    profileUpdates.profilePhoto = cloudResponse.secure_url;
+                    console.log("Profile photo uploaded successfully");
+                } catch (fileError) {
+                    console.error("Profile photo upload error:", fileError.message);
+                    return res.status(400).json({ message: "Profile photo upload failed.", success: false });
                 }
             }
 
