@@ -93,12 +93,12 @@ const ProfileCandidate = () => {
         if (!file) return;
 
         if (!file.type.startsWith('image/')) {
-            alert('Please upload an image file');
+            toast.error('Please upload an image file');
             return;
         }
 
         if (file.size > 5 * 1024 * 1024) {
-            alert('File size should be less than 5MB');
+            toast.error('File size should be less than 5MB');
             return;
         }
 
@@ -107,22 +107,35 @@ const ProfileCandidate = () => {
         formData.append('profilePhoto', file);
 
         try {
-            const config = { 
-                headers: { 'Content-Type': 'multipart/form-data' },
-                withCredentials: true
-            };
+            console.log('Uploading profile photo:', {
+                filename: file.name,
+                size: file.size,
+                type: file.type
+            });
+
             const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
             
-            const response = await axios.put(apiUrl, formData, config);
+            const response = await axios.put(apiUrl, formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            console.log('Photo upload response:', response.data);
 
             if (response.data.success) {
                 setEditData({ ...editData, profilePhoto: response.data.user.profile.profilePhoto });
                 dispatch(setUser(response.data.user));
-                alert('Profile photo updated successfully!');
+                toast.success('Profile photo updated successfully!');
             }
         } catch (error) {
-            console.error('Error uploading photo:', error);
-            alert('Failed to upload profile photo');
+            console.error('Error uploading photo:', {
+                message: error.message,
+                response: error.response?.data,
+                status: error.response?.status
+            });
+            toast.error(error.response?.data?.message || 'Failed to upload profile photo');
         } finally {
             setUploading(false);
         }
@@ -133,12 +146,12 @@ const ProfileCandidate = () => {
         if (!file) return;
 
         if (file.type !== 'application/pdf') {
-            alert('Please upload a PDF file');
+            toast.error('Please upload a PDF file');
             return;
         }
 
         if (file.size > 5 * 1024 * 1024) {
-            alert('File size should be less than 5MB');
+            toast.error('File size should be less than 5MB');
             return;
         }
 
@@ -147,22 +160,35 @@ const ProfileCandidate = () => {
         formData.append('resume', file);
 
         try {
-            const config = { 
-                headers: { 'Content-Type': 'multipart/form-data' },
-                withCredentials: true
-            };
+            console.log('Uploading resume:', {
+                filename: file.name,
+                size: file.size,
+                type: file.type
+            });
+
             const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
             
-            const response = await axios.put(apiUrl, formData, config);
+            const response = await axios.put(apiUrl, formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            console.log('Resume upload response:', response.data);
 
             if (response.data.success) {
                 setEditData({ ...editData, resume: response.data.user.profile.resume });
                 dispatch(setUser(response.data.user));
-                alert('Resume uploaded successfully!');
+                toast.success('Resume uploaded successfully!');
             }
         } catch (error) {
-            console.error('Error uploading resume:', error);
-            alert('Failed to upload resume');
+            console.error('Error uploading resume:', {
+                message: error.message,
+                response: error.response?.data,
+                status: error.response?.status
+            });
+            toast.error(error.response?.data?.message || 'Failed to upload resume');
         } finally {
             setUploading(false);
         }
