@@ -12,26 +12,34 @@ class AuthMiddleware {
         });
       }
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-          if (err.name === 'TokenExpiredError') {
-            return res.status(401).json({ message: 'Token expired' });
-          }
-          return res.status(401).json({ message: 'Invalid token' });
+      // Use try-catch to handle token verification
+      let decoded;
+      try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET);
+      } catch (tokenError) {
+        if (tokenError.name === 'TokenExpiredError') {
+          return res.status(401).json({ 
+            message: 'Token expired, please login again',
+            success: false 
+          });
         }
-        return decoded;
-      });
+        return res.status(401).json({ 
+          message: 'Invalid token',
+          success: false 
+        });
+      }
 
-      if (!decoded) {
+      if (!decoded || !decoded.userId) {
         return res.status(401).json({
           message: "Invalid token",
           success: false,
         });
       }
+      
       req.id = decoded.userId;
       next();
     } catch (error) {
-      console.error(error);
+      console.error("Auth middleware error:", error);
       return res.status(500).json({
         message: "Internal Server Error",
         success: false,
