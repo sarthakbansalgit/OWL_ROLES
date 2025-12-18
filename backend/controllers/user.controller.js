@@ -328,24 +328,37 @@ class UserController {
                 const photoFile = filesArray.find(f => f.fieldname === 'profilePhoto');
                 if (photoFile) {
                     try {
-                        console.log("Uploading profile photo to Cloudinary:", photoFile.originalname);
+                        console.log("Uploading profile photo:", photoFile.originalname);
                         
-                        // For photos, still use Cloudinary for image optimization
-                        const fileUri = getDataUri(photoFile);
-                        console.log("DataUri created:", fileUri ? 'Yes' : 'No');
-                        
-                        if (!fileUri || !fileUri.content) {
-                            throw new Error("Failed to convert photo to data URI - fileUri is " + JSON.stringify(fileUri));
+                        // Check if image file
+                        if (!photoFile.mimetype.startsWith('image/')) {
+                            throw new Error("Please upload a valid image file (JPG, PNG, etc)");
                         }
                         
-                        const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
-                            public_id: `profile_${userId}_${Date.now()}`,
-                        });
-                        
-                        profileUpdates.profilePhoto = cloudResponse.secure_url;
-                        console.log("✓ Profile photo uploaded:", cloudResponse.secure_url);
+                        // Try Cloudinary first, if fails, convert to base64
+                        try {
+                            const fileUri = getDataUri(photoFile);
+                            if (!fileUri || !fileUri.content) {
+                                throw new Error("Failed to convert photo to data URI");
+                            }
+                            
+                            const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+                                public_id: `profile_${userId}_${Date.now()}`,
+                            });
+                            
+                            profileUpdates.profilePhoto = cloudResponse.secure_url;
+                            console.log("✓ Profile photo uploaded to Cloudinary:", cloudResponse.secure_url);
+                        } catch (cloudinaryError) {
+                            console.warn("⚠ Cloudinary upload failed, converting to base64...");
+                            
+                            // Fallback: Convert to base64 and store in MongoDB
+                            const base64 = photoFile.buffer.toString('base64');
+                            const base64String = `data:${photoFile.mimetype};base64,${base64}`;
+                            profileUpdates.profilePhoto = base64String;
+                            console.log("✓ Profile photo stored as base64");
+                        }
                     } catch (fileError) {
-                        console.error("✗ Profile photo upload error:", fileError.message, fileError);
+                        console.error("✗ Profile photo upload error:", fileError.message);
                         throw new Error(`Profile photo upload failed: ${fileError.message}`);
                     }
                 }
