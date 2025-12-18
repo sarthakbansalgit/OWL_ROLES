@@ -285,47 +285,57 @@ class UserController {
                 // Find resume file
                 const resumeFile = files.find(f => f.fieldname === 'resume');
                 if (resumeFile) {
-                    console.log("Resume file details:", {
-                        originalname: resumeFile.originalname,
-                        mimetype: resumeFile.mimetype,
-                        size: resumeFile.size
-                    });
-                    
-                    const fileUri = getDataUri(resumeFile);
-                    const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
-                        resource_type: 'raw',
-                        public_id: `resume_${userId}_${Date.now()}`,
-                    });
-                    
-                    console.log("Cloudinary response for resume:", cloudResponse);
-                    
-                    // Use secure_url directly from Cloudinary response
-                    profileUpdates.resume = cloudResponse.secure_url;
-                    profileUpdates.resumeOriginalName = resumeFile.originalname;
-                    console.log("Resume uploaded successfully:", {
-                        url: cloudResponse.secure_url,
-                        originalName: resumeFile.originalname
-                    });
+                    try {
+                        console.log("Resume file details:", {
+                            originalname: resumeFile.originalname,
+                            mimetype: resumeFile.mimetype,
+                            size: resumeFile.size
+                        });
+                        
+                        const fileUri = getDataUri(resumeFile);
+                        const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+                            resource_type: 'raw',
+                            public_id: `resume_${userId}_${Date.now()}`,
+                        });
+                        
+                        console.log("Cloudinary response for resume:", cloudResponse);
+                        
+                        // Use secure_url directly from Cloudinary response
+                        profileUpdates.resume = cloudResponse.secure_url;
+                        profileUpdates.resumeOriginalName = resumeFile.originalname;
+                        console.log("Resume uploaded successfully:", {
+                            url: cloudResponse.secure_url,
+                            originalName: resumeFile.originalname
+                        });
+                    } catch (fileError) {
+                        console.error("Resume upload error:", fileError.message);
+                        throw new Error(`Resume upload failed: ${fileError.message}`);
+                    }
                 }
 
                 // Find profile photo file
                 const photoFile = files.find(f => f.fieldname === 'profilePhoto');
                 if (photoFile) {
-                    console.log("Profile photo details:", {
-                        originalname: photoFile.originalname,
-                        mimetype: photoFile.mimetype,
-                        size: photoFile.size
-                    });
-                    
-                    const fileUri = getDataUri(photoFile);
-                    const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
-                        public_id: `profile_${userId}_${Date.now()}`,
-                    });
-                    
-                    console.log("Cloudinary response for photo:", cloudResponse);
-                    
-                    profileUpdates.profilePhoto = cloudResponse.secure_url;
-                    console.log("Profile photo uploaded successfully:", cloudResponse.secure_url);
+                    try {
+                        console.log("Profile photo details:", {
+                            originalname: photoFile.originalname,
+                            mimetype: photoFile.mimetype,
+                            size: photoFile.size
+                        });
+                        
+                        const fileUri = getDataUri(photoFile);
+                        const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
+                            public_id: `profile_${userId}_${Date.now()}`,
+                        });
+                        
+                        console.log("Cloudinary response for photo:", cloudResponse);
+                        
+                        profileUpdates.profilePhoto = cloudResponse.secure_url;
+                        console.log("Profile photo uploaded successfully:", cloudResponse.secure_url);
+                    } catch (fileError) {
+                        console.error("Profile photo upload error:", fileError.message);
+                        throw new Error(`Profile photo upload failed: ${fileError.message}`);
+                    }
                 }
             }
 
