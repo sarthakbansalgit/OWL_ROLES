@@ -45,6 +45,27 @@ const ProfileCandidate = () => {
         setScoreAnimated(true);
     }, []);
 
+    // Update editData when user data changes (from Redux updates)
+    useEffect(() => {
+        if (user) {
+            setEditData(prev => ({
+                ...prev,
+                fullname: user.fullname || '',
+                email: user.email || '',
+                phoneNumber: user.profile?.phoneNumber || '',
+                bio: user.profile?.bio || '',
+                location: user.profile?.location || '',
+                orcidId: user.profile?.orcidId || '',
+                qualifications: user.profile?.qualifications || [],
+                researchAreas: user.profile?.researchAreas || [],
+                experience: user.profile?.experience || [],
+                coursesTaught: user.profile?.coursesTaught || [],
+                publications: user.profile?.publications || [],
+                profilePhoto: user.profile?.profilePhoto || ''
+            }));
+        }
+    }, [user?.profile?.resumeFileId]); // Only re-sync when resume changes
+
     // Auto-save handler with debouncing
     const autoSaveProfile = async (dataToSave) => {
         try {
@@ -199,8 +220,14 @@ const ProfileCandidate = () => {
             console.log('🟢 Resume upload successful:', response.data);
 
             if (response.data.success) {
-                setEditData({ ...editData, resume: response.data.user.profile.resume });
+                // Update local state with new resume data
+                setEditData({ 
+                    ...editData, 
+                    resume: response.data.user.profile.resumeFileId || '' 
+                });
+                // Update Redux store with the full user data
                 dispatch(setUser(response.data.user));
+                console.log('✅ Resume data updated - FileID:', response.data.user.profile.resumeFileId);
                 toast.success('Resume uploaded successfully!');
             } else {
                 console.error('🔴 Upload response not successful:', response.data);
