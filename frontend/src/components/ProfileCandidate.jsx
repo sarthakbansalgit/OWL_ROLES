@@ -823,7 +823,7 @@ const ProfileCandidate = () => {
                         {/* Left Column - 2 cols */}
                         <div className="lg:col-span-2 space-y-8">
                             {/* Resume Section */}
-                            {user?.profile?.resumeFileId && (
+                            {user?.profile?.resumeFileId ? (
                                 <section className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-300">
                                     <div className="flex items-center justify-between">
                                         <div>
@@ -842,6 +842,19 @@ const ProfileCandidate = () => {
                                             className="bg-blue-600 hover:bg-blue-700"
                                         >
                                             <Download className="mr-2 h-4 w-4" /> Download
+                                        </Button>
+                                    </div>
+                                </section>
+                            ) : (
+                                <section className="bg-gradient-to-br from-amber-50 to-orange-100 rounded-lg p-6 border border-amber-300">
+                                    <div className="text-center">
+                                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Resume</h2>
+                                        <p className="text-gray-600 mb-4">No resume uploaded yet</p>
+                                        <Button 
+                                            onClick={() => setIsEditing(true)}
+                                            className="bg-blue-600 hover:bg-blue-700"
+                                        >
+                                            <FileUp className="mr-2 h-4 w-4" /> Upload Resume
                                         </Button>
                                     </div>
                                 </section>
