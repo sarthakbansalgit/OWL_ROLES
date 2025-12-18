@@ -14,6 +14,7 @@ import blogRoutes from "./routes/blog.route.js"
 import b2bAnalyticsRoutes from "./routes/b2b.route.js";
 import setupSwagger from './docs/swaggerDocs.js';
 import { accessLogStream, dualStream } from "./utils/morganConfig.js";
+import { initializeGridFS } from "./utils/gridfs.js";
 dotenv.config({ path: './.env' });
 
 const app = express();
@@ -80,8 +81,9 @@ app.use((err, req, res, next) => {
 
 // Only start server locally, not on Vercel
 if (process.env.NODE_ENV !== 'production') {
-    app.listen(PORT, '0.0.0.0', ()=>{
-        connectDB();
+    app.listen(PORT, '0.0.0.0', async ()=>{
+        await connectDB();
+        await initializeGridFS();
         console.log(`\n${'='.repeat(50)}`);
         console.log(`✓ Server running at http://172.20.10.2:${PORT}`);
         console.log(`✓ Or access locally: http://localhost:${PORT}`);
@@ -90,7 +92,7 @@ if (process.env.NODE_ENV !== 'production') {
     });
 } else {
     // Connect DB on startup for production
-    connectDB();
+    connectDB().then(() => initializeGridFS());
 }
 
 // Export for Vercel

@@ -11,7 +11,8 @@ import {
     getAllUsers,
     deleteUser,
     addApplicantByAdmin,
-    addRecruiterByAdmin
+    addRecruiterByAdmin,
+    downloadResume
 } from "../controllers/user.controller.js";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
 import { singleUpload, multiUpload } from "../middlewares/mutler.js"; 
@@ -52,6 +53,9 @@ router.delete('/deleteRecruiter/:id', deleteRecruiter);
 
 // Route to delete a user
 router.delete('/deleteUser/:id', deleteUser);
+
+// Route to download user resume from GridFS
+router.get('/resume/download/:userId', downloadResume);
 
 // Route for admin to add a new applicant
 router.route("/admin/addApplicant").post(singleUpload, addApplicantByAdmin);

@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloudinary.js";
+import { uploadToGridFS, deleteFromGridFS } from "../utils/gridfs.js";
 import PDFDocument from "pdfkit";
 import applicationModel from "../models/application.model.js";
 import moment from 'moment';
@@ -280,85 +281,71 @@ class UserController {
                     : req.body.publications;
             }
 
-            // Handle file uploads - files come as array from multer.any()
-            console.log("Files array received:", files);
-            if (Array.isArray(files) && files.length > 0) {
+            // Handle file uploads - multer.any() returns object with numeric keys
+            console.log("Files object keys:", Object.keys(files));
+            console.log("Files object:", files);
+            
+            // Convert files object to array
+            const filesArray = Object.values(files).flat();
+            console.log("Converted to array:", filesArray.length, "files");
+            
+            if (filesArray && filesArray.length > 0) {
                 // Find resume file by fieldname
-                const resumeFile = files.find(f => f.fieldname === 'resume');
-                console.log("Resume file found:", resumeFile ? 'Yes' : 'No');
+                const resumeFile = filesArray.find(f => f.fieldname === 'resume');
+                console.log("Resume file found:", resumeFile ? 'Yes' : 'No', resumeFile?.originalname);
                 
                 if (resumeFile) {
                     try {
-                        console.log("Resume file details:", {
-                            originalname: resumeFile.originalname,
-                            mimetype: resumeFile.mimetype,
-                            size: resumeFile.size,
-                            fieldname: resumeFile.fieldname
-                        });
+                        console.log("Uploading resume to GridFS:", resumeFile.originalname);
                         
-                        const fileUri = getDataUri(resumeFile);
-                        console.log("DataUri result:", fileUri ? 'Created' : 'Failed', fileUri?.content ? 'Has content' : 'No content');
-                        
-                        if (!fileUri || !fileUri.content) {
-                            throw new Error("Failed to convert resume file to DataUri");
+                        // Delete old resume if exists
+                        if (user.profile?.resumeFileId) {
+                            try {
+                                await deleteFromGridFS(user.profile.resumeFileId);
+                                console.log("Old resume deleted from GridFS");
+                            } catch (e) {
+                                console.warn("Could not delete old resume:", e.message);
+                            }
                         }
                         
-                        const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
-                            resource_type: 'raw',
-                            public_id: `resume_${userId}_${Date.now()}`,
-                        });
+                        // Upload to GridFS
+                        const fileId = await uploadToGridFS(
+                            resumeFile.buffer, 
+                            resumeFile.originalname, 
+                            resumeFile.mimetype
+                        );
                         
-                        console.log("Cloudinary response for resume:", {
-                            public_id: cloudResponse.public_id,
-                            secure_url: cloudResponse.secure_url
-                        });
-                        
-                        // Use secure_url directly from Cloudinary response
-                        profileUpdates.resume = cloudResponse.secure_url;
+                        profileUpdates.resumeFileId = fileId;
                         profileUpdates.resumeOriginalName = resumeFile.originalname;
-                        console.log("Resume uploaded successfully:", {
-                            url: cloudResponse.secure_url,
-                            originalName: resumeFile.originalname
-                        });
+                        console.log("✓ Resume uploaded to GridFS:", fileId);
                     } catch (fileError) {
-                        console.error("Resume upload error:", fileError.message);
+                        console.error("✗ Resume upload error:", fileError.message, fileError.stack);
                         throw new Error(`Resume upload failed: ${fileError.message}`);
                     }
                 }
 
                 // Find profile photo file
-                const photoFile = files.find(f => f.fieldname === 'profilePhoto');
-                console.log("Photo file found:", photoFile ? 'Yes' : 'No');
-                
+                const photoFile = filesArray.find(f => f.fieldname === 'profilePhoto');
                 if (photoFile) {
                     try {
-                        console.log("Profile photo details:", {
-                            originalname: photoFile.originalname,
-                            mimetype: photoFile.mimetype,
-                            size: photoFile.size,
-                            fieldname: photoFile.fieldname
-                        });
+                        console.log("Uploading profile photo to Cloudinary:", photoFile.originalname);
                         
+                        // For photos, still use Cloudinary for image optimization
                         const fileUri = getDataUri(photoFile);
-                        console.log("DataUri result:", fileUri ? 'Created' : 'Failed', fileUri?.content ? 'Has content' : 'No content');
+                        console.log("DataUri created:", fileUri ? 'Yes' : 'No');
                         
                         if (!fileUri || !fileUri.content) {
-                            throw new Error("Failed to convert photo file to DataUri");
+                            throw new Error("Failed to convert photo to data URI - fileUri is " + JSON.stringify(fileUri));
                         }
                         
                         const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
                             public_id: `profile_${userId}_${Date.now()}`,
                         });
                         
-                        console.log("Cloudinary response for photo:", {
-                            public_id: cloudResponse.public_id,
-                            secure_url: cloudResponse.secure_url
-                        });
-                        
                         profileUpdates.profilePhoto = cloudResponse.secure_url;
-                        console.log("Profile photo uploaded successfully:", cloudResponse.secure_url);
+                        console.log("✓ Profile photo uploaded:", cloudResponse.secure_url);
                     } catch (fileError) {
-                        console.error("Profile photo upload error:", fileError.message);
+                        console.error("✗ Profile photo upload error:", fileError.message, fileError);
                         throw new Error(`Profile photo upload failed: ${fileError.message}`);
                     }
                 }
@@ -401,10 +388,13 @@ class UserController {
             console.error("\n====== UPDATE ERROR ======");
             console.error("Error message:", error.message);
             console.error("Error stack:", error.stack);
+            console.error("Full error object:", error);
             console.error("==========================\n");
             
             return res.status(500).json({
                 message: error.message || "Failed to update profile",
+                error: error.message,
+                stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
                 success: false
             });
         }
@@ -728,6 +718,37 @@ class UserController {
         }
     }
 
+    // Download resume from GridFS
+    async downloadResume(req, res, next) {
+        try {
+            const { userId } = req.params;
+            
+            console.log("Download resume request for user:", userId);
+            
+            const user = await User.findById(userId).lean();
+            if (!user || !user.profile?.resumeFileId) {
+                return res.status(404).json({ 
+                    message: "Resume not found for this user", 
+                    success: false 
+                });
+            }
+
+            const { downloadFromGridFS } = await import("../utils/gridfs.js");
+            const fileBuffer = await downloadFromGridFS(user.profile.resumeFileId);
+            
+            // Set proper headers for file download
+            res.setHeader('Content-Type', 'application/pdf');
+            res.setHeader('Content-Disposition', `attachment; filename="${user.profile.resumeOriginalName || 'resume.pdf'}"`);
+            res.setHeader('Content-Length', fileBuffer.length);
+            
+            console.log(`✓ Resume downloaded for user ${userId}`);
+            res.end(fileBuffer);
+        } catch (error) {
+            console.error("Resume download error:", error.message);
+            next(error);
+        }
+    }
+
     register = this.register.bind(this);
     login = this.login.bind(this);
     logout = this.logout.bind(this);
@@ -738,6 +759,7 @@ class UserController {
     deleteRecruiter = this.deleteRecruiter.bind(this);
     getAllUsers = this.getAllUsers.bind(this);
     deleteUser = this.deleteUser.bind(this);
+    downloadResume = this.downloadResume.bind(this);
     addApplicantByAdmin = this.addApplicantByAdmin.bind(this);
     addRecruiterByAdmin = this.addRecruiterByAdmin.bind(this);
 }
@@ -755,5 +777,6 @@ export const {
     getAllUsers,
     deleteUser,
     addApplicantByAdmin,
-    addRecruiterByAdmin
+    addRecruiterByAdmin,
+    downloadResume
 } = userController;

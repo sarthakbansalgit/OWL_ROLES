@@ -18,6 +18,7 @@ class UserModel {
           skills: [{ type: String }],
           resume: { type: String },
           resumeOriginalName: { type: String },
+          resumeFileId: { type: String }, // GridFS file ID for resume PDF
           company: { type: mongoose.Schema.Types.ObjectId, ref: "Company" },
           profilePhoto: { type: String, default: "" },
           phoneNumber: { type: String },

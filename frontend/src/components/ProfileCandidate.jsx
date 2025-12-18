@@ -107,13 +107,15 @@ const ProfileCandidate = () => {
         formData.append('profilePhoto', file);
 
         try {
-            console.log('Uploading profile photo:', {
+            const debugInfo = {
                 filename: file.name,
                 size: file.size,
                 type: file.type
-            });
+            };
+            console.log('🔵 Starting profile photo upload:', debugInfo);
 
             const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
+            console.log('🔵 API URL:', apiUrl);
             
             const response = await axios.put(apiUrl, formData, {
                 withCredentials: true,
@@ -123,26 +125,35 @@ const ProfileCandidate = () => {
                 timeout: 60000 // 1 minute for image upload
             });
 
-            console.log('Photo upload response:', response.data);
+            console.log('🟢 Photo upload successful:', response.data);
 
             if (response.data.success) {
                 setEditData({ ...editData, profilePhoto: response.data.user.profile.profilePhoto });
                 dispatch(setUser(response.data.user));
                 toast.success('Profile photo updated successfully!');
+            } else {
+                console.error('🔴 Upload response not successful:', response.data);
+                toast.error(response.data.message || 'Upload failed');
             }
         } catch (error) {
-            console.error('Error uploading photo:', {
-                message: error.message,
-                response: error.response?.data,
-                status: error.response?.status
-            });
+            const errorInfo = {
+                errorMessage: error.message,
+                httpStatus: error.response?.status,
+                responseData: error.response?.data,
+                requestURL: error.config?.url
+            };
+            console.error('🔴 Photo upload error:', errorInfo);
             
-            // Handle token expiry
-            if (error.response?.status === 401 || error.response?.data?.message?.includes('token')) {
-                toast.error('Your session has expired. Please login again.');
-            } else {
-                toast.error(error.response?.data?.message || 'Failed to upload profile photo');
-            }
+            // Show detailed error to user
+            const detailedError = `📁 File: ${file.name}
+🔗 Status: ${error.response?.status || 'No response'}
+💬 Message: ${error.response?.data?.message || error.message}
+🔍 Details: ${JSON.stringify(error.response?.data || error.message)}`;
+            
+            toast.error(detailedError, {
+                duration: 5000,
+                style: { whiteSpace: 'pre-line', fontSize: '12px' }
+            });
         } finally {
             setUploading(false);
         }
@@ -167,13 +178,15 @@ const ProfileCandidate = () => {
         formData.append('resume', file);
 
         try {
-            console.log('Uploading resume:', {
+            const debugInfo = {
                 filename: file.name,
                 size: file.size,
                 type: file.type
-            });
+            };
+            console.log('🔵 Starting resume upload:', debugInfo);
 
             const apiUrl = `${import.meta.env.VITE_API_END_POINT}/api/v1/user/profile/update`;
+            console.log('🔵 API URL:', apiUrl);
             
             const response = await axios.put(apiUrl, formData, {
                 withCredentials: true,
@@ -183,27 +196,35 @@ const ProfileCandidate = () => {
                 timeout: 120000 // 2 minutes for file upload
             });
 
-            console.log('Resume upload response:', response.data);
+            console.log('🟢 Resume upload successful:', response.data);
 
             if (response.data.success) {
                 setEditData({ ...editData, resume: response.data.user.profile.resume });
                 dispatch(setUser(response.data.user));
                 toast.success('Resume uploaded successfully!');
+            } else {
+                console.error('🔴 Upload response not successful:', response.data);
+                toast.error(response.data.message || 'Upload failed');
             }
         } catch (error) {
-            console.error('Error uploading resume:', {
-                message: error.message,
-                response: error.response?.data,
-                status: error.response?.status
-            });
+            const errorInfo = {
+                errorMessage: error.message,
+                httpStatus: error.response?.status,
+                responseData: error.response?.data,
+                requestURL: error.config?.url
+            };
+            console.error('🔴 Resume upload error:', errorInfo);
             
-            // Handle token expiry
-            if (error.response?.status === 401 || error.response?.data?.message?.includes('token')) {
-                toast.error('Your session has expired. Please login again.');
-                // Could redirect to login here
-            } else {
-                toast.error(error.response?.data?.message || 'Failed to upload resume');
-            }
+            // Show detailed error to user
+            const detailedError = `📄 Resume: ${file.name}
+🔗 Status: ${error.response?.status || 'No response'}
+💬 Message: ${error.response?.data?.message || error.message}
+🔍 Details: ${JSON.stringify(error.response?.data || error.message)}`;
+            
+            toast.error(detailedError, {
+                duration: 5000,
+                style: { whiteSpace: 'pre-line', fontSize: '12px' }
+            });
         } finally {
             setUploading(false);
         }
@@ -749,12 +770,21 @@ const ProfileCandidate = () => {
                                 >
                                     <Pen className="mr-2 h-4 w-4" /> Edit Profile
                                 </Button>
-                                {editData.resume && (
-                                    <a href={editData.resume} target="_blank" rel="noopener noreferrer">
-                                        <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
-                                            <Download className="mr-2 h-4 w-4" /> Download Resume
-                                        </Button>
-                                    </a>
+                                {user?.profile?.resumeFileId && (
+                                    <Button 
+                                        onClick={() => {
+                                            const link = document.createElement('a');
+                                            link.href = `/api/v1/user/resume/download/${user._id}`;
+                                            link.download = user.profile.resumeOriginalName || 'resume.pdf';
+                                            document.body.appendChild(link);
+                                            link.click();
+                                            document.body.removeChild(link);
+                                        }}
+                                        variant="outline" 
+                                        className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                                    >
+                                        <Download className="mr-2 h-4 w-4" /> Download Resume
+                                    </Button>
                                 )}
                                 <ReportDownloadButton />
                             </div>
@@ -765,6 +795,31 @@ const ProfileCandidate = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {/* Left Column - 2 cols */}
                         <div className="lg:col-span-2 space-y-8">
+                            {/* Resume Section */}
+                            {user?.profile?.resumeFileId && (
+                                <section className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-6 border border-blue-300">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <h2 className="text-2xl font-bold text-gray-900 mb-2">Resume</h2>
+                                            <p className="text-gray-700 font-medium">📄 {user?.profile?.resumeOriginalName || 'resume.pdf'}</p>
+                                        </div>
+                                        <Button 
+                                            onClick={() => {
+                                                const link = document.createElement('a');
+                                                link.href = `/api/v1/user/resume/download/${user._id}`;
+                                                link.download = user.profile.resumeOriginalName || 'resume.pdf';
+                                                document.body.appendChild(link);
+                                                link.click();
+                                                document.body.removeChild(link);
+                                            }}
+                                            className="bg-blue-600 hover:bg-blue-700"
+                                        >
+                                            <Download className="mr-2 h-4 w-4" /> Download
+                                        </Button>
+                                    </div>
+                                </section>
+                            )}
+
                             {/* Qualifications */}
                             <section>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-6">Qualifications</h2>

@@ -5,7 +5,14 @@ import path from "path";
 const getDataUri = (file) => {
     const parser = new DataUriParser();
     const extName = path.extname(file.originalname).toString();
-    return parser.format(extName, file.buffer);
+    const dataUri = parser.format(extName, file.buffer);
+    
+    // Return object with content property for compatibility
+    return {
+        content: dataUri,
+        // Also return the string directly if accessed as string
+        toString: () => dataUri
+    };
 }
 
 export default getDataUri;
