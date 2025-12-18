@@ -119,7 +119,8 @@ const ProfileCandidate = () => {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                timeout: 60000 // 1 minute for image upload
             });
 
             console.log('Photo upload response:', response.data);
@@ -135,7 +136,13 @@ const ProfileCandidate = () => {
                 response: error.response?.data,
                 status: error.response?.status
             });
-            toast.error(error.response?.data?.message || 'Failed to upload profile photo');
+            
+            // Handle token expiry
+            if (error.response?.status === 401 || error.response?.data?.message?.includes('token')) {
+                toast.error('Your session has expired. Please login again.');
+            } else {
+                toast.error(error.response?.data?.message || 'Failed to upload profile photo');
+            }
         } finally {
             setUploading(false);
         }
@@ -172,7 +179,8 @@ const ProfileCandidate = () => {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data'
-                }
+                },
+                timeout: 120000 // 2 minutes for file upload
             });
 
             console.log('Resume upload response:', response.data);
@@ -188,7 +196,14 @@ const ProfileCandidate = () => {
                 response: error.response?.data,
                 status: error.response?.status
             });
-            toast.error(error.response?.data?.message || 'Failed to upload resume');
+            
+            // Handle token expiry
+            if (error.response?.status === 401 || error.response?.data?.message?.includes('token')) {
+                toast.error('Your session has expired. Please login again.');
+                // Could redirect to login here
+            } else {
+                toast.error(error.response?.data?.message || 'Failed to upload resume');
+            }
         } finally {
             setUploading(false);
         }

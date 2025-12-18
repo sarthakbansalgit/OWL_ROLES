@@ -38,6 +38,12 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(morgan("combined", { stream: dualStream }));
 
+// Increase timeout for file upload routes
+app.use('/api/v1/user/profile/update', (req, res, next) => {
+    req.setTimeout(120000); // 2 minutes for file uploads
+    next();
+});
+
 const PORT = process.env.PORT || 3000;
 
 // Root route
