@@ -48,6 +48,11 @@ const ProfileCandidate = () => {
     // Update editData when user data changes (from Redux updates)
     useEffect(() => {
         if (user) {
+            console.log('📋 User data updated in profile:', {
+                hasResume: !!user.profile?.resumeFileId,
+                resumeFileId: user.profile?.resumeFileId,
+                resumeOriginalName: user.profile?.resumeOriginalName
+            });
             setEditData(prev => ({
                 ...prev,
                 fullname: user.fullname || '',
@@ -748,6 +753,15 @@ const ProfileCandidate = () => {
             </div>
         );
     }
+
+    // Debug log for resume
+    console.log('🎯 Profile render - User resume data:', {
+        userId: user?._id,
+        hasResumeFileId: !!user?.profile?.resumeFileId,
+        resumeFileId: user?.profile?.resumeFileId,
+        resumeOriginalName: user?.profile?.resumeOriginalName,
+        profileKeys: Object.keys(user?.profile || {})
+    });
 
     return (
         <div className="min-h-screen bg-white text-gray-900">
