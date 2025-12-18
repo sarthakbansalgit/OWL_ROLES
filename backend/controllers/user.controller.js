@@ -281,24 +281,37 @@ class UserController {
             }
 
             // Handle file uploads - files come as array from multer.any()
+            console.log("Files array received:", files);
             if (Array.isArray(files) && files.length > 0) {
-                // Find resume file
+                // Find resume file by fieldname
                 const resumeFile = files.find(f => f.fieldname === 'resume');
+                console.log("Resume file found:", resumeFile ? 'Yes' : 'No');
+                
                 if (resumeFile) {
                     try {
                         console.log("Resume file details:", {
                             originalname: resumeFile.originalname,
                             mimetype: resumeFile.mimetype,
-                            size: resumeFile.size
+                            size: resumeFile.size,
+                            fieldname: resumeFile.fieldname
                         });
                         
                         const fileUri = getDataUri(resumeFile);
+                        console.log("DataUri result:", fileUri ? 'Created' : 'Failed', fileUri?.content ? 'Has content' : 'No content');
+                        
+                        if (!fileUri || !fileUri.content) {
+                            throw new Error("Failed to convert resume file to DataUri");
+                        }
+                        
                         const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
                             resource_type: 'raw',
                             public_id: `resume_${userId}_${Date.now()}`,
                         });
                         
-                        console.log("Cloudinary response for resume:", cloudResponse);
+                        console.log("Cloudinary response for resume:", {
+                            public_id: cloudResponse.public_id,
+                            secure_url: cloudResponse.secure_url
+                        });
                         
                         // Use secure_url directly from Cloudinary response
                         profileUpdates.resume = cloudResponse.secure_url;
@@ -315,20 +328,32 @@ class UserController {
 
                 // Find profile photo file
                 const photoFile = files.find(f => f.fieldname === 'profilePhoto');
+                console.log("Photo file found:", photoFile ? 'Yes' : 'No');
+                
                 if (photoFile) {
                     try {
                         console.log("Profile photo details:", {
                             originalname: photoFile.originalname,
                             mimetype: photoFile.mimetype,
-                            size: photoFile.size
+                            size: photoFile.size,
+                            fieldname: photoFile.fieldname
                         });
                         
                         const fileUri = getDataUri(photoFile);
+                        console.log("DataUri result:", fileUri ? 'Created' : 'Failed', fileUri?.content ? 'Has content' : 'No content');
+                        
+                        if (!fileUri || !fileUri.content) {
+                            throw new Error("Failed to convert photo file to DataUri");
+                        }
+                        
                         const cloudResponse = await cloudinary.uploader.upload(fileUri.content, {
                             public_id: `profile_${userId}_${Date.now()}`,
                         });
                         
-                        console.log("Cloudinary response for photo:", cloudResponse);
+                        console.log("Cloudinary response for photo:", {
+                            public_id: cloudResponse.public_id,
+                            secure_url: cloudResponse.secure_url
+                        });
                         
                         profileUpdates.profilePhoto = cloudResponse.secure_url;
                         console.log("Profile photo uploaded successfully:", cloudResponse.secure_url);
