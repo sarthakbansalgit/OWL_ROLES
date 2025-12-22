@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './shared/Navbar';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSearchedQuery } from '@/redux/jobSlice';
-import { Star, Filter } from 'lucide-react';
+import { Star, Filter, TrendingUp, Users, Briefcase, Award } from 'lucide-react';
 import { Button } from './ui/button';
 
 const Jobs = () => {
@@ -50,45 +50,59 @@ const Jobs = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white text-gray-900">
+        <div className="relative min-h-screen bg-gradient-to-b from-slate-50 via-white to-blue-50 text-slate-900 overflow-hidden">
+            {/* Animated background elements */}
+            <div className='auth-aurora fixed inset-0 opacity-30' />
+            <div className='auth-aurora auth-aurora--two fixed inset-0 opacity-20' />
+            <div className='auth-orb auth-orb--one fixed opacity-15' />
+            
             <Navbar />
             
-            <main className="flex-1 pt-24 px-4 sm:px-6 lg:px-10">
+            <main className="flex-1 pt-24 px-4 sm:px-6 lg:px-10 relative z-10">
                 <div className="flex flex-col lg:flex-row gap-8 max-w-screen-2xl mx-auto">
                     {/* Left Panel: Job Description */}
                     <aside className="w-full lg:w-1/3 lg:max-w-md flex-shrink-0">
-                        <div className="sticky top-28 p-6 rounded-xl border border-blue-200 bg-blue-50">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-1">
+                        <div className="sticky top-28 p-8 rounded-2xl border border-sky-300/50 bg-gradient-to-br from-sky-50 via-white to-blue-50 shadow-xl hover:shadow-2xl transition-all card-3d backdrop-blur-xl">
+                            <h3 className="text-3xl font-bold text-slate-900 mb-2 drop-shadow-lg">
                                 {selectedJob?.title || 'Job Title'}
                             </h3>
-                            <p className="text-gray-600 text-sm mb-6">
+                            <p className="text-slate-600 text-sm mb-8 font-medium">
                                 {selectedJob?.description?.substring(0, 100) || 'Department'}
                             </p>
-                            <div className="space-y-6">
-                                <div>
-                                    <h4 className="font-semibold text-gray-900 mb-2">Key Responsibilities</h4>
-                                    <ul className="space-y-2 text-gray-700 text-sm list-disc list-inside">
+                            <div className="space-y-8">
+                                <div className="group">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Briefcase className="h-5 w-5 text-sky-600" />
+                                        <h4 className="font-bold text-slate-900 text-base">Key Responsibilities</h4>
+                                    </div>
+                                    <ul className="space-y-2 text-slate-700 text-sm list-disc list-inside ml-1">
                                         <li>Teach courses in {selectedJob?.title || 'subject'}</li>
                                         <li>Conduct high-impact research.</li>
                                         <li>Mentor students and supervise work.</li>
                                         <li>Contribute to departmental service.</li>
                                     </ul>
                                 </div>
-                                <div>
-                                    <h4 className="font-semibold text-gray-900 mb-2">Required Qualifications</h4>
-                                    <ul className="space-y-2 text-gray-700 text-sm list-disc list-inside">
+                                <div className="group">
+                                    <div className="flex items-center gap-2 mb-3">
+                                        <Award className="h-5 w-5 text-sky-600" />
+                                        <h4 className="font-bold text-slate-900 text-base">Required Qualifications</h4>
+                                    </div>
+                                    <ul className="space-y-2 text-slate-700 text-sm list-disc list-inside ml-1">
                                         <li>Relevant degree or certification.</li>
                                         <li>Minimum 5 years of experience.</li>
                                         <li>Strong professional record.</li>
                                     </ul>
                                 </div>
-                                <div>
-                                    <h4 className="font-semibold text-gray-900 mb-2">Desired Expertise</h4>
-                                    <div className="flex flex-wrap gap-2">
-                                        <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full border border-blue-300">Deep Learning</span>
-                                        <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full border border-blue-300">NLP</span>
-                                        <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full border border-blue-300">Research</span>
-                                        <span className="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-1 rounded-full border border-blue-300">Teaching</span>
+                                <div className="group">
+                                    <div className="flex items-center gap-2 mb-4">
+                                        <TrendingUp className="h-5 w-5 text-sky-600" />
+                                        <h4 className="font-bold text-slate-900 text-base">Desired Expertise</h4>
+                                    </div>
+                                    <div className="flex flex-wrap gap-3">
+                                        <span className="bg-sky-100 text-sky-700 text-xs font-bold px-4 py-2 rounded-full border border-sky-300/60 hover:border-sky-400 transition-all card-3d">Deep Learning</span>
+                                        <span className="bg-sky-100 text-sky-700 text-xs font-bold px-4 py-2 rounded-full border border-sky-300/60 hover:border-sky-400 transition-all card-3d">NLP</span>
+                                        <span className="bg-blue-100 text-blue-700 text-xs font-bold px-4 py-2 rounded-full border border-blue-300/60 hover:border-blue-400 transition-all card-3d">Research</span>
+                                        <span className="bg-indigo-100 text-indigo-700 text-xs font-bold px-4 py-2 rounded-full border border-indigo-300/60 hover:border-indigo-400 transition-all card-3d">Teaching</span>
                                     </div>
                                 </div>
                             </div>
@@ -98,41 +112,41 @@ const Jobs = () => {
                     {/* Right Panel: Candidate Matches */}
                     <div className="flex-1 min-w-0">
                         {/* Header */}
-                        <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                        <div className="flex flex-wrap items-center justify-between gap-4 mb-8 slide-in-down">
                             <div className="flex min-w-72 flex-col">
-                                <div className="flex flex-wrap gap-2 text-sm mb-2">
-                                    <a className="text-gray-600 hover:text-gray-900 transition-colors" href="#">Jobs</a>
-                                    <span className="text-gray-400">/</span>
-                                    <a className="text-gray-600 hover:text-gray-900 transition-colors" href="#">
+                                <div className="flex flex-wrap gap-2 text-sm mb-4">
+                                    <a className="text-sky-600 font-semibold hover:text-sky-700 transition-colors" href="#">Jobs</a>
+                                    <span className="text-slate-400">/</span>
+                                    <a className="text-sky-600 font-semibold hover:text-sky-700 transition-colors" href="#">
                                         {selectedJob?.title?.substring(0, 30) || 'Position'}
                                     </a>
-                                    <span className="text-gray-400">/</span>
-                                    <span className="text-gray-900 font-medium">AI Matches</span>
+                                    <span className="text-slate-400">/</span>
+                                    <span className="text-slate-900 font-bold">AI Matches</span>
                                 </div>
-                                <h1 className="text-gray-900 text-4xl font-black leading-tight tracking-tight mb-2">
+                                <h1 className="text-slate-900 text-5xl font-black leading-tight tracking-tight mb-3 drop-shadow-lg">
                                     Top Candidate Matches
                                 </h1>
-                                <p className="text-gray-600 text-base">
+                                <p className="text-slate-600 text-lg">
                                     Best candidates based on AI analysis of their qualifications and experience.
                                 </p>
                             </div>
                         </div>
 
                         {/* Filters */}
-                        <div className="flex gap-3 py-3 overflow-x-auto mb-6 pb-2">
+                        <div className="flex gap-3 py-4 overflow-x-auto mb-8 pb-2 slide-in-left">
                             {['Experience', 'Subject', 'Degree', 'Publications', 'Teaching Quality'].map((filter, idx) => (
                                 <button
                                     key={idx}
-                                    className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-blue-100 hover:bg-blue-200 transition-colors pl-4 pr-2 whitespace-nowrap border border-blue-300"
+                                    className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-xl bg-gradient-to-r from-sky-100 to-blue-100 hover:from-sky-200 hover:to-blue-200 transition-all pl-5 pr-3 whitespace-nowrap border border-sky-300/60 font-semibold text-sm text-slate-700 card-3d hover:shadow-lg stagger-item-1"
                                 >
-                                    <p className="text-gray-900 text-sm font-medium">{filter}</p>
+                                    <p>{filter}</p>
                                     <span className="text-base">⌄</span>
                                 </button>
                             ))}
                         </div>
 
                         {/* Candidate Cards */}
-                        <div className="space-y-6">
+                        <div className="space-y-6 scale-in">
                             {filterJobs.length > 0 ? (
                                 filterJobs.map((job, idx) => {
                                     const matchScore = 92 - (idx * 5); // Demo: 92%, 87%, 81%
@@ -144,18 +158,18 @@ const Jobs = () => {
                                         <div
                                             key={job._id}
                                             onClick={() => setSelectedJob(job)}
-                                            className="flex flex-col md:flex-row items-stretch justify-between gap-6 rounded-xl bg-blue-50 border border-blue-200 p-6 shadow-lg shadow-blue-200/20 hover:bg-blue-100 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                                            className={`group flex flex-col md:flex-row items-stretch justify-between gap-8 rounded-2xl bg-gradient-to-br from-sky-50/80 via-white to-blue-50/80 border border-sky-300/50 p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer card-3d stagger-item-${(idx % 3) + 1} hover:border-sky-400`}
                                         >
                                             {/* Left Content */}
-                                            <div className="flex items-center gap-6">
+                                            <div className="flex items-center gap-8">
                                                 {/* Match Circle */}
-                                                <div className="relative h-28 w-28 flex-shrink-0">
+                                                <div className="relative h-32 w-32 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                                                     <svg
                                                         className="absolute inset-0 h-full w-full -rotate-90"
                                                         viewBox="0 0 120 120"
                                                     >
                                                         <circle
-                                                            className="text-gray-300"
+                                                            className="text-slate-300"
                                                             cx="60"
                                                             cy="60"
                                                             fill="transparent"
@@ -164,7 +178,7 @@ const Jobs = () => {
                                                             strokeWidth="8"
                                                         ></circle>
                                                         <circle
-                                                            className="text-blue-600 transition-all duration-1000"
+                                                            className="text-sky-500 transition-all duration-1000"
                                                             cx="60"
                                                             cy="60"
                                                             fill="transparent"
@@ -177,42 +191,42 @@ const Jobs = () => {
                                                         ></circle>
                                                     </svg>
                                                     <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                                        <span className="text-gray-900 text-3xl font-bold">{matchScore}%</span>
-                                                        <span className="text-gray-600 text-xs">Match</span>
+                                                        <span className="text-slate-900 text-4xl font-black">{matchScore}%</span>
+                                                        <span className="text-slate-600 text-xs font-bold">Match</span>
                                                     </div>
                                                 </div>
 
                                                 {/* Candidate Info */}
-                                                <div className="flex flex-col gap-1">
-                                                    <p className="text-gray-900 text-xl font-bold leading-tight">
+                                                <div className="flex flex-col gap-2">
+                                                    <p className="text-slate-900 text-2xl font-bold leading-tight">
                                                         {job.title}
                                                     </p>
-                                                    <p className="text-gray-600 text-sm">
-                                                        {job.location}
+                                                    <p className="text-slate-600 text-base font-semibold">
+                                                        📍 {job.location}
                                                     </p>
-                                                    <div className="mt-4 space-y-3">
+                                                    <div className="mt-6 space-y-4">
                                                         {/* Subject Expertise */}
                                                         <div>
-                                                            <div className="flex justify-between items-center mb-1">
-                                                                <p className="text-gray-700 text-xs font-medium">Subject Expertise</p>
-                                                                <p className="text-gray-900 text-xs font-bold">{expertise}%</p>
+                                                            <div className="flex justify-between items-center mb-2">
+                                                                <p className="text-slate-700 text-sm font-bold">Subject Expertise</p>
+                                                                <p className="text-slate-900 text-sm font-bold">{expertise}%</p>
                                                             </div>
-                                                            <div className="w-full bg-gray-300 rounded-full h-1.5">
+                                                            <div className="w-48 bg-slate-300/50 rounded-full h-2 overflow-hidden">
                                                                 <div
-                                                                    className="bg-blue-600 h-1.5 rounded-full transition-all duration-500"
+                                                                    className="bg-gradient-to-r from-sky-400 to-blue-500 h-2 rounded-full transition-all duration-500 shadow-lg"
                                                                     style={{ width: `${expertise}%` }}
                                                                 ></div>
                                                             </div>
                                                         </div>
 
                                                         {/* Research & Teaching */}
-                                                        <div className="flex items-center gap-6">
+                                                        <div className="flex items-center gap-8">
                                                             <div>
-                                                                <p className="text-gray-700 text-xs font-medium">Research Alignment</p>
-                                                                <p className="text-gray-900 font-bold">{alignment}%</p>
+                                                                <p className="text-slate-700 text-sm font-bold">Research Alignment</p>
+                                                                <p className="text-slate-900 font-black text-lg">{alignment}%</p>
                                                             </div>
                                                             <div>
-                                                                <p className="text-gray-700 text-xs font-medium">Teaching Rating</p>
+                                                                <p className="text-slate-700 text-sm font-bold">Teaching Rating</p>
                                                                 {renderStars(Math.floor(rating))}
                                                             </div>
                                                         </div>
@@ -221,15 +235,15 @@ const Jobs = () => {
                                             </div>
 
                                             {/* Right Actions */}
-                                            <div className="flex flex-col justify-center items-center md:items-end gap-3 flex-shrink-0 pt-4 md:pt-0 border-t md:border-t-0 md:border-l border-blue-200 md:pl-6">
-                                                <Button className="w-full md:w-auto min-w-[120px] h-10 px-4 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-opacity shadow-lg shadow-blue-200/30">
+                                            <div className="flex flex-col justify-center items-center md:items-end gap-3 flex-shrink-0 pt-6 md:pt-0 border-t md:border-t-0 md:border-l border-sky-300/40 md:pl-8">
+                                                <Button className="w-full md:w-auto min-w-[140px] h-12 px-6 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:via-blue-600 hover:to-indigo-700 text-white text-base font-bold transition-all shadow-lg hover:shadow-xl card-3d hover:scale-105">
                                                     View Profile
                                                 </Button>
                                                 <Button
                                                     variant="outline"
-                                                    className="w-full md:w-auto min-w-[120px] h-10 px-4 border-blue-300 bg-white hover:bg-blue-50 text-gray-900 text-sm font-medium transition-colors"
+                                                    className="w-full md:w-auto min-w-[140px] h-12 px-6 border-2 border-sky-400 bg-white hover:bg-sky-50 text-slate-900 text-base font-bold transition-all shadow-md hover:shadow-lg card-3d"
                                                 >
-                                                    Shortlist
+                                                    ✓ Shortlist
                                                 </Button>
                                             </div>
                                         </div>
@@ -237,7 +251,7 @@ const Jobs = () => {
                                 })
                             ) : (
                                 <div className="flex items-center justify-center h-96">
-                                    <p className="text-gray-600 text-lg">No candidates found for this position.</p>
+                                    <p className="text-slate-600 text-lg font-semibold">No candidates found for this position.</p>
                                 </div>
                             )}
                         </div>

@@ -67,81 +67,81 @@ const AdminJobsTable = () => {
     
 
     return (
-        <div className="rounded-lg md:rounded-2xl border border-gray-100 shadow-lg bg-white overflow-hidden">
+        <div className="rounded-3xl border border-sky-300/50 shadow-2xl bg-white/95 overflow-hidden card-3d scale-in backdrop-blur-xl">
             {/* Desktop Table */}
             <div className='hidden md:block overflow-x-auto'>
                 <Table>
-                    <TableHeader className="bg-gradient-to-r from-blue-50 to-blue-50 border-b-2 border-blue-100">
-                        <TableRow className="hover:bg-blue-50">
-                            <TableHead className="w-[220px] text-gray-700 font-bold">Company</TableHead>
-                            <TableHead className="min-w-[280px] text-gray-700 font-bold">Job Title</TableHead>
-                            <TableHead className="w-[140px] text-gray-700 font-bold">Posted Date</TableHead>
-                            <TableHead className="text-right w-[140px] text-gray-700 font-bold">Actions</TableHead>
+                    <TableHeader className="bg-gradient-to-r from-sky-100 via-blue-100 to-indigo-100 border-b-2 border-sky-300/60">
+                        <TableRow className="hover:bg-sky-50">
+                            <TableHead className="w-[240px] text-slate-700 font-bold text-sm">Company</TableHead>
+                            <TableHead className="min-w-[300px] text-slate-700 font-bold text-sm">Job Title</TableHead>
+                            <TableHead className="w-[140px] text-slate-700 font-bold text-sm">Posted Date</TableHead>
+                            <TableHead className="text-right w-[140px] text-slate-700 font-bold text-sm">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
 
                     <TableBody>
-                        {filterJobs?.map((job) => (
+                        {filterJobs?.map((job, idx) => (
                             <TableRow 
                                 key={job._id}
-                                className="group hover:bg-blue-50 transition-colors border-b border-gray-100"
+                                className={`group hover:bg-sky-50/80 transition-all duration-300 border-b border-sky-200/50 hover:border-sky-300 stagger-item-${(idx % 5) + 1} slide-in-up`}
                             >
-                                <TableCell className="font-semibold text-gray-900">
+                                <TableCell className="font-bold text-slate-900">
                                     <div className="flex items-center gap-3">
-                                        <Avatar className="w-10 h-10 border-2 border-blue-200">
-                                            <AvatarImage src={job.company?.logo} />
-                                            <AvatarFallback className="bg-gradient-to-br from-blue-100 to-blue-100 text-blue-700 font-bold text-sm">
+                                        <Avatar className="w-12 h-12 border-3 border-sky-300/60 card-3d group-hover:scale-110 transition-transform">
+                                            <AvatarImage src={job.company?.logo} className="object-cover" />
+                                            <AvatarFallback className="bg-gradient-to-br from-sky-100 to-blue-100 text-sky-700 font-bold text-sm">
                                                 {job.company?.name[0]}
                                             </AvatarFallback>
                                         </Avatar>
-                                        <span className='truncate'>{job.company?.name}</span>
+                                        <span className='truncate text-base'>{job.company?.name}</span>
                                     </div>
                                 </TableCell>
                                 
-                                <TableCell className="text-gray-900 font-medium">
+                                <TableCell className="text-slate-900 font-semibold text-base">
                                     <div className='flex items-center gap-2'>
-                                        <span className='inline-block w-2 h-2 rounded-full bg-blue-500'></span>
+                                        <span className='inline-block w-3 h-3 rounded-full bg-gradient-to-r from-sky-500 to-blue-500'></span>
                                         {job.title}
                                     </div>
                                 </TableCell>
                                 
-                                <TableCell className="text-gray-600 text-sm">
+                                <TableCell className="text-slate-600 text-sm font-semibold">
                                     {formatDate(job.createdAt)}
                                 </TableCell>
                                 
                                 <TableCell className="text-right">
                                     <Popover>
-                                        <PopoverTrigger className="p-2 hover:bg-blue-100 rounded-full transition">
-                                            <MoreHorizontal className="w-5 h-5 text-gray-600" />
+                                        <PopoverTrigger className="p-2 hover:bg-sky-200 rounded-full transition card-3d hover:scale-110">
+                                            <MoreHorizontal className="w-5 h-5 text-slate-600 group-hover:text-sky-600 transition-colors" />
                                         </PopoverTrigger>
                                         
                                         <PopoverContent 
-                                            className="w-48 p-2 rounded-xl shadow-xl border border-blue-200 bg-white"
+                                            className="w-52 p-3 rounded-xl shadow-2xl border border-sky-300/60 bg-white"
                                             align="end"
                                         >
                                             <div className="space-y-2">
                                                 <button
                                                     onClick={() => navigate(`/admin/jobs/edit/${job._id}`)}
-                                                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium"
+                                                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-sky-100 text-slate-700 hover:text-sky-600 transition-all font-semibold text-sm card-3d"
                                                 >
                                                     <Edit2 className="w-4 h-4" />
-                                                    <span>Edit</span>
+                                                    <span>Edit Job</span>
                                                 </button>
                                                 
                                                 <button
                                                     onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}
-                                                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium"
+                                                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-blue-100 text-slate-700 hover:text-blue-600 transition-all font-semibold text-sm card-3d"
                                                 >
                                                     <Eye className="w-4 h-4" />
-                                                    <span>Applicants</span>
+                                                    <span>View Applicants</span>
                                                 </button>
 
                                                 <button
                                                     onClick={() => handleDeleteJob(job._id)}
-                                                    className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors text-sm font-medium"
+                                                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-red-100 text-red-600 hover:text-red-700 transition-all font-semibold text-sm card-3d"
                                                 >
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                     </svg>
                                                     <span>Delete</span>
                                                 </button>
@@ -156,37 +156,37 @@ const AdminJobsTable = () => {
             </div>
 
             {/* Mobile Card View */}
-            <div className='md:hidden space-y-3 p-4'>
-                {filterJobs?.map((job) => (
-                    <div key={job._id} className='bg-white border border-blue-100 rounded-lg p-4 hover:shadow-md transition-shadow'>
-                        <div className='flex items-center justify-between mb-3'>
-                            <div className='flex items-center gap-2 flex-1'>
-                                <Avatar className='w-8 h-8 border-2 border-blue-200 flex-shrink-0'>
-                                    <AvatarImage src={job.company?.logo} />
-                                    <AvatarFallback className='bg-gradient-to-br from-blue-100 to-blue-100 text-blue-700 font-bold text-xs'>
+            <div className='md:hidden space-y-4 p-5'>
+                {filterJobs?.map((job, idx) => (
+                    <div key={job._id} className={`bg-gradient-to-br from-white to-sky-50/50 border border-sky-300/50 rounded-2xl p-5 hover:shadow-xl transition-all card-3d stagger-item-${(idx % 3) + 1} slide-in-up hover:border-sky-400`}>
+                        <div className='flex items-center justify-between mb-4'>
+                            <div className='flex items-center gap-3 flex-1'>
+                                <Avatar className='w-12 h-12 border-3 border-sky-300/60 card-3d flex-shrink-0'>
+                                    <AvatarImage src={job.company?.logo} className="object-cover" />
+                                    <AvatarFallback className='bg-gradient-to-br from-sky-100 to-blue-100 text-sky-700 font-bold text-sm'>
                                         {job.company?.name[0]}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div className='flex-1 min-w-0'>
-                                    <p className='font-semibold text-gray-900 text-sm truncate'>{job.company?.name}</p>
-                                    <p className='text-xs text-gray-500'>{formatDate(job.createdAt)}</p>
+                                    <p className='font-bold text-slate-900 text-sm truncate'>{job.company?.name}</p>
+                                    <p className='text-xs text-slate-500 font-semibold'>{formatDate(job.createdAt)}</p>
                                 </div>
                             </div>
                             <Popover>
-                                <PopoverTrigger className='p-2 hover:bg-blue-100 rounded-full flex-shrink-0'>
-                                    <MoreHorizontal className='w-4 h-4 text-gray-600' />
+                                <PopoverTrigger className='p-2 hover:bg-sky-200 rounded-full flex-shrink-0 card-3d'>
+                                    <MoreHorizontal className='w-5 h-5 text-slate-600' />
                                 </PopoverTrigger>
-                                <PopoverContent className='w-40 p-2 rounded-lg shadow-lg border border-blue-200'>
-                                    <div className='space-y-1'>
-                                        <button onClick={() => navigate(`/admin/jobs/edit/${job._id}`)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-blue-50 text-blue-600 font-medium'>
-                                            <Edit2 className='w-3 h-3' /> Edit
+                                <PopoverContent className='w-48 p-2 rounded-xl shadow-xl border border-sky-300/60'>
+                                    <div className='space-y-2'>
+                                        <button onClick={() => navigate(`/admin/jobs/edit/${job._id}`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-sky-100 text-sky-600 font-semibold card-3d'>
+                                            <Edit2 className='w-4 h-4' /> Edit
                                         </button>
-                                        <button onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-blue-50 text-blue-600 font-medium'>
-                                            <Eye className='w-3 h-3' /> Applicants
+                                        <button onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-blue-100 text-blue-600 font-semibold card-3d'>
+                                            <Eye className='w-4 h-4' /> Applicants
                                         </button>
-                                        <button onClick={() => handleDeleteJob(job._id)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-red-50 text-red-600 font-medium'>
-                                            <svg xmlns='http://www.w3.org/2000/svg' className='h-3 w-3' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M6 18L18 6M6 6l12 12' />
+                                        <button onClick={() => handleDeleteJob(job._id)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-red-100 text-red-600 font-semibold card-3d'>
+                                            <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
                                             </svg>
                                             Delete
                                         </button>
@@ -194,15 +194,15 @@ const AdminJobsTable = () => {
                                 </PopoverContent>
                             </Popover>
                         </div>
-                        <h3 className='font-semibold text-gray-900 text-sm line-clamp-2'>{job.title}</h3>
+                        <h3 className='font-bold text-slate-900 text-sm line-clamp-2'>{job.title}</h3>
                     </div>
                 ))}
             </div>
 
             {filterJobs.length === 0 && (
-                <div className="p-12 text-center">
-                    <p className='text-gray-500 text-base mb-2'>📋 {searchJobByText ? "No jobs found" : "No jobs posted yet"}</p>
-                    <p className='text-gray-400 text-sm'>Try adjusting your search criteria</p>
+                <div className="p-16 text-center slide-in-down">
+                    <p className='text-slate-600 text-lg font-bold mb-2'>📋 {searchJobByText ? "No jobs found" : "No jobs posted yet"}</p>
+                    <p className='text-slate-400 text-base'>Try adjusting your search criteria or post a new job</p>
                 </div>
             )}
         </div>

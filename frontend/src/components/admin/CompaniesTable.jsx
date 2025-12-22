@@ -26,36 +26,36 @@ const CompaniesTable = ({ refreshCompanies }) => {
     }, [companies, searchCompanyByText]);
     
     return (
-        <div className='rounded-lg md:rounded-2xl border border-gray-100 shadow-lg bg-white overflow-hidden'>
+        <div className='rounded-2xl border border-sky-300/50 shadow-xl bg-white/95 overflow-hidden backdrop-blur card-3d scale-in'>
             {/* Desktop Table */}
             <div className='hidden md:block overflow-x-auto'>
                 <Table>
-                    <TableHeader className='bg-gradient-to-r from-blue-50 to-blue-50 border-b-2 border-blue-100'>
-                        <TableRow className='hover:bg-blue-50'>
-                            <TableHead className='w-[80px] text-gray-700 font-bold'>Logo</TableHead>
-                            <TableHead className='min-w-[200px] text-gray-700 font-bold'>Company Name</TableHead>
-                            <TableHead className='min-w-[200px] text-gray-700 font-bold'>Website</TableHead>
-                            <TableHead className='min-w-[120px] text-gray-700 font-bold'>Created</TableHead>
-                            <TableHead className='text-right w-[120px] text-gray-700 font-bold'>Actions</TableHead>
+                    <TableHeader className='bg-gradient-to-r from-sky-100 via-blue-100 to-indigo-100 border-b-2 border-sky-300/60'>
+                        <TableRow className='hover:bg-sky-50'>
+                            <TableHead className='w-[80px] text-slate-700 font-bold text-sm'>Logo</TableHead>
+                            <TableHead className='min-w-[200px] text-slate-700 font-bold text-sm'>Company Name</TableHead>
+                            <TableHead className='min-w-[200px] text-slate-700 font-bold text-sm'>Website</TableHead>
+                            <TableHead className='min-w-[120px] text-slate-700 font-bold text-sm'>Created</TableHead>
+                            <TableHead className='text-right w-[120px] text-slate-700 font-bold text-sm'>Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     
                     <TableBody>
-                        {filteredCompanies?.map((company) => (
-                            <TableRow key={company._id} className='group hover:bg-blue-50 transition-colors border-b border-gray-100'>
+                        {filteredCompanies?.map((company, idx) => (
+                            <TableRow key={company._id} className={`group hover:bg-sky-50/80 transition-all duration-300 border-b border-sky-200/50 hover:border-sky-300 stagger-item-${(idx % 5) + 1} slide-in-up`}>
                                 <TableCell>
-                                    <Avatar className='w-12 h-12 border-3 border-blue-200'>
+                                    <Avatar className='w-12 h-12 border-3 border-sky-300/60 card-3d group-hover:scale-110 transition-transform'>
                                         <AvatarImage 
                                             src={company.logo} 
                                             className='object-cover'
                                         />
-                                        <AvatarFallback className='bg-gradient-to-br from-blue-100 to-blue-100 text-blue-700 font-bold'>
+                                        <AvatarFallback className='bg-gradient-to-br from-sky-100 to-blue-100 text-sky-700 font-bold text-sm'>
                                             {company.name[0]}
                                         </AvatarFallback>
                                     </Avatar>
                                 </TableCell>
                                 
-                                <TableCell className='font-semibold text-gray-900'>
+                                <TableCell className='font-bold text-slate-900 text-base group-hover:text-sky-600 transition-colors'>
                                     {company.name}
                                 </TableCell>
 
@@ -66,30 +66,30 @@ const CompaniesTable = ({ refreshCompanies }) => {
                                             target="_blank" 
                                             rel="noopener noreferrer"
                                             onClick={(e) => e.stopPropagation()}
-                                            className="text-blue-600 hover:text-blue-800 hover:underline text-sm truncate"
+                                            className="text-sky-600 hover:text-sky-800 hover:underline text-sm truncate font-medium"
                                         >
                                             {company.website}
                                         </a>
                                     ) : (
-                                        <span className="text-gray-400 text-sm">NA</span>
+                                        <span className="text-slate-400 text-sm">NA</span>
                                     )}
                                 </TableCell>
                                 
-                                <TableCell className='text-gray-600 text-sm'>
+                                <TableCell className='text-slate-600 text-sm font-semibold'>
                                     {format(new Date(company.createdAt), 'MMM dd')}
                                 </TableCell>
                                 
                                 <TableCell className='text-right'>
                                     <Popover>
-                                        <PopoverTrigger className='p-2 hover:bg-blue-100 rounded-full transition'>
-                                            <MoreHorizontal className='w-5 h-5 text-gray-600' />
+                                        <PopoverTrigger className='p-2 hover:bg-sky-200 rounded-full transition card-3d hover:scale-110'>
+                                            <MoreHorizontal className='w-5 h-5 text-slate-600 group-hover:text-sky-600 transition-colors' />
                                         </PopoverTrigger>
                                         
-                                        <PopoverContent className='w-48 p-2 rounded-xl shadow-xl border border-blue-200 bg-white'>
+                                        <PopoverContent className='w-48 p-3 rounded-xl shadow-2xl border border-sky-300/60 bg-white'>
                                             <div className='space-y-2'>
                                                 <button 
                                                     onClick={() => navigate(`/admin/companies/${company._id}`)}
-                                                    className='w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium'
+                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-sky-100 text-slate-700 hover:text-sky-600 transition-all font-semibold text-sm card-3d'
                                                 >
                                                     <Edit2 className='w-4 h-4' />
                                                     <span>Edit</span>
@@ -97,7 +97,7 @@ const CompaniesTable = ({ refreshCompanies }) => {
 
                                                 <button 
                                                     onClick={() => navigate(`/admin/jobs`)}
-                                                    className='w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-blue-50 text-gray-700 hover:text-blue-600 transition-colors text-sm font-medium'
+                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-blue-100 text-slate-700 hover:text-blue-600 transition-all font-semibold text-sm card-3d'
                                                 >
                                                     <Eye className="h-4 w-4"/>
                                                     <span>View Jobs</span>
@@ -108,7 +108,7 @@ const CompaniesTable = ({ refreshCompanies }) => {
                                                         open: true,
                                                         companyId: company._id
                                                     })}
-                                                    className='w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors text-sm font-medium'
+                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-red-100 text-red-600 hover:text-red-700 transition-all font-semibold text-sm card-3d'
                                                 >
                                                     <Trash2 className='w-4 h-4' />
                                                     <span>Delete</span>
@@ -124,43 +124,43 @@ const CompaniesTable = ({ refreshCompanies }) => {
             </div>
 
             {/* Mobile Card View */}
-            <div className='md:hidden space-y-4 p-4'>
-                {filteredCompanies?.map((company) => (
-                    <div key={company._id} className='bg-white border border-blue-100 rounded-lg p-4 hover:shadow-md transition-shadow'>
-                        <div className='flex items-center justify-between mb-3'>
-                            <div className='flex items-center gap-3'>
-                                <Avatar className='w-10 h-10 border-2 border-blue-200'>
+            <div className='md:hidden space-y-4 p-5'>
+                {filteredCompanies?.map((company, idx) => (
+                    <div key={company._id} className={`bg-gradient-to-br from-white to-sky-50/50 border border-sky-300/50 rounded-xl p-5 hover:shadow-lg transition-all card-3d stagger-item-${(idx % 3) + 1} slide-in-up hover:border-sky-400`}>
+                        <div className='flex items-center justify-between mb-4'>
+                            <div className='flex items-center gap-4'>
+                                <Avatar className='w-12 h-12 border-3 border-sky-300/60 card-3d'>
                                     <AvatarImage src={company.logo} className='object-cover'/>
-                                    <AvatarFallback className='bg-gradient-to-br from-blue-100 to-blue-100 text-blue-700 font-bold text-sm'>
+                                    <AvatarFallback className='bg-gradient-to-br from-sky-100 to-blue-100 text-sky-700 font-bold text-sm'>
                                         {company.name[0]}
                                     </AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <h3 className='font-semibold text-gray-900 text-sm'>{company.name}</h3>
-                                    <p className='text-xs text-gray-500'>{format(new Date(company.createdAt), 'MMM dd, yyyy')}</p>
+                                    <h3 className='font-bold text-slate-900 text-sm'>{company.name}</h3>
+                                    <p className='text-xs text-slate-500 font-medium'>{format(new Date(company.createdAt), 'MMM dd, yyyy')}</p>
                                 </div>
                             </div>
                             <Popover>
-                                <PopoverTrigger className='p-2 hover:bg-blue-100 rounded-full'>
-                                    <MoreHorizontal className='w-5 h-5 text-gray-600' />
+                                <PopoverTrigger className='p-2 hover:bg-sky-200 rounded-full transition card-3d'>
+                                    <MoreHorizontal className='w-5 h-5 text-slate-600' />
                                 </PopoverTrigger>
-                                <PopoverContent className='w-40 p-2 rounded-lg shadow-lg border border-blue-200'>
-                                    <div className='space-y-1'>
-                                        <button onClick={() => navigate(`/admin/companies/${company._id}`)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-blue-50 text-blue-600'>
-                                            <Edit2 className='w-3 h-3' /> Edit
+                                <PopoverContent className='w-44 p-2 rounded-xl shadow-xl border border-sky-300/60'>
+                                    <div className='space-y-2'>
+                                        <button onClick={() => navigate(`/admin/companies/${company._id}`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-sky-100 text-sky-600 font-semibold card-3d'>
+                                            <Edit2 className='w-4 h-4' /> Edit
                                         </button>
-                                        <button onClick={() => navigate(`/admin/jobs`)} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-blue-50 text-blue-600'>
-                                            <Eye className='w-3 h-3' /> Jobs
+                                        <button onClick={() => navigate(`/admin/jobs`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-blue-100 text-blue-600 font-semibold card-3d'>
+                                            <Eye className='w-4 h-4' /> Jobs
                                         </button>
-                                        <button onClick={() => setDeleteDialogState({open: true, companyId: company._id})} className='w-full flex items-center gap-2 px-2 py-1.5 rounded text-xs hover:bg-red-50 text-red-600'>
-                                            <Trash2 className='w-3 h-3' /> Delete
+                                        <button onClick={() => setDeleteDialogState({open: true, companyId: company._id})} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-red-100 text-red-600 font-semibold card-3d'>
+                                            <Trash2 className='w-4 h-4' /> Delete
                                         </button>
                                     </div>
                                 </PopoverContent>
                             </Popover>
                         </div>
                         {company?.website && (
-                            <a href={company.website} target="_blank" rel="noopener noreferrer" className='text-xs text-blue-600 hover:underline truncate block'>
+                            <a href={company.website} target="_blank" rel="noopener noreferrer" className='text-xs text-sky-600 hover:text-sky-700 hover:underline truncate block font-semibold'>
                                 {company.website}
                             </a>
                         )}
@@ -169,9 +169,9 @@ const CompaniesTable = ({ refreshCompanies }) => {
             </div>
             
             {filteredCompanies.length === 0 && (
-                <div className='p-12 text-center'>
-                    <p className='text-gray-500 text-base mb-2'>📭 No companies found</p>
-                    <p className='text-gray-400 text-sm'>Try adjusting your search criteria</p>
+                <div className='p-16 text-center slide-in-down'>
+                    <p className='text-slate-500 text-lg font-bold mb-2'>📭 No companies found</p>
+                    <p className='text-slate-400 text-base'>Try adjusting your search criteria</p>
                 </div>
             )}
 
