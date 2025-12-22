@@ -384,17 +384,19 @@ const ProfileCandidate = () => {
 
     if (isEditing) {
         return (
-            <div className="min-h-screen bg-white text-gray-900">
+            <div className="relative min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900 page-transition">
+                <div className='auth-aurora' />
+                <div className='auth-aurora auth-aurora--two' />
                 <Navbar />
-                <main className="page-transition px-4 sm:px-10 lg:px-20 py-8 pt-24">
+                <main className="relative z-10 px-4 sm:px-10 lg:px-20 py-8 pt-24">
                     <div className="max-w-4xl mx-auto">
-                        <div className="flex justify-between items-center mb-8">
-                            <h1 className="text-3xl font-bold">Edit Profile</h1>
+                        <div className="flex justify-between items-center mb-8 slide-in-down">
+                            <h1 className="text-4xl font-bold text-slate-900">Edit Profile</h1>
                             <div className="flex gap-2">
-                                <Button onClick={() => setIsEditing(false)} variant="outline">
+                                <Button onClick={() => setIsEditing(false)} variant="outline" className="border-slate-200 hover:bg-slate-100 text-slate-700">
                                     <X className="mr-2 h-4 w-4" /> Cancel
                                 </Button>
-                                <Button onClick={handleSaveProfile} className="bg-blue-600 hover:bg-blue-700">
+                                <Button onClick={handleSaveProfile} className="bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 hover:shadow-lg text-white">
                                     <Save className="mr-2 h-4 w-4" /> Save Changes
                                 </Button>
                             </div>
@@ -764,13 +766,15 @@ const ProfileCandidate = () => {
     });
 
     return (
-        <div className="min-h-screen bg-white text-gray-900">
+        <div className="relative min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900 page-transition">
+            <div className='auth-aurora' />
+            <div className='auth-aurora auth-aurora--two' />
             <Navbar />
             
-            <main className="page-transition px-4 sm:px-10 lg:px-20 py-8 pt-24">
+            <main className="relative z-10 px-4 sm:px-10 lg:px-20 py-8 pt-24">
                 <div className="max-w-6xl mx-auto">
                     {/* Header Section */}
-                    <div className="flex flex-col gap-6 border-b border-blue-200 pb-8 mb-8">
+                    <div className="flex flex-col gap-6 border-b-2 border-slate-200 pb-8 mb-8 slide-in-down">
                         <div className="flex w-full flex-col gap-6 md:flex-row md:justify-between md:items-center">
                             {/* Profile Info */}
                             <div className="flex items-center gap-6">

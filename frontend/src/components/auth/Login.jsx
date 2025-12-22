@@ -1,272 +1,392 @@
-import React, { useEffect, useState } from 'react'
-import Navbar from '../shared/Navbar'
-import { Label } from '../ui/label'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
-import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { USER_API_END_POINT } from '@/utils/constant'
-import { toast } from 'sonner'
-import { useDispatch, useSelector } from 'react-redux'
-import { setLoading, setUser } from '@/redux/authSlice'
-import { Loader2, Mail, Lock, User, Briefcase, AlertCircle, CheckCircle2, X } from 'lucide-react'
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'sonner';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    AlertCircle,
+    ArrowRight,
+    CheckCircle2,
+    Eye,
+    EyeOff,
+    Globe,
+    Loader2,
+    Lock,
+    Mail,
+    ShieldCheck,
+    Sparkles,
+    User,
+    X,
+} from 'lucide-react';
+
+import Navbar from '../shared/Navbar';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import { Button } from '../ui/button';
+import { USER_API_END_POINT } from '@/utils/constant';
+import { setLoading, setUser } from '@/redux/authSlice';
 
 const Login = () => {
     const [input, setInput] = useState({
-        email: "",
-        password: "",
-        role: "",
+        email: '',
+        password: '',
+        role: '',
     });
+    const [showPassword, setShowPassword] = useState(false);
     const [showProfilePopup, setShowProfilePopup] = useState(false);
-    const { loading,user } = useSelector(store => store.auth);
-    const navigate = useNavigate();
+
+    const { loading, user } = useSelector((store) => store.auth);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const changeEventHandler = (e) => {
-        setInput({ ...input, [e.target.name]: e.target.value });
-    }
-
+        setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        
+
         if (!input.email || !input.password || !input.role) {
-            toast.error("Please fill in all fields");
+            toast.error('Please fill in all fields before continuing.');
             return;
         }
-        
+
         dispatch(setLoading(true));
-        
+
         try {
             const response = await axios.post(
                 `${USER_API_END_POINT}/login`,
                 input,
                 {
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 'Content-Type': 'application/json' },
                     withCredentials: true,
-                }
+                },
             );
-            
+
             if (response.data.success) {
                 dispatch(setUser(response.data.user));
-                toast.success(response.data.message || "Login successful!");
-                
-                // Show profile popup first, then redirect
+                toast.success(response.data.message || 'Login successful!');
                 setShowProfilePopup(true);
-                
-                // Auto redirect after 3 seconds if user doesn't click
+
                 setTimeout(() => {
-                    navigate("/profile");
-                }, 3000);
+                    navigate('/profile');
+                }, 3200);
             } else {
-                toast.error(response.data.message || "Login failed");
+                toast.error(response.data.message || 'Login failed, please try again.');
             }
         } catch (error) {
-            console.error("Login error:", error);
             if (error.response?.data?.message) {
                 toast.error(error.response.data.message);
-            } else if (error.message === "Network Error") {
-                toast.error("Network error. Please check your connection and try again.");
+            } else if (error.message === 'Network Error') {
+                toast.error('Network error. Please check your connection and try again.');
             } else {
-                toast.error(error.message || "Something went wrong. Please try again.");
+                toast.error('Something went wrong. Please try again.');
             }
         } finally {
             dispatch(setLoading(false));
         }
     };
-    
+
     useEffect(() => {
         if (user) {
-            navigate("/");
+            navigate('/');
         }
-    }, []);
-    
+    }, [user, navigate]);
+
+    const heroHighlights = [
+        {
+            icon: ShieldCheck,
+            title: 'Secure Access',
+            description: 'Enterprise-grade protection keeps your profile and data safe.',
+        },
+        {
+            icon: Sparkles,
+            title: 'Tailored Matches',
+            description: 'AI-curated recommendations surface the roles that fit you best.',
+        },
+        {
+            icon: Globe,
+            title: 'Global Talent',
+            description: 'Connect with teams and researchers from 120+ countries.',
+        },
+    ];
+
+    const statBadges = [
+        { label: 'Professionals enrolled', value: '30K+' },
+        { label: 'Roles posted monthly', value: '4.2K' },
+        { label: 'Avg. match time', value: '3 days' },
+    ];
+
     return (
-        <div className='min-h-screen bg-gradient-to-br from-gray-950 to-gray-900 page-transition'>
+        <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900 page-transition">
             <Navbar />
-            <div className='flex items-center justify-center min-h-[calc(100vh-100px)] px-4'>
-                <div className='w-full max-w-md'>
-                    <form 
-                        onSubmit={submitHandler}
-                        role="form"
-                        aria-label="Login form"
-                        className='bg-white rounded-xl shadow-2xl p-8 space-y-6'
-                    >
-                        {/* Header */}
-                        <div className='text-center mb-8'>
-                            <h1 className='text-3xl font-bold text-gray-900 mb-2'>Welcome Back</h1>
-                            <p className='text-gray-600 text-sm'>Sign in to your account to continue</p>
+
+            <div className="auth-aurora" />
+            <div className="auth-aurora auth-aurora--two" />
+            <div className="auth-orb auth-orb--one" />
+            <div className="auth-orb auth-orb--two" />
+            <div className="auth-orb auth-orb--three" />
+
+            <div className="relative z-10 mx-auto flex min-h-[calc(100vh-90px)] w-full max-w-6xl flex-col justify-center px-4 pb-24 pt-16 sm:px-6 lg:px-8">
+                <div className="grid gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+                    <div className="space-y-10">
+                        <div className="space-y-4">
+                            <span className="auth-mini-badge">
+                                <Sparkles className="h-4 w-4 text-sky-500" />
+                                Elevate your next move
+                            </span>
+                            <h1 className="text-4xl font-semibold leading-snug tracking-tight text-slate-900 sm:text-5xl">
+                                Step into a vibrant workspace curated for ambitious minds
+                            </h1>
+                            <p className="max-w-xl text-base text-slate-600 sm:text-lg">
+                                Log in to unlock a cinematic dashboard, real-time analytics, and beautifully orchestrated hiring journeys designed to keep you inspired at every step.
+                            </p>
                         </div>
 
-                        {/* Email Input */}
-                        <div className='space-y-2'>
-                            <Label className='text-gray-700 font-semibold flex items-center gap-2'>
-                                <Mail className='w-4 h-4' />
-                                Email
-                            </Label>
-                            <Input
-                                type="email"
-                                value={input.email}
-                                name="email"
-                                onChange={changeEventHandler}
-                                placeholder="you@example.com"
-                                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
-                            />
-                        </div>
-
-                        {/* Password Input */}
-                        <div className='space-y-2'>
-                            <Label className='text-gray-700 font-semibold flex items-center gap-2'>
-                                <Lock className='w-4 h-4' />
-                                Password
-                            </Label>
-                            <Input
-                                type="password"
-                                value={input.password}
-                                name="password"
-                                onChange={changeEventHandler}
-                                placeholder="••••••••"
-                                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition'
-                            />
-                        </div>
-
-                        {/* Role Selection */}
-                        <div className='space-y-3 py-4 border-y border-gray-200'>
-                            <Label className='text-gray-700 font-semibold block'>Select your role</Label>
-                            <div className='grid grid-cols-2 gap-3'>
-                                {/* Candidate Option */}
-                                <button
-                                    type='button'
-                                    onClick={() => setInput({ ...input, role: 'student' })}
-                                    className={`relative p-4 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-2 ${
-                                        input.role === 'student'
-                                            ? 'border-blue-500 bg-blue-50'
-                                            : 'border-gray-200 bg-white hover:border-gray-300'
-                                    }`}
+                        <div className="grid gap-4 sm:grid-cols-2">
+                            {heroHighlights.map(({ icon: Icon, title, description }) => (
+                                <div
+                                    key={title}
+                                    className="auth-section-soft group relative overflow-hidden p-6 transition-transform hover:-translate-y-1"
                                 >
-                                    <User className={`w-5 h-5 ${input.role === 'student' ? 'text-blue-600' : 'text-gray-600'}`} />
-                                    <span className={`text-sm font-semibold ${input.role === 'student' ? 'text-blue-600' : 'text-gray-700'}`}>
-                                        Candidate
-                                    </span>
-                                    {input.role === 'student' && (
-                                        <div className='absolute top-2 right-2 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs'>
-                                            ✓
+                                    <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 via-blue-500/5 to-indigo-500/10 opacity-0 transition-opacity group-hover:opacity-100" />
+                                    <div className="relative space-y-3">
+                                        <div className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-sky-100 text-sky-500">
+                                            <Icon className="h-5 w-5" />
                                         </div>
-                                    )}
-                                </button>
-
-                                {/* Recruiter Option */}
-                                <button
-                                    type='button'
-                                    onClick={() => setInput({ ...input, role: 'recruiter' })}
-                                    className={`relative p-4 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-2 ${
-                                        input.role === 'recruiter'
-                                            ? 'border-blue-500 bg-blue-50'
-                                            : 'border-gray-200 bg-white hover:border-gray-300'
-                                    }`}
-                                >
-                                    <Briefcase className={`w-5 h-5 ${input.role === 'recruiter' ? 'text-blue-600' : 'text-gray-600'}`} />
-                                    <span className={`text-sm font-semibold ${input.role === 'recruiter' ? 'text-blue-600' : 'text-gray-700'}`}>
-                                        Recruiter
-                                    </span>
-                                    {input.role === 'recruiter' && (
-                                        <div className='absolute top-2 right-2 w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs'>
-                                            ✓
+                                        <div>
+                                            <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
+                                            <p className="text-sm text-slate-600">{description}</p>
                                         </div>
-                                    )}
-                                </button>
-                            </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
 
-                        {/* Login Button */}
-                        {
-                            loading ? (
-                                <Button className="w-full py-2 bg-gradient-to-r from-blue-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition"> 
-                                    <Loader2 className='mr-2 h-4 w-4 animate-spin' /> 
-                                    Logging in...
-                                </Button>
-                            ) : (
-                                <Button 
-                                    type="submit" 
-                                    className="w-full py-2 bg-gradient-to-r from-blue-600 to-blue-600 text-white font-semibold rounded-lg hover:shadow-lg transition"
+                        <div className="flex flex-wrap gap-3">
+                            {statBadges.map((badge) => (
+                                <div
+                                    key={badge.label}
+                                    className="rounded-full border border-slate-200/70 bg-white/70 px-4 py-2 text-sm text-slate-600 shadow-inner backdrop-blur"
                                 >
-                                    Login
-                                </Button>
-                            )
-                        }
-
-                        {/* Signup Link */}
-                        <div className='text-center text-sm text-gray-600'>
-                            Don't have an account? <Link to="/signup" className='text-blue-600 font-semibold hover:text-blue-700 transition'>Signup</Link>
+                                    <span className="font-semibold text-slate-900">{badge.value}</span>
+                                    <span className="ml-2 text-slate-600">{badge.label}</span>
+                                </div>
+                            ))}
                         </div>
-                    </form>
+                    </div>
+
+                    <div className="auth-section-card relative overflow-hidden border border-white/20 bg-gradient-to-b from-slate-800/70 to-slate-900/80 p-12 shadow-[0_30px_120px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                        <div className="absolute -top-24 right-24 hidden h-40 w-40 rounded-full bg-sky-400/30 blur-3xl sm:block" />
+                        <div className="absolute -bottom-24 left-10 hidden h-40 w-40 rounded-full bg-indigo-500/30 blur-3xl sm:block" />
+
+                        <div className="relative space-y-16">
+                            <header className="space-y-6 text-center slide-in-down">
+                                <div className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 backdrop-blur">
+                                    Welcome back
+                                </div>
+                                <div className="space-y-4">
+                                    <h2 className="text-6xl font-bold text-white drop-shadow-lg">Log in to continue</h2>
+                                    <p className="text-xl text-white/90 font-medium drop-shadow">
+                                        Beautifully fluid animations, powerful analytics, and opportunities tailored just for you.
+                                    </p>
+                                </div>
+                            </header>
+
+                            <form onSubmit={submitHandler} className="space-y-4 scale-in" aria-label="Login form">
+                                <fieldset className="space-y-4 stagger-item-1 pt-48" aria-labelledby="login-email-label">
+                                    <legend className="sr-only">Email</legend>
+                                    <Label id="login-email-label" className="flex items-center gap-2 text-base font-bold text-black bg-yellow-200 px-3 py-2 rounded-lg w-fit">
+                                        <Mail className="h-5 w-5 text-black" />
+                                        Email address
+                                    </Label>
+                                    <Input
+                                        type="email"
+                                        name="email"
+                                        value={input.email}
+                                        onChange={changeEventHandler}
+                                        placeholder="you@example.com"
+                                        className="h-14 rounded-2xl border-2 border-sky-400/60 bg-white/30 px-5 text-white text-base placeholder:text-white/70 focus:border-sky-300 focus:bg-white/40 focus:ring-2 focus:ring-sky-300 backdrop-blur-md transition-all shadow-lg shadow-sky-500/20"
+                                        autoComplete="email"
+                                        autoCapitalize="none"
+                                        autoCorrect="off"
+                                        inputMode="email"
+                                        required
+                                    />
+                                </fieldset>
+
+                                <fieldset className="space-y-4 stagger-item-2 pt-8" aria-labelledby="login-password-label">
+                                    <legend className="sr-only">Password</legend>
+                                    <Label id="login-password-label" className="flex items-center gap-2 text-base font-bold text-black bg-yellow-200 px-3 py-2 rounded-lg w-fit">
+                                        <Lock className="h-5 w-5 text-black" />
+                                        Password
+                                    </Label>
+                                    <div className="relative">
+                                        <Input
+                                            type={showPassword ? 'text' : 'password'}
+                                            name="password"
+                                            value={input.password}
+                                            onChange={changeEventHandler}
+                                            placeholder="Enter your password"
+                                            className="h-14 rounded-2xl border-2 border-sky-400/60 bg-white/30 px-5 pr-14 text-white text-base placeholder:text-white/70 focus:border-sky-300 focus:bg-white/40 focus:ring-2 focus:ring-sky-300 backdrop-blur-md transition-all shadow-lg shadow-sky-500/20"
+                                            autoComplete="current-password"
+                                            required
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowPassword((prev) => !prev)}
+                                            className="absolute inset-y-0 right-4 flex items-center text-white/80 transition hover:text-sky-300"
+                                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                        >
+                                            {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                                        </button>
+                                    </div>
+                                </fieldset>
+
+                                <div className="space-y-5 stagger-item-3 pt-8">
+                                    <Label className="block text-lg font-bold text-black bg-yellow-200 px-4 py-3 rounded-lg w-fit">Select your role</Label>
+                                    <div className="grid grid-cols-2 gap-5">
+                                        {[
+                                            { key: 'student', label: 'Candidate', description: 'Discover tailored opportunities.' },
+                                            { key: 'recruiter', label: 'Recruiter', description: 'Showcase roles with style.' },
+                                        ].map((role) => {
+                                            const isActive = input.role === role.key;
+                                            return (
+                                                <button
+                                                    key={role.key}
+                                                    type="button"
+                                                    onClick={() => setInput((prev) => ({ ...prev, role: role.key }))}
+                                                    className={`group relative overflow-hidden rounded-2xl border px-4 py-6 text-left transition-all ${
+                                                        isActive
+                                                            ? 'border-black bg-yellow-100 shadow-[0_12px_40px_rgba(0,0,0,0.2)] backdrop-blur-md'
+                                                            : 'border-slate-300 bg-white hover:border-yellow-400 hover:bg-yellow-50 backdrop-blur'
+                                                    }`}
+                                                >
+                                                    <div className="absolute inset-0 bg-gradient-to-br from-sky-300/10 via-blue-300/5 to-indigo-300/10 opacity-0 transition-opacity group-hover:opacity-100" />
+                                                    <div className="relative space-y-2">
+                                                        <div className="flex items-center justify-between">
+                                                            <div className="flex items-center gap-3">
+                                                                <span
+                                                                    className={`flex h-9 w-9 items-center justify-center rounded-xl border text-sm font-semibold ${
+                                                                        isActive
+                                                                            ? 'border-black bg-yellow-200 text-black'
+                                                                            : 'border-slate-300 bg-slate-100 text-slate-600'
+                                                                    }`}
+                                                                >
+                                                                    <User className="h-5 w-5" />
+                                                                </span>
+                                                                <div>
+                                                                    <p className="text-base font-bold text-black">{role.label}</p>
+                                                                    <p className="text-sm font-semibold text-black">{role.description}</p>
+                                                                </div>
+                                                            </div>
+                                                            {isActive && (
+                                                                <CheckCircle2 className="h-5 w-5 text-sky-300 animate-pulse" />
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+
+                                <div className="auth-divider" />
+
+                                {loading ? (
+                                    <Button
+                                        type="button"
+                                        disabled
+                                        className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 py-3 text-base font-semibold text-white shadow-[0_18px_90px_rgba(56,189,248,0.3)]"
+                                    >
+                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                        Logging in...
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        type="submit"
+                                        className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 py-3 text-base font-semibold text-white shadow-[0_18px_90px_rgba(56,189,248,0.3)] transition hover:scale-[1.01]"
+                                    >
+                                        Enter dashboard
+                                        <ArrowRight className="h-4 w-4" />
+                                    </Button>
+                                )}
+
+                                <p className="text-center text-sm text-slate-600">
+                                    Don&apos;t have an account yet?{' '}
+                                    <Link to="/signup" className="font-semibold text-sky-600 hover:text-sky-500">
+                                        Create one in seconds
+                                    </Link>
+                                </p>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Profile Popup Modal */}
             {showProfilePopup && (
-                <div className='fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4'>
-                    <div className='bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 space-y-6 animate-in fade-in scale-in'>
-                        {/* Close Button */}
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4 backdrop-blur">
+                    <div className="relative w-full max-w-md overflow-hidden rounded-3xl border border-slate-200/70 bg-white/90 p-8 shadow-[0_35px_120px_rgba(148,163,184,0.4)]">
                         <button
                             onClick={() => setShowProfilePopup(false)}
-                            className='absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition'
+                            className="absolute right-4 top-4 rounded-full bg-white/70 p-1.5 text-slate-500 transition hover:bg-white hover:text-slate-700"
+                            aria-label="Close"
                         >
-                            <X className='w-6 h-6' />
+                            <X className="h-4 w-4" />
                         </button>
 
-                        {/* Success Icon */}
-                        <div className='flex justify-center'>
-                            <div className='bg-gradient-to-br from-green-400 to-green-600 rounded-full p-4'>
-                                <CheckCircle2 className='w-12 h-12 text-white' />
+                        <div className="space-y-6 text-center">
+                            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 via-sky-400 to-indigo-400 text-white shadow-[0_10px_45px_rgba(56,189,248,0.35)]">
+                                <CheckCircle2 className="h-8 w-8" />
                             </div>
-                        </div>
 
-                        {/* Title */}
-                        <div className='text-center space-y-2'>
-                            <h2 className='text-2xl font-bold text-gray-900'>Welcome! 🎉</h2>
-                            <p className='text-gray-600'>Login successful</p>
-                        </div>
-
-                        {/* Alert Box */}
-                        <div className='bg-blue-50 border-2 border-blue-200 rounded-lg p-4 flex gap-3'>
-                            <AlertCircle className='w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5' />
-                            <div>
-                                <p className='font-semibold text-blue-900'>Complete Your Profile</p>
-                                <p className='text-blue-700 text-sm'>Add your details and profile picture to get noticed by recruiters and stand out from the crowd!</p>
+                            <div className="space-y-2">
+                                <h3 className="text-2xl font-semibold text-slate-900">Welcome aboard! ✨</h3>
+                                <p className="text-sm text-slate-600">Login successful — let&apos;s polish your profile to shine brighter.</p>
                             </div>
-                        </div>
 
-                        {/* Action Buttons */}
-                        <div className='space-y-3 pt-2'>
-                            <button
-                                onClick={() => {
-                                    setShowProfilePopup(false);
-                                    navigate("/profile");
-                                }}
-                                className='w-full bg-gradient-to-r from-blue-600 to-blue-600 text-white font-semibold py-3 rounded-lg hover:shadow-lg transition duration-200 flex items-center justify-center gap-2'
-                            >
-                                <CheckCircle2 className='w-5 h-5' />
-                                Edit Profile Now
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setShowProfilePopup(false);
-                                    navigate("/");
-                                }}
-                                className='w-full bg-gray-200 text-gray-800 font-semibold py-3 rounded-lg hover:bg-gray-300 transition duration-200'
-                            >
-                                Skip for Now
-                            </button>
-                        </div>
+                            <div className="auth-section-soft space-y-3 rounded-2xl border border-slate-200/70 bg-white/80 p-4 text-left">
+                                <div className="flex items-start gap-3">
+                                    <AlertCircle className="mt-1 h-5 w-5 text-sky-500" />
+                                    <div>
+                                        <p className="font-semibold text-slate-900">Boost your first impression</p>
+                                        <p className="text-sm text-slate-600">
+                                            Add your expertise, media, and achievements to start appearing in curated shortlists instantly.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
-                        {/* Timer Info */}
-                        <p className='text-center text-xs text-gray-500'>Auto-redirecting in 3 seconds...</p>
+                            <div className="grid gap-3">
+                                <Button
+                                    onClick={() => {
+                                        setShowProfilePopup(false);
+                                        navigate('/profile');
+                                    }}
+                                    className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 py-3 text-base font-semibold text-white shadow-[0_18px_90px_rgba(56,189,248,0.3)]"
+                                >
+                                    Polish my profile now
+                                    <ArrowRight className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                        setShowProfilePopup(false);
+                                        navigate('/');
+                                    }}
+                                    className="rounded-2xl border border-slate-200/70 bg-white/80 py-3 text-slate-600 transition hover:bg-white"
+                                >
+                                    I&apos;ll do it later
+                                </Button>
+                            </div>
+
+                            <p className="text-xs text-slate-500">Auto-redirecting to your profile in a few seconds...</p>
+                        </div>
                     </div>
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;
