@@ -89,7 +89,7 @@ const CompaniesTable = ({ refreshCompanies }) => {
                                             <div className='space-y-2'>
                                                 <button 
                                                     onClick={() => navigate(`/admin/companies/${company._id}`)}
-                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-sky-100 text-slate-700 hover:text-sky-600 transition-all font-semibold text-sm card-3d'
+                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 text-white transition-all font-semibold text-sm card-3d hover:shadow-[0_10px_40px_rgba(56,189,248,0.4)] hover:scale-105 active:scale-95'
                                                 >
                                                     <Edit2 className='w-4 h-4' />
                                                     <span>Edit</span>
@@ -97,7 +97,7 @@ const CompaniesTable = ({ refreshCompanies }) => {
 
                                                 <button 
                                                     onClick={() => navigate(`/admin/jobs`)}
-                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-blue-100 text-slate-700 hover:text-blue-600 transition-all font-semibold text-sm card-3d'
+                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-400 to-indigo-500 text-white transition-all font-semibold text-sm card-3d hover:shadow-[0_10px_40px_rgba(99,102,241,0.4)] hover:scale-105 active:scale-95'
                                                 >
                                                     <Eye className="h-4 w-4"/>
                                                     <span>View Jobs</span>
@@ -108,7 +108,7 @@ const CompaniesTable = ({ refreshCompanies }) => {
                                                         open: true,
                                                         companyId: company._id
                                                     })}
-                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-lg hover:bg-red-100 text-red-600 hover:text-red-700 transition-all font-semibold text-sm card-3d'
+                                                    className='w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-400 to-red-500 text-white transition-all font-semibold text-sm card-3d hover:shadow-[0_10px_40px_rgba(239,68,68,0.4)] hover:scale-105 active:scale-95'
                                                 >
                                                     <Trash2 className='w-4 h-4' />
                                                     <span>Delete</span>
@@ -146,13 +146,13 @@ const CompaniesTable = ({ refreshCompanies }) => {
                                 </PopoverTrigger>
                                 <PopoverContent className='w-44 p-2 rounded-xl shadow-xl border border-sky-300/60'>
                                     <div className='space-y-2'>
-                                        <button onClick={() => navigate(`/admin/companies/${company._id}`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-sky-100 text-sky-600 font-semibold card-3d'>
+                                        <button onClick={() => navigate(`/admin/companies/${company._id}`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-sky-400 to-blue-500 text-white font-semibold card-3d hover:scale-105 active:scale-95'>
                                             <Edit2 className='w-4 h-4' /> Edit
                                         </button>
-                                        <button onClick={() => navigate(`/admin/jobs`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-blue-100 text-blue-600 font-semibold card-3d'>
+                                        <button onClick={() => navigate(`/admin/jobs`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-blue-400 to-indigo-500 text-white font-semibold card-3d hover:scale-105 active:scale-95'>
                                             <Eye className='w-4 h-4' /> Jobs
                                         </button>
-                                        <button onClick={() => setDeleteDialogState({open: true, companyId: company._id})} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs hover:bg-red-100 text-red-600 font-semibold card-3d'>
+                                        <button onClick={() => setDeleteDialogState({open: true, companyId: company._id})} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-rose-400 to-red-500 text-white font-semibold card-3d hover:scale-105 active:scale-95'>
                                             <Trash2 className='w-4 h-4' /> Delete
                                         </button>
                                     </div>

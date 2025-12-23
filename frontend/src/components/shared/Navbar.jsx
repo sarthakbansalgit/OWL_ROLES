@@ -159,7 +159,7 @@ const Navbar = () => {
 
                                         <button 
                                             onClick={logoutHandler}
-                                            className="w-full flex items-center text-white bg-black hover:bg-gray-900 gap-3 p-3 rounded-lg transition-all font-medium"
+                                            className="w-full flex items-center gap-3 bg-gradient-to-r from-rose-500 via-red-500 to-orange-600 text-white p-3 rounded-3xl transition-all font-medium shadow-[0_20px_100px_rgba(239,68,68,0.4)] hover:shadow-[0_30px_140px_rgba(239,68,68,0.6)] card-3d hover:scale-105 active:scale-95"
                                         >
                                             <LogOut className="w-5 h-5" />
                                             <span className="text-sm">Logout</span>
@@ -211,7 +211,7 @@ const Navbar = () => {
                                         {user?.role === 'recruiter' && <Link to="/admin/companies" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Companies</Link>}
                                         {user?.role === 'recruiter' && <Link to="/admin/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Jobs</Link>}
                                         {user?.role === 'student' && <Link to="/profile" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Profile</Link>}
-                                        <button onClick={logoutHandler} className="w-full p-2 text-white bg-black hover:bg-gray-900 rounded text-sm font-medium">Logout</button>
+                                        <button onClick={logoutHandler} className="w-full p-3 text-white bg-gradient-to-r from-rose-500 via-red-500 to-orange-600 hover:shadow-[0_20px_100px_rgba(239,68,68,0.4)] rounded-3xl text-sm font-medium shadow-[0_15px_70px_rgba(239,68,68,0.3)] transition-all card-3d hover:scale-105 active:scale-95">Logout</button>
                                     </div>
                                 </div>
                             </PopoverContent>

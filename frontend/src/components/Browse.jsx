@@ -238,7 +238,7 @@ const Browse = () => {
                             <p className='text-base text-slate-600 mb-8 max-w-md'>Try adjusting your search terms or filters to discover amazing roles</p>
                             <button
                                 onClick={clearFilters}
-                                className='px-8 py-3 bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 hover:shadow-lg text-white rounded-xl font-medium transition-all hover:scale-[1.02]'
+                                className='px-8 py-3 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white rounded-3xl font-medium transition-all shadow-[0_15px_60px_rgba(56,189,248,0.3)] hover:shadow-[0_25px_100px_rgba(56,189,248,0.5)] hover:scale-105 active:scale-95'
                             >
                                 Clear Filters
                             </button>

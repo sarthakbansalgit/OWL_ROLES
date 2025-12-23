@@ -51,7 +51,7 @@ const AdminJobs = () => {
               onChange={(e) => setInput(e.target.value)}
             />
           </div>
-          <Button onClick={() => navigate("/admin/jobs/create")} className='w-full md:w-auto bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:via-blue-600 hover:to-indigo-700 text-white font-bold text-base py-3 md:py-3 px-8 md:px-10 rounded-2xl shadow-lg hover:shadow-2xl transition-all card-3d hover:scale-105 h-13 flex items-center justify-center gap-2 whitespace-nowrap'>
+          <Button onClick={() => navigate("/admin/jobs/create")} className='w-full md:w-auto bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white font-bold text-base py-4 md:py-4 px-8 md:px-10 rounded-3xl shadow-[0_20px_100px_rgba(56,189,248,0.4)] hover:shadow-[0_30px_140px_rgba(56,189,248,0.6)] transition-all card-3d hover:scale-105 active:scale-95 h-13 flex items-center justify-center gap-2 whitespace-nowrap'>
             <Plus className='h-6 w-6' />
             Post New Job
           </Button>

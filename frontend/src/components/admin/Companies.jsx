@@ -49,7 +49,7 @@ const Companies = () => {
                     </div>
                     <Button 
                         onClick={() => navigate("/admin/companies/create")} 
-                        className='w-full md:w-auto bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:via-blue-600 hover:to-indigo-700 text-white font-bold text-base py-3 md:py-3 px-8 md:px-8 rounded-xl shadow-lg hover:shadow-xl transition-all card-3d hover:scale-105 h-12 flex items-center justify-center gap-2'>
+                        className='w-full md:w-auto bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white font-bold text-base py-4 md:py-4 px-8 md:px-8 rounded-3xl shadow-[0_20px_100px_rgba(56,189,248,0.4)] hover:shadow-[0_30px_140px_rgba(56,189,248,0.6)] transition-all card-3d hover:scale-105 active:scale-95 h-12 flex items-center justify-center gap-2'>
                         <Plus className='h-5 w-5' />
                         Register Company
                     </Button>

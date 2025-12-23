@@ -51,7 +51,7 @@ const Job = ({job}) => {
                 <Badge className='bg-blue-100 text-blue-700 border border-blue-200 text-xs md:text-sm group-hover:bg-blue-200 group-hover:shadow-md transition-all duration-300'>₹{job?.salary}</Badge>
             </div>
             
-            <Button onClick={()=> navigate(`/description/${job?._id}`)} className="w-full bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold text-sm md:text-base py-2 md:py-3 transition-all duration-300 active:scale-95 group-hover:shadow-lg">
+            <Button onClick={()=> navigate(`/description/${job?._id}`)} className="w-full bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white font-semibold text-sm md:text-base py-3 md:py-4 transition-all duration-300 active:scale-95 group-hover:shadow-[0_20px_100px_rgba(56,189,248,0.4)] shadow-[0_15px_60px_rgba(56,189,248,0.3)] rounded-3xl card-3d hover:scale-105">
                 View Details
             </Button>
         </div>

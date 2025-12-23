@@ -236,12 +236,11 @@ const Jobs = () => {
 
                                             {/* Right Actions */}
                                             <div className="flex flex-col justify-center items-center md:items-end gap-3 flex-shrink-0 pt-6 md:pt-0 border-t md:border-t-0 md:border-l border-sky-300/40 md:pl-8">
-                                                <Button className="w-full md:w-auto min-w-[140px] h-12 px-6 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:via-blue-600 hover:to-indigo-700 text-white text-base font-bold transition-all shadow-lg hover:shadow-xl card-3d hover:scale-105">
+                                                <Button className="w-full md:w-auto min-w-[140px] h-12 px-6 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white text-base font-bold transition-all shadow-[0_15px_60px_rgba(56,189,248,0.3)] hover:shadow-[0_25px_100px_rgba(56,189,248,0.5)] card-3d hover:scale-105 active:scale-95 rounded-3xl">
                                                     View Profile
                                                 </Button>
                                                 <Button
-                                                    variant="outline"
-                                                    className="w-full md:w-auto min-w-[140px] h-12 px-6 border-2 border-sky-400 bg-white hover:bg-sky-50 text-slate-900 text-base font-bold transition-all shadow-md hover:shadow-lg card-3d"
+                                                    className="w-full md:w-auto min-w-[140px] h-12 px-6 bg-gradient-to-r from-emerald-400 to-teal-500 text-white text-base font-bold transition-all shadow-[0_15px_60px_rgba(16,185,129,0.3)] hover:shadow-[0_25px_100px_rgba(16,185,129,0.5)] card-3d hover:scale-105 active:scale-95 rounded-3xl"
                                                 >
                                                     ✓ Shortlist
                                                 </Button>

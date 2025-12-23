@@ -1020,10 +1020,10 @@ const Signup = () => {
                                     ) : (
                                         <Button
                                             type="submit"
-                                            className="btn-shimmer flex-1 rounded-2xl bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 py-3 text-base font-semibold text-white shadow-[0_18px_90px_rgba(56,189,248,0.35)] transition hover:scale-[1.01]"
+                                            className="flex-1 rounded-3xl bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 py-4 text-lg font-semibold text-white shadow-[0_20px_100px_rgba(56,189,248,0.4)] transition-all duration-300 hover:shadow-[0_30px_140px_rgba(56,189,248,0.6)] card-3d hover:scale-105 active:scale-95"
                                         >
                                             Launch my profile
-                                            <ArrowRight className="ml-2 h-4 w-4" />
+                                            <ArrowRight className="ml-2 h-5 w-5" />
                                         </Button>
                                     )}
                                 </div>

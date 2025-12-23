@@ -297,18 +297,18 @@ const Login = () => {
                                     <Button
                                         type="button"
                                         disabled
-                                        className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 py-3 text-base font-semibold text-white shadow-[0_18px_90px_rgba(56,189,248,0.3)]"
+                                        className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-3xl bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 py-4 text-lg font-bold text-white shadow-[0_20px_100px_rgba(56,189,248,0.4)] hover:shadow-[0_25px_120px_rgba(56,189,248,0.5)] transition-all duration-300 card-3d opacity-75 cursor-not-allowed"
                                     >
-                                        <Loader2 className="h-5 w-5 animate-spin" />
+                                        <Loader2 className="h-6 w-6 animate-spin" />
                                         Logging in...
                                     </Button>
                                 ) : (
                                     <Button
                                         type="submit"
-                                        className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 py-3 text-base font-semibold text-white shadow-[0_18px_90px_rgba(56,189,248,0.3)] transition hover:scale-[1.01]"
+                                        className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-3xl bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 hover:from-sky-600 hover:via-blue-600 hover:to-indigo-700 py-4 text-lg font-bold text-white shadow-[0_20px_100px_rgba(56,189,248,0.4)] hover:shadow-[0_30px_140px_rgba(56,189,248,0.6)] transition-all duration-300 card-3d hover:scale-105 active:scale-95"
                                     >
                                         Enter dashboard
-                                        <ArrowRight className="h-4 w-4" />
+                                        <ArrowRight className="h-5 w-5" />
                                     </Button>
                                 )}
 

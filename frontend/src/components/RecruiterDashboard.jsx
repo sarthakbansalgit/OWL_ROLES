@@ -125,7 +125,7 @@ const RecruiterDashboard = () => {
                             </h1>
                             <p className="text-slate-600 text-lg font-medium">Monitor your hiring pipeline and talent acquisition in real-time.</p>
                         </div>
-                        <Button className="flex items-center justify-center gap-2 h-12 px-8 bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-600 text-white text-base font-bold hover:shadow-2xl transition-all shadow-lg card-3d hover:scale-105">
+                        <Button className="flex items-center justify-center gap-2 h-12 px-8 rounded-3xl bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white text-base font-bold hover:shadow-[0_30px_140px_rgba(56,189,248,0.6)] transition-all shadow-[0_20px_100px_rgba(56,189,248,0.4)] card-3d hover:scale-105 active:scale-95">
                             <Plus className="h-6 w-6" />
                             <span className="truncate">Add New Job</span>
                         </Button>
@@ -195,8 +195,8 @@ const RecruiterDashboard = () => {
                                                 <div className="relative">
                                                     <p className="line-clamp-3">{candidate}</p>
                                                     <div className="mt-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <button className="text-xs px-3 py-1 rounded-lg bg-sky-100 text-sky-600 font-semibold hover:bg-sky-200">View</button>
-                                                        <button className="text-xs px-3 py-1 rounded-lg bg-emerald-100 text-emerald-600 font-semibold hover:bg-emerald-200">✓ Move</button>
+                                                        <button className="text-xs px-4 py-2 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 text-white font-semibold hover:shadow-[0_10px_40px_rgba(56,189,248,0.4)] shadow-md transition-all card-3d hover:scale-105 active:scale-95">View</button>
+                                                        <button className="text-xs px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-400 to-teal-500 text-white font-semibold hover:shadow-[0_10px_40px_rgba(16,185,129,0.4)] shadow-md transition-all card-3d hover:scale-105 active:scale-95">✓ Move</button>
                                                     </div>
                                                 </div>
                                             </div>
