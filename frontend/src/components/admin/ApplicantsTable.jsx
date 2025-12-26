@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, User } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'sonner';
 import { APPLICATION_API_END_POINT } from '@/utils/constant';
@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { setAllApplicants } from '@/redux/applicationSlice';
+import CandidateProfileModal from './CandidateProfileModal';
 
 const shortlistingStatus = ["Accepted", "Rejected", "pending"];
 
@@ -16,6 +17,8 @@ const ApplicantsTable = ({ triggerRefresh }) => {
     const { applicants } = useSelector(store => store.application);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [selectedApplicant, setSelectedApplicant] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const statusHandler = async (status, id) => {
         try {
@@ -41,6 +44,15 @@ const ApplicantsTable = ({ triggerRefresh }) => {
             toast.error(error.response.data.message);
             console.error("Status update error:", error);
         }
+    }
+
+    const handleStatusChange = (status, id) => {
+        statusHandler(status, id);
+    }
+
+    const openProfileModal = (applicant) => {
+        setSelectedApplicant(applicant);
+        setIsModalOpen(true);
     }
 
     const deleteApplicationHandler = async (id) => {
@@ -102,60 +114,71 @@ const ApplicantsTable = ({ triggerRefresh }) => {
                                     </span>
                                 </TableCell>
                                 <TableCell className="float-right cursor-pointer">
-                                    <Popover>
-                                        <PopoverTrigger>
-                                            <MoreHorizontal />
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-52">
-                                            {/* <Button 
-                                                onClick={() => viewCandidateProfileHandler(item?.applicant?._id)} 
-                                                className='bg-neutral-200 text-black text-sm text-left w-full hover:bg-zinc-400 rounded-sm hover:text-black p-2 cursor-pointer mb-2'
-                                            >
-                                                View Candidate Profile
-                                            </Button> */}
-                                            {
-                                                shortlistingStatus.map((status, index) => {
-                                                    return (
-                                                        <div 
-                                                            onClick={() => statusHandler(status, item?._id)} 
-                                                            key={index} 
-                                                            className={`flex w-auto items-center my-2 mx-2 cursor-pointer bg-stone-300 text-sm text-left hover:bg-zinc-400 rounded-sm hover:text-black p-2 ${
-                                                                item?.status === status ? 'border-2 border-blue-500' : ''
-                                                            }`}
-                                                        >
-                                                            <span>{status}</span>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                            <hr className='m-3'/>
-                                            <Button 
-                                                onClick={() => deleteApplicationHandler(item?._id)} 
-                                                sx={{
-                                                    color: '#dc2626', 
-                                                    fontSize: '0.875rem', 
-                                                    textAlign: 'left', 
-                                                    width: '100%', 
-                                                    '&:hover': {
-                                                    backgroundColor: '#fca5a5', 
-                                                    color: '#000000',
-                                                    },
-                                                    borderRadius: '0.125rem',
-                                                    padding: '0.5rem',
-                                                    cursor: 'pointer', 
-                                                    justifyContent: 'flex-start', 
-                                                }}
-                                                >
-                                                Delete Application
-                                            </Button>   
-                                        </PopoverContent>
-                                    </Popover>
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => openProfileModal(item)}
+                                            className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 text-white hover:shadow-[0_10px_40px_rgba(56,189,248,0.4)] transition-all font-semibold text-sm card-3d hover:scale-105 active:scale-95"
+                                        >
+                                            <User className="h-4 w-4" />
+                                            <span>Show Profile</span>
+                                        </button>
+                                        <Popover>
+                                            <PopoverTrigger>
+                                                <MoreHorizontal />
+                                            </PopoverTrigger>
+                                            <PopoverContent className="w-56 p-3 space-y-2">
+                                                {
+                                                    shortlistingStatus.map((status, index) => {
+                                                        return (
+                                                            <div 
+                                                                onClick={() => statusHandler(status, item?._id)} 
+                                                                key={index} 
+                                                                className={`flex w-auto items-center cursor-pointer bg-stone-300 text-sm text-left hover:bg-zinc-400 rounded-lg hover:text-black p-2 transition-all ${
+                                                                    item?.status === status ? 'border-2 border-blue-500 font-semibold' : ''
+                                                                }`}
+                                                            >
+                                                                <span>{status}</span>
+                                                            </div>
+                                                        )
+                                                    })
+                                                }
+                                                <hr className='m-3'/>
+                                                <Button 
+                                                    onClick={() => deleteApplicationHandler(item?._id)} 
+                                                    sx={{
+                                                        color: '#dc2626', 
+                                                        fontSize: '0.875rem', 
+                                                        textAlign: 'left', 
+                                                        width: '100%', 
+                                                        '&:hover': {
+                                                        backgroundColor: '#fca5a5', 
+                                                        color: '#000000',
+                                                        },
+                                                        borderRadius: '0.5rem',
+                                                        padding: '0.5rem',
+                                                        cursor: 'pointer', 
+                                                        justifyContent: 'flex-start', 
+                                                    }}
+                                                    >
+                                                    Delete Application
+                                                </Button>   
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
                                 </TableCell>
                             </tr>
                         ))
                     }
                 </TableBody>
             </Table>
+
+            {/* Candidate Profile Modal */}
+            <CandidateProfileModal 
+                open={isModalOpen}
+                onOpenChange={setIsModalOpen}
+                applicant={selectedApplicant}
+                onStatusChange={handleStatusChange}
+            />
         </div>
     )
 }

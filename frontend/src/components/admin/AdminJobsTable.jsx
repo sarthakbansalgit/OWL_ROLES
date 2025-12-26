@@ -110,44 +110,46 @@ const AdminJobsTable = () => {
                                 </TableCell>
                                 
                                 <TableCell className="text-right">
-                                    <Popover>
-                                        <PopoverTrigger className="p-2 hover:bg-sky-200 rounded-full transition card-3d hover:scale-110">
-                                            <MoreHorizontal className="w-5 h-5 text-slate-600 group-hover:text-sky-600 transition-colors" />
-                                        </PopoverTrigger>
-                                        
-                                        <PopoverContent 
-                                            className="w-52 p-3 rounded-xl shadow-2xl border border-sky-300/60 bg-white"
-                                            align="end"
+                                    <div className="flex items-center gap-3 justify-end">
+                                        <button
+                                            onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}
+                                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-blue-400 to-indigo-500 text-white hover:shadow-[0_10px_40px_rgba(99,102,241,0.4)] transition-all font-semibold text-sm card-3d hover:scale-105 active:scale-95 whitespace-nowrap"
                                         >
-                                            <div className="space-y-2">
-                                                <button
-                                                    onClick={() => navigate(`/admin/jobs/edit/${job._id}`)}
-                                                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 text-white hover:shadow-[0_10px_40px_rgba(56,189,248,0.4)] transition-all font-semibold text-sm card-3d hover:scale-105 active:scale-95"
-                                                >
-                                                    <Edit2 className="w-4 h-4" />
-                                                    <span>Edit Job</span>
-                                                </button>
-                                                
-                                                <button
-                                                    onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}
-                                                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-400 to-indigo-500 text-white hover:shadow-[0_10px_40px_rgba(99,102,241,0.4)] transition-all font-semibold text-sm card-3d hover:scale-105 active:scale-95"
-                                                >
-                                                    <Eye className="w-4 h-4" />
-                                                    <span>View Applicants</span>
-                                                </button>
+                                            <Eye className="w-4 h-4" />
+                                            <span>View Applicants</span>
+                                        </button>
+                                        
+                                        <Popover>
+                                            <PopoverTrigger className="p-2 hover:bg-sky-200 rounded-full transition card-3d hover:scale-110">
+                                                <MoreHorizontal className="w-5 h-5 text-slate-600 group-hover:text-sky-600 transition-colors" />
+                                            </PopoverTrigger>
+                                            
+                                            <PopoverContent 
+                                                className="w-52 p-3 rounded-xl shadow-2xl border border-sky-300/60 bg-white"
+                                                align="end"
+                                            >
+                                                <div className="space-y-2">
+                                                    <button
+                                                        onClick={() => navigate(`/admin/jobs/edit/${job._id}`)}
+                                                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-sky-400 to-blue-500 text-white hover:shadow-[0_10px_40px_rgba(56,189,248,0.4)] transition-all font-semibold text-sm card-3d hover:scale-105 active:scale-95"
+                                                    >
+                                                        <Edit2 className="w-4 h-4" />
+                                                        <span>Edit Job</span>
+                                                    </button>
 
-                                                <button
-                                                    onClick={() => handleDeleteJob(job._id)}
-                                                    className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-400 to-red-500 text-white hover:shadow-[0_10px_40px_rgba(239,68,68,0.4)] transition-all font-semibold text-sm card-3d hover:scale-105 active:scale-95"
-                                                >
-                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                    <span>Delete</span>
-                                                </button>
-                                            </div>
-                                        </PopoverContent>
-                                    </Popover>
+                                                    <button
+                                                        onClick={() => handleDeleteJob(job._id)}
+                                                        className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-gradient-to-r from-rose-400 to-red-500 text-white hover:shadow-[0_10px_40px_rgba(239,68,68,0.4)] transition-all font-semibold text-sm card-3d hover:scale-105 active:scale-95"
+                                                    >
+                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                        <span>Delete</span>
+                                                    </button>
+                                                </div>
+                                            </PopoverContent>
+                                        </Popover>
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -172,27 +174,32 @@ const AdminJobsTable = () => {
                                     <p className='text-xs text-slate-500 font-semibold'>{formatDate(job.createdAt)}</p>
                                 </div>
                             </div>
-                            <Popover>
-                                <PopoverTrigger className='p-2 hover:bg-sky-200 rounded-full flex-shrink-0 card-3d'>
-                                    <MoreHorizontal className='w-5 h-5 text-slate-600' />
-                                </PopoverTrigger>
-                                <PopoverContent className='w-48 p-2 rounded-xl shadow-xl border border-sky-300/60'>
-                                    <div className='space-y-2'>
-                                        <button onClick={() => navigate(`/admin/jobs/edit/${job._id}`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-sky-400 to-blue-500 text-white font-semibold card-3d hover:scale-105 active:scale-95'>
-                                            <Edit2 className='w-4 h-4' /> Edit
-                                        </button>
-                                        <button onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-blue-400 to-indigo-500 text-white font-semibold card-3d hover:scale-105 active:scale-95'>
-                                            <Eye className='w-4 h-4' /> Applicants
-                                        </button>
-                                        <button onClick={() => handleDeleteJob(job._id)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-rose-400 to-red-500 text-white font-semibold card-3d hover:scale-105 active:scale-95'>
-                                            <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
-                                            </svg>
-                                            Delete
-                                        </button>
-                                    </div>
-                                </PopoverContent>
-                            </Popover>
+                            <div className='flex items-center gap-2 flex-shrink-0'>
+                                <button 
+                                    onClick={() => navigate(`/admin/jobs/${job._id}/applicants`)}
+                                    className='flex items-center gap-1 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-blue-400 to-indigo-500 text-white font-semibold card-3d hover:scale-105 active:scale-95 whitespace-nowrap'
+                                >
+                                    <Eye className='w-4 h-4' /> Applicants
+                                </button>
+                                <Popover>
+                                    <PopoverTrigger className='p-2 hover:bg-sky-200 rounded-full flex-shrink-0 card-3d'>
+                                        <MoreHorizontal className='w-5 h-5 text-slate-600' />
+                                    </PopoverTrigger>
+                                    <PopoverContent className='w-48 p-2 rounded-xl shadow-xl border border-sky-300/60'>
+                                        <div className='space-y-2'>
+                                            <button onClick={() => navigate(`/admin/jobs/edit/${job._id}`)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-sky-400 to-blue-500 text-white font-semibold card-3d hover:scale-105 active:scale-95'>
+                                                <Edit2 className='w-4 h-4' /> Edit
+                                            </button>
+                                            <button onClick={() => handleDeleteJob(job._id)} className='w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs bg-gradient-to-r from-rose-400 to-red-500 text-white font-semibold card-3d hover:scale-105 active:scale-95'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' className='h-4 w-4' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                                                    <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+                                                </svg>
+                                                Delete
+                                            </button>
+                                        </div>
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
                         </div>
                         <h3 className='font-bold text-slate-900 text-sm line-clamp-2'>{job.title}</h3>
                     </div>

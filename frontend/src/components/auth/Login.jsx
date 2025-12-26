@@ -66,11 +66,16 @@ const Login = () => {
             if (response.data.success) {
                 dispatch(setUser(response.data.user));
                 toast.success(response.data.message || 'Login successful!');
-                setShowProfilePopup(true);
-
-                setTimeout(() => {
-                    navigate('/profile');
-                }, 3200);
+                
+                // Redirect based on user role
+                if (response.data.user?.role === 'recruiter') {
+                    navigate('/admin/jobs');
+                } else {
+                    setShowProfilePopup(true);
+                    setTimeout(() => {
+                        navigate('/profile');
+                    }, 3200);
+                }
             } else {
                 toast.error(response.data.message || 'Login failed, please try again.');
             }
@@ -361,11 +366,11 @@ const Login = () => {
                                 <Button
                                     onClick={() => {
                                         setShowProfilePopup(false);
-                                        navigate('/profile');
+                                        user?.role === 'recruiter' ? navigate('/admin/jobs') : navigate('/profile');
                                     }}
                                     className="btn-shimmer flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 py-3 text-base font-semibold text-white shadow-[0_18px_90px_rgba(56,189,248,0.3)]"
                                 >
-                                    Polish my profile now
+                                    {user?.role === 'recruiter' ? 'Go to Dashboard' : 'Polish my profile now'}
                                     <ArrowRight className="h-4 w-4" />
                                 </Button>
                                 <Button
