@@ -5,7 +5,7 @@ services:
     plan: free
     rootDir: backend
     buildCommand: npm install --legacy-peer-deps
-    startCommand: npm start
+    startCommand: node index.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -34,7 +34,7 @@ services:
     plan: free
     rootDir: frontend
     buildCommand: npm install --legacy-peer-deps && npm run build
-    startCommand: npm install -g serve && serve -s dist -l 5174
+    startCommand: npx serve -s dist -l 5174
     envVars:
       - key: NODE_ENV
         value: production
