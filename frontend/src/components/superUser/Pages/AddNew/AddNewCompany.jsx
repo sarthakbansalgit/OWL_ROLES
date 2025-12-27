@@ -6,6 +6,7 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import './New.scss';
 import noImage from '../../../../assets/superuser-dashboard/photo-camera.png';
 import axios from 'axios';
+import { COMPANY_API_END_POINT } from '../../../../utils/constant';
 
 function AddNewCompany({ inputs = [], titlee }) {
     const [userInp, setUserInp] = useState({
@@ -43,7 +44,7 @@ function AddNewCompany({ inputs = [], titlee }) {
                 formData.append('logo', file);
             }
             
-            const response = await axios.post('/api/company/add', formData, {
+            const response = await axios.post(`${COMPANY_API_END_POINT}/add`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

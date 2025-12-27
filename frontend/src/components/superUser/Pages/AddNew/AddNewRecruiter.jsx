@@ -6,6 +6,7 @@ import Sidebar from "../../Components/Sidebar/Sidebar";
 import './New.scss';
 import noImage from '../../../../assets/superuser-dashboard/photo-camera.png';
 import axios from 'axios';
+import { USER_API_END_POINT } from '../../../../utils/constant';
 
 function AddNewRecruiter({ inputs = [], titlee }) {
     const [formData, setFormData] = useState({
@@ -55,7 +56,7 @@ function AddNewRecruiter({ inputs = [], titlee }) {
             }
             
             // Make the API call
-            const response = await axios.post('/api/user/admin/addRecruiter', data);
+            const response = await axios.post(`${USER_API_END_POINT}/admin/addRecruiter`, data);
             
             if (response.data.success) {
                 showNotification('Recruiter created successfully', 'success');

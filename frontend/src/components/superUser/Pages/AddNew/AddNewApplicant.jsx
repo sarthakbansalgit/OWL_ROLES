@@ -6,6 +6,7 @@ import Sidebar from '../../Components/Sidebar/Sidebar';
 import './New.scss';
 import noImage from '../../../../assets/superuser-dashboard/photo-camera.png';
 import axios from 'axios';
+import { USER_API_END_POINT } from '../../../../utils/constant';
 
 function AddNewApplicant({ inputs = [], titlee }) {
     const [userInp, setUserInp] = useState({
@@ -41,7 +42,7 @@ function AddNewApplicant({ inputs = [], titlee }) {
                 formData.append('file', file);
             }
             
-            const response = await axios.post('/api/v1/user/admin/addApplicant', formData, {
+            const response = await axios.post(`${USER_API_END_POINT}/admin/addApplicant`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
