@@ -3,14 +3,16 @@ FROM node:20-alpine
 # Verify npm is installed
 RUN npm --version && node --version
 
-WORKDIR /app/backend
+WORKDIR /app
 
-COPY backend/package*.json ./
+COPY backend/package*.json ./backend/
 
 # Install dependencies
-RUN npm install --verbose
+RUN cd backend && npm install --verbose --legacy-peer-deps
 
-COPY backend/ ./
+COPY backend/ ./backend/
+
+WORKDIR /app/backend
 
 ENV NODE_ENV=production
 ENV PORT=3000

@@ -3,14 +3,16 @@ FROM node:20-alpine as build
 # Verify npm is installed
 RUN npm --version && node --version
 
-WORKDIR /app/frontend
+WORKDIR /app
 
-COPY frontend/package*.json ./
+COPY frontend/package*.json ./frontend/
 
 # Install dependencies
-RUN npm install --verbose
+RUN cd frontend && npm install --verbose --legacy-peer-deps
 
-COPY frontend/ ./
+COPY frontend/ ./frontend/
+
+WORKDIR /app/frontend
 
 RUN npm run build
 
@@ -23,7 +25,7 @@ WORKDIR /app/frontend
 
 COPY frontend/package*.json ./
 
-RUN npm install --verbose
+RUN npm install --verbose --legacy-peer-deps
 
 COPY --from=build /app/frontend/dist ./dist
 
