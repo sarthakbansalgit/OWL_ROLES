@@ -87,19 +87,18 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Only start server locally, not on Vercel
-if (process.env.NODE_ENV !== 'production') {
+// Start server on all environments except Vercel
+if (process.env.VERCEL !== '1') {
     app.listen(PORT, '0.0.0.0', async ()=>{
         await connectDB();
         await initializeGridFS();
         console.log(`\n${'='.repeat(50)}`);
-        console.log(`✓ Server running at http://172.20.10.2:${PORT}`);
-        console.log(`✓ Or access locally: http://localhost:${PORT}`);
-        console.log(`✓ API Docs: http://172.20.10.2:${PORT}/api-docs`);
+        console.log(`✓ Server running at http://0.0.0.0:${PORT}`);
+        console.log(`✓ API Docs: http://localhost:${PORT}/api-docs`);
         console.log(`${'='.repeat(50)}\n`);
     });
 } else {
-    // Connect DB on startup for production
+    // Connect DB on startup for Vercel
     connectDB().then(() => initializeGridFS());
 }
 
