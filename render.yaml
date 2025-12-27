@@ -34,7 +34,7 @@ services:
     plan: free
     rootDir: frontend
     buildCommand: npm install --legacy-peer-deps && npm run build
-    startCommand: npm run preview -- --host 0.0.0.0
+    startCommand: npm install -g serve && serve -s dist -l 5174
     envVars:
       - key: NODE_ENV
         value: production
