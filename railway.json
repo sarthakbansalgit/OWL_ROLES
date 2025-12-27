@@ -2,14 +2,8 @@
   "$schema": "https://railway.app/railway.schema.json",
   "services": {
     "backend": {
-      "dockerfile": "Dockerfile.backend",
-      "name": "owl-roles-backend",
-      "buildContext": "."
-    },
-    "frontend": {
-      "dockerfile": "Dockerfile.frontend", 
-      "name": "owl-roles-frontend",
-      "buildContext": "."
+      "dockerfile": "Dockerfile",
+      "name": "owl-roles-backend"
     }
   }
 }
