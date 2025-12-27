@@ -3,7 +3,8 @@ services:
     name: owl-roles-backend
     runtime: node
     plan: free
-    buildCommand: npm install
+    rootDir: backend
+    buildCommand: npm install --legacy-peer-deps
     startCommand: npm start
     envVars:
       - key: NODE_ENV
@@ -25,4 +26,23 @@ services:
       - key: EMAIL_PASSWORD
         sync: false
       - key: CLIENT_URL
-        value: https://owl-roles.vercel.app
+        sync: false
+  
+  - type: web
+    name: owl-roles-frontend
+    runtime: node
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: npm run preview -- --host 0.0.0.0
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5174
+      - key: VITE_API_END_POINT
+        sync: false
+      - key: VITE_CLOUDINARY_NAME
+        sync: false
+      - key: VITE_CLOUDINARY_PRESET
+        sync: false
