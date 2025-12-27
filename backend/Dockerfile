@@ -8,6 +8,9 @@ RUN npm install --legacy-peer-deps
 
 COPY . .
 
+# Use Render environment for production
+RUN cp .env.render .env
+
 ENV NODE_ENV=production
 ENV PORT=3000
 

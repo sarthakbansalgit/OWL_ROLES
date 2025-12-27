@@ -29,15 +29,32 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 const corsOptions = {
-    origin: [
-        'http://localhost:5173', 
-        'http://localhost:5174', 
-        "https://cubicles.netlify.app", 
-        "https://owl-roles-um59.vercel.app", 
-        "https://owl-roles2-59yw49qv9-sarthaks-projects-ba3df7d0.vercel.app",
-        process.env.CLIENT_URL,
-        /\.up\.railway\.app$/  // Allow all Railway URLs
-    ],
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            'http://localhost:5173', 
+            'http://localhost:5174',
+            'http://localhost:3000',
+            "https://cubicles.netlify.app", 
+            "https://owl-roles-um59.vercel.app", 
+            "https://owl-roles2-59yw49qv9-sarthaks-projects-ba3df7d0.vercel.app",
+            "https://owl-roles-1.onrender.com",  // Render frontend
+            "https://owl-roles.onrender.com",    // Render backend (for same-origin)
+            process.env.CLIENT_URL,
+        ];
+        
+        // Check against allowed origins or regex patterns
+        const isAllowed = allowedOrigins.includes(origin) || 
+                         /\.onrender\.com$/.test(origin) || 
+                         /\.up\.railway\.app$/.test(origin) ||
+                         /\.netlify\.app$/.test(origin) ||
+                         !origin; // Allow requests with no origin (like mobile apps)
+        
+        if (isAllowed) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma']
