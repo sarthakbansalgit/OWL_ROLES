@@ -1,34 +1,29 @@
-# Build stage
 FROM node:20-alpine as build
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies
 RUN npm install
 
-# Copy source code
 COPY . .
 
-# Build the application
 RUN npm run build
 
-# Production stage - serve with Node preview server
 FROM node:20-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm ci --only=production
+RUN npm install
 
 COPY --from=build /app/dist ./dist
 
-EXPOSE 5174
-
 ENV NODE_ENV=production
+ENV PORT=5174
+
+EXPOSE 5174
 
 CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0"]
 

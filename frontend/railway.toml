@@ -1,8 +1,0 @@
-[nixpacks]
-providers = ["node"]
-
-[build]
-runCommand = "npm install && npm run build"
-
-[start]
-runCommand = "npm run preview -- --host 0.0.0.0"

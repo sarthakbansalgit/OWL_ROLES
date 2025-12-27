@@ -1,8 +1,0 @@
-[nixpacks]
-providers = ["node"]
-
-[build]
-runCommand = "npm install"
-
-[start]
-runCommand = "node index.js"
