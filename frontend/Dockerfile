@@ -8,7 +8,8 @@ RUN npm install --legacy-peer-deps
 
 COPY . .
 
-RUN npm run build
+# Use Render environment for build
+RUN cp .env.render .env && npm run build
 
 RUN npm install -g serve
 
