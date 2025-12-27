@@ -1,10 +1,14 @@
 FROM node:20-alpine as build
 
+# Verify npm is installed
+RUN npm --version && node --version
+
 WORKDIR /app/frontend
 
 COPY frontend/package*.json ./
 
-RUN npm install
+# Install dependencies
+RUN npm install --verbose
 
 COPY frontend/ ./
 
@@ -12,11 +16,14 @@ RUN npm run build
 
 FROM node:20-alpine
 
+# Verify npm is installed in production image
+RUN npm --version && node --version
+
 WORKDIR /app/frontend
 
 COPY frontend/package*.json ./
 
-RUN npm install
+RUN npm install --verbose
 
 COPY --from=build /app/frontend/dist ./dist
 

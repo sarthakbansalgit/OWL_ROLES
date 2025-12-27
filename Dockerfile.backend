@@ -1,10 +1,14 @@
 FROM node:20-alpine
 
+# Verify npm is installed
+RUN npm --version && node --version
+
 WORKDIR /app/backend
 
 COPY backend/package*.json ./
 
-RUN npm install
+# Install dependencies
+RUN npm install --verbose
 
 COPY backend/ ./
 
