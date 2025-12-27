@@ -29,7 +29,15 @@ app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 const corsOptions = {
-    origin: ['http://localhost:5173', 'http://localhost:5174', "https://cubicles.netlify.app", "https://owl-roles-um59.vercel.app", "https://owl-roles2-59yw49qv9-sarthaks-projects-ba3df7d0.vercel.app", process.env.CLIENT_URL],
+    origin: [
+        'http://localhost:5173', 
+        'http://localhost:5174', 
+        "https://cubicles.netlify.app", 
+        "https://owl-roles-um59.vercel.app", 
+        "https://owl-roles2-59yw49qv9-sarthaks-projects-ba3df7d0.vercel.app",
+        process.env.CLIENT_URL,
+        /\.up\.railway\.app$/  // Allow all Railway URLs
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Cache-Control', 'Pragma']
