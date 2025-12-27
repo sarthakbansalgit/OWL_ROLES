@@ -1,11 +1,10 @@
 services:
   - type: web
     name: owl-roles-backend
-    runtime: node
+    dockerfile: Dockerfile.backend
+    dockerfilePath: ./Dockerfile.backend
+    buildContext: ./backend
     plan: free
-    rootDir: backend
-    buildCommand: npm install --legacy-peer-deps
-    startCommand: node index.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -30,11 +29,10 @@ services:
   
   - type: web
     name: owl-roles-frontend
-    runtime: node
+    dockerfile: Dockerfile.frontend
+    dockerfilePath: ./Dockerfile.frontend
+    buildContext: ./frontend
     plan: free
-    rootDir: frontend
-    buildCommand: npm install --legacy-peer-deps && npm run build
-    startCommand: npx serve -s dist -l 5174
     envVars:
       - key: NODE_ENV
         value: production
