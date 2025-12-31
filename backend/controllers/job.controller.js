@@ -79,17 +79,22 @@ class JobController {
     }
   }
 
-  // Get jobs created by admin
+  // Get jobs created by logged-in HR
   async getAdminJobs(req, res, next) {
     try {
-      // Get all jobs since authentication is removed
-      const jobs = await Job.find()
-      .sort({ createdAt: -1 }) 
-      .populate({ path: 'company' });
+      const userId = req.id; // Get authenticated user's ID from middleware
 
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized. Please login.", success: false });
+      }
+
+      // Get only jobs created by this HR user
+      const jobs = await Job.find({ created_by: userId })
+        .sort({ createdAt: -1 })
+        .populate({ path: 'company' });
 
       if (jobs.length === 0) {
-        return res.status(404).json({ message: "Jobs not found.", success: false });
+        return res.status(200).json({ message: "No jobs created by you yet.", jobs: [], success: true });
       }
 
       return res.status(200).json({ jobs, success: true });
@@ -98,21 +103,32 @@ class JobController {
     }
   }
 
-  // Update a job using job id
+  // Update a job using job id (only by creator)
   async updateJob(req, res, next) {
     try {
       const jobID = req.params.id;
-      console.log("triggred")
+      const userId = req.id; // Get authenticated user's ID
+
       if (!jobID) {
         return res.status(404).json({ message: "Job not found!", success: false });
       }
-  
-      const updatedJob = await Job.findByIdAndUpdate(jobID, { $set: req.body }, { new: true });
-  
-      if (!updatedJob) {
+
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized. Please login.", success: false });
+      }
+
+      // Check if job exists and belongs to current user
+      const job = await Job.findById(jobID);
+      if (!job) {
         return res.status(404).json({ message: "Job not found!", success: false });
       }
-  
+
+      if (job.created_by.toString() !== userId.toString()) {
+        return res.status(403).json({ message: "Unauthorized. You can only edit jobs you created.", success: false });
+      }
+
+      const updatedJob = await Job.findByIdAndUpdate(jobID, { $set: req.body }, { new: true });
+
       res.status(200).json({ message: "Job updated successfully!", success: true, job: updatedJob });
     } catch (err) {
       console.error(err);
@@ -120,20 +136,31 @@ class JobController {
     }
   }
 
-  // Delete a job by ID
+  // Delete a job by ID (only by creator)
   async deleteJob(req, res, next) {
     try {
       const jobId = req.params.id;
+      const userId = req.id; // Get authenticated user's ID
 
       if (!jobId) {
         return res.status(400).json({ message: "Job ID is required.", success: false });
       }
 
-      const deletedJob = await Job.findByIdAndDelete(jobId);
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized. Please login.", success: false });
+      }
 
-      if (!deletedJob) {
+      // Check if job exists and belongs to current user
+      const job = await Job.findById(jobId);
+      if (!job) {
         return res.status(404).json({ message: "Job not found.", success: false });
       }
+
+      if (job.created_by.toString() !== userId.toString()) {
+        return res.status(403).json({ message: "Unauthorized. You can only delete jobs you created.", success: false });
+      }
+
+      await Job.findByIdAndDelete(jobId);
 
       return res.status(200).json({ message: "Job deleted successfully.", success: true });
     } catch (error) {
