@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Company from "../models/company.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import getDataUri from "../utils/datauri.js";
@@ -135,7 +136,7 @@ class UserController {
                 }
             }
             
-            await User.create({
+            const newUser = await User.create({
                 fullname,
                 email,
                 phoneNumber,
@@ -147,7 +148,6 @@ class UserController {
 
             // If recruiter, create company
             if (role === 'recruiter' && companyName?.trim()) {
-                const Company = require("../models/company.model.js").default;
                 await Company.create({
                     name: companyName.trim(),
                     description: companyDescription?.trim(),

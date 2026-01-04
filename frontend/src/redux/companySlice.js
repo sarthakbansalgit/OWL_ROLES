@@ -4,6 +4,7 @@ const companySlice = createSlice({
     name:"company",
     initialState:{
         singleCompany:null,
+        company:null, // For HR/recruiter's own company
         companies:[],
         searchCompanyByText:"",
     },
@@ -11,6 +12,9 @@ const companySlice = createSlice({
         // actions
         setSingleCompany:(state,action) => {
             state.singleCompany = action.payload;
+        },
+        setCompany:(state,action) => {
+            state.company = action.payload;
         },
         setCompanies:(state,action) => {
             state.companies = action.payload;
@@ -20,5 +24,5 @@ const companySlice = createSlice({
         }
     }
 });
-export const {setSingleCompany, setCompanies,setSearchCompanyByText} = companySlice.actions;
+export const {setSingleCompany, setCompany, setCompanies,setSearchCompanyByText} = companySlice.actions;
 export default companySlice.reducer;

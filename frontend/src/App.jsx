@@ -9,6 +9,7 @@ import Profile from './components/Profile'
 import ProfileCandidate from './components/ProfileCandidate'
 import EditableProfile from './components/EditableProfile'
 import JobDescription from './components/JobDescription'
+import HRProfile from './components/HRProfile'
 import AdminJobs from "./components/admin/AdminJobs";
 import PostJob from './components/admin/PostJob'
 import Applicants from './components/admin/Applicants'
@@ -105,6 +106,10 @@ const appRouter = createBrowserRouter([
   },
 
   // admin ke liye yha se start hoga
+  {
+    path: "/hr/profile",
+    element: <ProtectedRoute><HRProfile /></ProtectedRoute>
+  },
   {
     path: "/admin/jobs",
     element: <ProtectedRoute><AdminJobs /></ProtectedRoute>
