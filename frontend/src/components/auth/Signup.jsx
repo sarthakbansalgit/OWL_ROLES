@@ -8,7 +8,7 @@ import axios from 'axios';
 import { USER_API_END_POINT } from '@/utils/constant';
 import { toast } from 'sonner';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading } from '@/redux/authSlice';
+import { setLoading, setUser } from '@/redux/authSlice';
 import {
     AlertCircle,
     ArrowRight,
@@ -51,6 +51,11 @@ const Signup = () => {
         coursesTaught: [],
         demoVideo: null,
         file: null,
+        // Recruiter company fields
+        companyName: '',
+        companyDescription: '',
+        companyWebsite: '',
+        companyLocation: '',
     });
 
     const changeEventHandler = (event) => {
@@ -98,6 +103,13 @@ const Signup = () => {
             }
         }
 
+        if (input.role === 'recruiter') {
+            if (!input.companyName?.trim() || !input.companyDescription?.trim() || !input.companyLocation?.trim()) {
+                toast.error('Company Name, Description, and Location are mandatory for recruiters');
+                return;
+            }
+        }
+
         if (!/^\d{10}$/.test(input.phoneNumber)) {
             toast.error('Please enter a valid 10-digit phone number.');
             return;
@@ -118,6 +130,13 @@ const Signup = () => {
             formData.append('experience', JSON.stringify(input.experience));
             formData.append('publications', JSON.stringify(input.publications));
             formData.append('coursesTaught', JSON.stringify(input.coursesTaught));
+        }
+
+        if (input.role === 'recruiter') {
+            formData.append('companyName', input.companyName.trim());
+            formData.append('companyDescription', input.companyDescription.trim());
+            formData.append('companyWebsite', input.companyWebsite.trim());
+            formData.append('companyLocation', input.companyLocation.trim());
         }
 
         if (input.orcidId?.trim()) {
@@ -144,7 +163,34 @@ const Signup = () => {
 
             if (response.data.success) {
                 toast.success(response.data.message || 'Account created successfully!');
-                navigate('/login');
+                
+                // Auto-login the user after signup
+                const loginResponse = await axios.post(
+                    `${USER_API_END_POINT}/login`,
+                    {
+                        email: input.email,
+                        password: input.password,
+                        role: input.role,
+                    },
+                    {
+                        headers: { 'Content-Type': 'application/json' },
+                        withCredentials: true,
+                    }
+                );
+
+                if (loginResponse.data.success) {
+                    dispatch(setUser(loginResponse.data.user));
+                    
+                    // Redirect based on role
+                    if (input.role === 'recruiter') {
+                        navigate('/recruiter/profile');
+                    } else {
+                        navigate('/profile');
+                    }
+                } else {
+                    // If auto-login fails, redirect to manual login
+                    navigate('/login');
+                }
             } else {
                 toast.error(response.data.message || 'Signup failed, please try again.');
             }
@@ -992,6 +1038,86 @@ const Signup = () => {
                                                     className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                                                 />
                                             </label>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {input.role === 'recruiter' && (
+                                    <div className="space-y-8">
+                                        <div className="auth-section-soft flex items-start gap-3 rounded-3xl border border-slate-300 bg-white p-4 text-sm text-slate-700">
+                                            <AlertCircle className="mt-0.5 h-5 w-5 flex-shrink-0" />
+                                            <p>
+                                                Recruiter accounts help you post jobs and manage your company. Set up your company details below to get started.
+                                            </p>
+                                        </div>
+
+                                        <div className="auth-section-soft space-y-6 rounded-3xl border border-slate-300 bg-white p-6">
+                                            <div className="space-y-1">
+                                                <p className="text-lg font-semibold text-black">Company details</p>
+                                                <p className="text-sm text-slate-700">
+                                                    Tell us about your organization and its mission.
+                                                </p>
+                                            </div>
+
+                                            <div className="grid gap-5 md:grid-cols-2">
+                                                <div className="space-y-3">
+                                                    <Label className="flex items-center gap-2 text-sm font-semibold text-black">
+                                                        <Briefcase className="h-4 w-4 text-sky-600" />
+                                                        Company Name *
+                                                    </Label>
+                                                    <Input
+                                                        name="companyName"
+                                                        value={input.companyName}
+                                                        onChange={changeEventHandler}
+                                                        placeholder="e.g., Tech Innovations Inc."
+                                                        className="rounded-2xl border-slate-300 bg-slate-50 text-black placeholder:text-slate-500 focus:bg-white focus:ring-sky-400"
+                                                    />
+                                                </div>
+
+                                                <div className="space-y-3">
+                                                    <Label className="flex items-center gap-2 text-sm font-semibold text-black">
+                                                        <MapPin className="h-4 w-4 text-sky-600" />
+                                                        Location *
+                                                    </Label>
+                                                    <Input
+                                                        name="companyLocation"
+                                                        value={input.companyLocation}
+                                                        onChange={changeEventHandler}
+                                                        placeholder="e.g., San Francisco, CA"
+                                                        className="rounded-2xl border-slate-300 bg-slate-50 text-black placeholder:text-slate-500 focus:bg-white focus:ring-sky-400"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                <Label className="flex items-center gap-2 text-sm font-semibold text-black">
+                                                    <Globe className="h-4 w-4 text-sky-600" />
+                                                    Website (Optional)
+                                                </Label>
+                                                <Input
+                                                    name="companyWebsite"
+                                                    value={input.companyWebsite}
+                                                    onChange={changeEventHandler}
+                                                    placeholder="e.g., https://www.company.com"
+                                                    type="url"
+                                                    className="rounded-2xl border-slate-300 bg-slate-50 text-black placeholder:text-slate-500 focus:bg-white focus:ring-sky-400"
+                                                />
+                                            </div>
+
+                                            <div className="space-y-3">
+                                                <Label className="flex items-center gap-2 text-sm font-semibold text-black">
+                                                    <BookOpen className="h-4 w-4 text-sky-600" />
+                                                    Company Description *
+                                                </Label>
+                                                <textarea
+                                                    name="companyDescription"
+                                                    value={input.companyDescription}
+                                                    onChange={changeEventHandler}
+                                                    placeholder="Describe your company's mission, values, and what makes it unique..."
+                                                    rows={4}
+                                                    className="min-h-[120px] w-full rounded-2xl border-slate-300 bg-slate-50 px-4 py-3 text-sm text-black placeholder:text-slate-500 focus:border-transparent focus:bg-white focus:outline-none focus:ring-2 focus:ring-sky-400"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 )}

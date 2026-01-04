@@ -9,6 +9,7 @@ import axios from 'axios';
 import { USER_API_END_POINT } from '@/utils/constant';
 import { setUser } from '@/redux/authSlice';
 import { setCompanies } from '@/redux/companySlice';
+import { setAllAdminJobs, setAllJobs } from '@/redux/jobSlice';
 import { toast } from 'sonner';
 import DropDown from '../ui/drop-down';
 // import UserFallBack from "@assets/user.png"
@@ -24,6 +25,10 @@ const Navbar = () => {
             if (res.data.success) {
                 dispatch(setUser(null));
                 dispatch(setCompanies([])); // Clear companies on logout
+                dispatch(setAllAdminJobs([])); // Clear admin jobs on logout
+                dispatch(setAllJobs([])); // Clear all jobs on logout
+                // Clear redux-persist localStorage to prevent old data from rehydrating
+                localStorage.removeItem('persist:root');
                 navigate("/");
                 toast.success(res.data.message);
             }
@@ -92,7 +97,7 @@ const Navbar = () => {
                     <ul className='flex font-semibold items-center gap-8'>
                         {user && user.role === 'recruiter' ? (
                             <>
-                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/admin/companies">Companies</Link></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/recruiter/profile">My Company</Link></li>
                                 <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/admin/jobs">Jobs</Link></li>
                                 <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><DropDown/></li>
                             </>
@@ -210,7 +215,7 @@ const Navbar = () => {
                                     <div className="space-y-2">
                                         {user?.role !== 'student' && <Link to="/" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Home</Link>}
                                         {user?.role !== 'recruiter' && <Link to="/browse" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Browse</Link>}
-                                        {user?.role === 'recruiter' && <Link to="/admin/companies" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Companies</Link>}
+                                        {user?.role === 'recruiter' && <Link to="/recruiter/profile" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">My Company</Link>}
                                         {user?.role === 'recruiter' && <Link to="/admin/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Jobs</Link>}
                                         {user?.role === 'student' && <Link to="/profile" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Profile</Link>}
                                         <button onClick={logoutHandler} className="w-full p-3 text-white bg-gradient-to-r from-rose-500 via-red-500 to-orange-600 hover:shadow-[0_20px_100px_rgba(239,68,68,0.4)] rounded-3xl text-sm font-medium shadow-[0_15px_70px_rgba(239,68,68,0.3)] transition-all card-3d hover:scale-105 active:scale-95">Logout</button>

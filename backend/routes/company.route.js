@@ -29,3 +29,4 @@ router.get('/companyCount', isAuthenticated, companyController.companyCount);
 
 // Route to delete a company
 router.delete('/delete/:id', isAuthenticated, companyController.deleteCompany);
+export default router;

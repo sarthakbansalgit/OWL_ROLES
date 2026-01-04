@@ -12,13 +12,25 @@ class CompanyController {
         return res.status(400).json({ message: "Company name is required.", success: false });
       }
 
-      const existingCompany = await Company.findOne({ name: companyName });
-      if (existingCompany) {
-        return res.status(400).json({ message: "You can't register the same company.", success: false });
+      const userId = req.id;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized. Please login first.", success: false });
       }
 
-      // Use userId if authenticated, otherwise null
-      const newCompany = await Company.create({ name: companyName, userId: req.id || null });
+      // Check if recruiter already has a company
+      const existingCompanyForUser = await Company.findOne({ userId, deleted: { $in: [false, null, undefined] } });
+      if (existingCompanyForUser) {
+        return res.status(400).json({ message: "You can only create one company. Please edit your existing company instead.", success: false });
+      }
+
+      // Check for duplicate company name
+      const existingCompany = await Company.findOne({ name: companyName, userId });
+      if (existingCompany) {
+        return res.status(400).json({ message: "You've already registered this company.", success: false });
+      }
+
+      // Create company with authenticated user's ID
+      const newCompany = await Company.create({ name: companyName, userId });
       return res.status(201).json({ message: "Company registered successfully.", company: newCompany, success: true });
     } catch (error) {
       next(error); // Use next for error propagation
@@ -29,7 +41,18 @@ class CompanyController {
   async getCompany(req, res, next) {
     try {
       const userId = req.id; // Logged in user id
-      const fetchedCompanies = await Company.find({ userId, deleted: { $in: [false, null, undefined] } });
+      
+      // Check if user is authenticated
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized. Please login.", success: false });
+      }
+
+      // Only fetch companies created by this user, excluding deleted ones
+      // Match both new format (with userId) and ensure it matches current user
+      const fetchedCompanies = await Company.find({ 
+        userId: userId,  // Must match the current user's ID
+        deleted: { $in: [false, null, undefined] } 
+      });
   
       if (fetchedCompanies.length === 0) {
         return res.status(200).json({ companies: [], success: true });

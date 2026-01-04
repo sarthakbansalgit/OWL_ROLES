@@ -9,9 +9,7 @@ import Profile from './components/Profile'
 import ProfileCandidate from './components/ProfileCandidate'
 import EditableProfile from './components/EditableProfile'
 import JobDescription from './components/JobDescription'
-import Companies from './components/admin/Companies'
-import CompanyCreate from './components/admin/CompanyCreate'
-import CompanySetup from './components/admin/CompanySetup'
+import RecruiterProfile from './components/RecruiterProfile'
 import AdminJobs from "./components/admin/AdminJobs";
 import PostJob from './components/admin/PostJob'
 import Applicants from './components/admin/Applicants'
@@ -109,16 +107,8 @@ const appRouter = createBrowserRouter([
 
   // admin ke liye yha se start hoga
   {
-    path: "/admin/companies",
-    element: <ProtectedRoute><Companies /></ProtectedRoute>
-  },
-  {
-    path: "/admin/companies/create",
-    element: <ProtectedRoute><CompanyCreate /></ProtectedRoute>
-  },
-  {
-    path: "/admin/companies/:id",
-    element: <ProtectedRoute><CompanySetup /></ProtectedRoute>
+    path: "/recruiter/profile",
+    element: <ProtectedRoute><RecruiterProfile /></ProtectedRoute>
   },
   {
     path: "/admin/jobs",

@@ -31,7 +31,8 @@ class UserController {
             const { 
                 fullname, email, phoneNumber, password, role, 
                 bio, location, orcidId, researchAreas, qualifications,
-                experience, publications, coursesTaught, demoVideo
+                experience, publications, coursesTaught, demoVideo,
+                companyName, companyDescription, companyWebsite, companyLocation
             } = req.body;
 
             // Validate email format
@@ -141,7 +142,20 @@ class UserController {
                 password: hashedPassword,
                 role,
                 profile: profileData,
+                isFirstLogin: true, // Add first login flag
             });
+
+            // If recruiter, create company
+            if (role === 'recruiter' && companyName?.trim()) {
+                const Company = require("../models/company.model.js").default;
+                await Company.create({
+                    name: companyName.trim(),
+                    description: companyDescription?.trim(),
+                    website: companyWebsite?.trim(),
+                    location: companyLocation?.trim(),
+                    userId: newUser._id,
+                });
+            }
 
             return res.status(201).json({ message: "Account created successfully.", success: true });
         } catch (error) {
@@ -421,6 +435,7 @@ class UserController {
             email: user.email,
             phoneNumber: user.phoneNumber,
             role: user.role,
+            isFirstLogin: user.isFirstLogin,
             profile: user.profile,
         };
     }
@@ -762,6 +777,34 @@ class UserController {
         }
     }
 
+    async markFirstLoginComplete(req, res, next) {
+        try {
+            const userId = req.id; // Get from auth middleware
+            
+            if (!userId) {
+                return res.status(401).json({ message: "Unauthorized", success: false });
+            }
+
+            const user = await User.findByIdAndUpdate(
+                userId,
+                { isFirstLogin: false },
+                { new: true }
+            );
+
+            if (!user) {
+                return res.status(404).json({ message: "User not found", success: false });
+            }
+
+            return res.status(200).json({ 
+                message: "First login completed", 
+                user: this.getUserResponse(user),
+                success: true 
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
     register = this.register.bind(this);
     login = this.login.bind(this);
     logout = this.logout.bind(this);
@@ -791,5 +834,6 @@ export const {
     deleteUser,
     addApplicantByAdmin,
     addRecruiterByAdmin,
-    downloadResume
+    downloadResume,
+    markFirstLoginComplete
 } = userController;

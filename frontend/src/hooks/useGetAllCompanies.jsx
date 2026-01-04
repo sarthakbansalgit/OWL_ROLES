@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 const useGetAllCompanies = () => {
     const dispatch = useDispatch();
     const [companyRefreshTrigger, setCompanyRefreshTrigger] = useState(0);
-    const { user } = useSelector(store => store.auth); // Listen to user changes
+    const { user } = useSelector(store => store.auth);
     
     // Function to trigger a refresh
     const refreshCompanies = () => {
@@ -15,21 +15,30 @@ const useGetAllCompanies = () => {
     };
     
     useEffect(() => {
+        // Always fetch companies when user changes or component mounts
+        if (!user || !user._id) {
+            // User is not logged in, clear companies
+            dispatch(setCompanies([]));
+            return;
+        }
+
         const fetchCompanies = async () => {
             try {
                 const res = await axios.get(`${COMPANY_API_END_POINT}/get?t=${Date.now()}`, {withCredentials:true});
-                // console.log(res);
                 if(res.data.success){
                     dispatch(setCompanies(res.data.companies));
+                } else {
+                    dispatch(setCompanies([]));
                 }
             } catch (error) {
-                console.log(error);
-                // If error, clear companies
+                console.error('Error fetching companies:', error);
+                // On error, clear companies to prevent showing stale data
                 dispatch(setCompanies([]));
             }
         }
+        
         fetchCompanies();
-    }, [companyRefreshTrigger, dispatch, user]); // Added user as dependency 
+    }, [user?._id, dispatch, companyRefreshTrigger]); 
     
     return { refreshCompanies };
 }

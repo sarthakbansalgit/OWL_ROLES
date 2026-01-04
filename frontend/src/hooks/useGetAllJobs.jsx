@@ -6,22 +6,33 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const useGetAllJobs = () => {
     const dispatch = useDispatch();
+    const { user } = useSelector(store => store.auth);
+    
     useEffect(() => {
+        // Clear jobs when user logs out
+        if (!user || !user._id) {
+            dispatch(setAllJobs([]));
+            return;
+        }
+        
         const fetchAllJobs = async () => {
             try {
-                const res = await axios.get(`${JOB_API_END_POINT}/get`, {
+                const res = await axios.get(`${JOB_API_END_POINT}/get?t=${Date.now()}`, {
                     withCredentials: true
                 });
                 if (res.data.success) {
                     dispatch(setAllJobs(res.data.jobs));
+                } else {
+                    dispatch(setAllJobs([]));
                 }
             } catch (error) {
                 console.log("Error fetching jobs:", error);
+                dispatch(setAllJobs([]));
             }
         };
         
         fetchAllJobs();
-    }, [dispatch]);
+    }, [user?._id, dispatch]);
     
 }
 

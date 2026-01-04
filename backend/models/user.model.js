@@ -13,6 +13,7 @@ class UserModel {
           enum: ["student", "recruiter", "superUser"],
           required: true,
         },
+        isFirstLogin: { type: Boolean, default: true },
         profile: {
           bio: { type: String },
           skills: [{ type: String }],
