@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
 import Home from './components/Home'
@@ -24,7 +24,6 @@ import AddNewCompany from './components/superUser/Pages/AddNew/AddNewCompany'
 import AddNewRecruiter from './components/superUser/Pages/AddNew/AddNewRecruiter'
 //super user imports end
 import ProErr from './components/ProErr'
-import NotFoundErr from './components/NotFoundErr'
 import LearnMore from './components/LearnMore'
 import LearnJob from './components/learn_job' // Add this import
 import BlogHome from './components/blogComponents/BlogHome/BlogHome'
@@ -192,7 +191,7 @@ supreme user starts here
   },
   {
     path:"*",
-    element:<NotFoundErr/>
+    element: <Navigate to="/hr/profile" replace />
   },
 
 ])
