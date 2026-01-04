@@ -148,13 +148,19 @@ class UserController {
 
             // If recruiter, create company
             if (role === 'recruiter' && companyName?.trim()) {
-                await Company.create({
-                    name: companyName.trim(),
-                    description: companyDescription?.trim(),
-                    website: companyWebsite?.trim(),
-                    location: companyLocation?.trim(),
-                    userId: newUser._id,
-                });
+                try {
+                    const newCompany = await Company.create({
+                        name: companyName.trim(),
+                        description: companyDescription?.trim(),
+                        website: companyWebsite?.trim(),
+                        location: companyLocation?.trim(),
+                        userId: newUser._id,
+                    });
+                    console.log('✅ Company created for recruiter:', newCompany._id);
+                } catch (companyError) {
+                    console.error('❌ Error creating company:', companyError.message);
+                    return res.status(400).json({ message: "Account created but company creation failed: " + companyError.message, success: false });
+                }
             }
 
             return res.status(201).json({ message: "Account created successfully.", success: true });

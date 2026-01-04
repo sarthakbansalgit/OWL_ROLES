@@ -68,13 +68,8 @@ const UpdateCompanyDialog = ({ open, setOpen, company }) => {
             });
 
             if (res.data.success) {
-                // Re-fetch company data
-                const companyRes = await axios.get(`${COMPANY_API_END_POINT}/get/${company._id}`, {
-                    withCredentials: true
-                });
-                if (companyRes.data.success) {
-                    dispatch(setCompany(companyRes.data.company));
-                }
+                // Use the returned company data from update response
+                dispatch(setCompany(res.data.company));
                 toast.success('Company updated successfully');
                 setOpen(false);
             }

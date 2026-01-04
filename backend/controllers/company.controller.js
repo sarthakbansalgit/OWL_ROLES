@@ -155,7 +155,7 @@ class CompanyController {
         return res.status(404).json({ message: "Company not found.", success: false });
       }
 
-      return res.status(200).json({ message: "Company information updated.", success: true });
+      return res.status(200).json({ message: "Company information updated.", company: updatedCompany, success: true });
     } catch (error) {
       next(error);
     }
