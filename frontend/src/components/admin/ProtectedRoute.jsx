@@ -1,25 +1,36 @@
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { toast } from "sonner";
+import LoadingPage from '../shared/LoadingPage';
 
 const ProtectedRoute = ({ children }) => {
     const { user } = useSelector((store) => store.auth);
     const navigate = useNavigate();
-    const [isAuthorized, setIsAuthorized] = useState(false);
 
     useEffect(() => {
-        // Check if user is not authenticated or role is neither recruiter nor superUser
-        if (!user || (user.role !== 'recruiter' && user.role !== 'superUser')) {
-            toast("Login first to perform this activity!")
-            navigate("/login");
-        } else {
-            setIsAuthorized(true);
+        // If user is not authenticated or role is invalid
+        if (!user) {
+            toast.error("Please login to continue");
+            navigate("/login", { replace: true });
+        } else if (user.role !== 'recruiter' && user.role !== 'superUser') {
+            toast.error("Unauthorized access");
+            navigate("/login", { replace: true });
         }
     }, [user, navigate]);
 
-    // Only render children if authorized
-    return isAuthorized ? <>{children}</> : null;
+    // Show loading while checking auth
+    if (!user) {
+        return <LoadingPage />;
+    }
+
+    // Check if user has right role
+    if (user.role !== 'recruiter' && user.role !== 'superUser') {
+        return <LoadingPage />;
+    }
+
+    // If authenticated and authorized, render children
+    return children;
 };
 
 export default ProtectedRoute;
