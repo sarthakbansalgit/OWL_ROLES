@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Navbar from './shared/Navbar';
 import { Avatar, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
-import { Mail, Pen, MapPin, Globe, Phone, Building2, Edit3, Trash2 } from 'lucide-react';
+import { Mail, Pen, MapPin, Globe, Phone, Building2, Edit3 } from 'lucide-react';
 import UpdateCompanyDialog from './UpdateCompanyDialog';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import useGetHRCompany from '@/hooks/useGetHRCompany';
 import axios from 'axios';
 import { COMPANY_API_END_POINT } from '@/utils/constant';
@@ -12,31 +13,10 @@ import { toast } from 'sonner';
 
 const HRProfile = () => {
     useGetHRCompany();
+    const navigate = useNavigate();
     const [openCompanyDialog, setOpenCompanyDialog] = useState(false);
     const { user } = useSelector(store => store.auth);
     const { company } = useSelector(store => store.company);
-    const [isDeleting, setIsDeleting] = useState(false);
-
-    const handleDeleteCompany = async () => {
-        if (!company?._id) return;
-        
-        try {
-            setIsDeleting(true);
-            const res = await axios.delete(`${COMPANY_API_END_POINT}/delete/${company._id}`, {
-                withCredentials: true
-            });
-            
-            if (res.data.success) {
-                toast.success('Company deleted successfully');
-                // Redirect to home or re-fetch
-                window.location.href = '/';
-            }
-        } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to delete company');
-        } finally {
-            setIsDeleting(false);
-        }
-    };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-blue-50 text-gray-900">
@@ -139,15 +119,6 @@ const HRProfile = () => {
                                             <Edit3 className="h-4 w-4" />
                                             Edit Company
                                         </Button>
-                                        <Button 
-                                            onClick={handleDeleteCompany}
-                                            disabled={isDeleting}
-                                            variant="outline"
-                                            className="border-red-600 text-red-600 hover:bg-red-50 gap-2"
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                            {isDeleting ? 'Deleting...' : 'Delete'}
-                                        </Button>
                                     </div>
                                 </div>
 
@@ -190,7 +161,7 @@ const HRProfile = () => {
                             <h3 className="text-xl font-bold text-gray-900 mb-3">📋 Manage Jobs</h3>
                             <p className="text-gray-700 mb-4">Post, edit, and manage all your job openings</p>
                             <Button 
-                                onClick={() => window.location.href = '/admin/jobs'}
+                                onClick={() => navigate('/admin/jobs')}
                                 className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                             >
                                 Go to Jobs Management
@@ -200,7 +171,7 @@ const HRProfile = () => {
                             <h3 className="text-xl font-bold text-gray-900 mb-3">👥 View Candidates</h3>
                             <p className="text-gray-700 mb-4">Review applications and manage candidates</p>
                             <Button 
-                                onClick={() => window.location.href = '/admin/jobs'}
+                                onClick={() => navigate('/admin/jobs')}
                                 className="w-full bg-purple-600 hover:bg-purple-700 text-white"
                             >
                                 View Applications

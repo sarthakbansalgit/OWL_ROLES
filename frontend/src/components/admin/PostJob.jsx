@@ -10,10 +10,12 @@ import { JOB_API_END_POINT } from '@/utils/constant'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, Loader2 } from 'lucide-react'
+import useGetHRCompany from '@/hooks/useGetHRCompany'
 
 const companyArray = [];
 
 const PostJob = () => {
+    useGetHRCompany();
     const [input, setInput] = useState({
         title: "",
         description: "",
@@ -28,14 +30,24 @@ const PostJob = () => {
     const [loading, setLoading]= useState(false);
     const navigate = useNavigate();
 
-    const { companies } = useSelector(store => store.company);
+    const { company } = useSelector(store => store.company);
+    
+    // Auto-set company when it's loaded
+    React.useEffect(() => {
+        if (company?._id && !input.companyId) {
+            setInput(prev => ({ ...prev, companyId: company._id }));
+        }
+    }, [company]);
+
     const changeEventHandler = (e) => {
         setInput({ ...input, [e.target.name]: e.target.value });
     };
 
     const selectChangeHandler = (value) => {
-        const selectedCompany = companies.find((company)=> company.name.toLowerCase() === value);
-        setInput({...input, companyId:selectedCompany._id});
+        // If only one company, just set it
+        if (company?.name?.toLowerCase() === value) {
+            setInput({...input, companyId: company._id});
+        }
     };
 
     const submitHandler = async (e) => {
@@ -189,26 +201,12 @@ const PostJob = () => {
                             />
                         </div>
                         {
-                            companies.length > 0 && (
+                            company && company._id && (
                                 <div className='col-span-1 md:col-span-2'>
-                                    <Label className='font-semibold text-gray-700 text-sm md:text-base'>Select Company *</Label>
-                                    <Select onValueChange={selectChangeHandler}>
-                                        <SelectTrigger className="border-gray-200 mt-1 text-sm">
-                                            <SelectValue placeholder="Select a Company" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                {
-                                                    companies.map((company) => {
-                                                        return (
-                                                            <SelectItem key={company._id} value={company?.name?.toLowerCase()}>{company.name}</SelectItem>
-                                                        )
-                                                    })
-                                                }
-
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
+                                    <Label className='font-semibold text-gray-700 text-sm md:text-base'>Company *</Label>
+                                    <div className="mt-1 p-3 border border-gray-200 rounded-md bg-gray-50">
+                                        <p className="text-sm font-medium text-gray-900">{company.name}</p>
+                                    </div>
                                 </div>
                             )
                         }
@@ -217,7 +215,7 @@ const PostJob = () => {
                         loading ? <Button className="w-full my-4 md:my-6 bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-sm md:text-base"> <Loader2 className='mr-2 h-4 w-4 animate-spin' /> Please wait </Button> : <Button type="submit" className="w-full my-4 md:my-6 bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white font-semibold py-2 md:py-3 rounded-lg text-sm md:text-base">Post Job</Button>
                     }
                     {
-                        companies.length === 0 && <p className='text-xs md:text-sm text-red-600 font-semibold text-center my-3 bg-red-50 p-3 rounded-lg'>*Please register a company first, before posting a job</p>
+                        !company || !company._id && <p className='text-xs md:text-sm text-red-600 font-semibold text-center my-3 bg-red-50 p-3 rounded-lg'>*Please register a company first, before posting a job</p>
                     }
                 </form>
                 
