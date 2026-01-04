@@ -97,7 +97,7 @@ const Navbar = () => {
                     <ul className='flex font-semibold items-center gap-8'>
                         {user && user.role === 'recruiter' ? (
                             <>
-                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/recruiter/profile">My Company</Link></li>
+                                <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/admin/jobs">My Company</Link></li>
                                 <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><Link to="/admin/jobs">Jobs</Link></li>
                                 <li className='text-gray-700 hover:text-blue-600 transition-colors cursor-pointer'><DropDown/></li>
                             </>
@@ -215,7 +215,7 @@ const Navbar = () => {
                                     <div className="space-y-2">
                                         {user?.role !== 'student' && <Link to="/" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Home</Link>}
                                         {user?.role !== 'recruiter' && <Link to="/browse" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Browse</Link>}
-                                        {user?.role === 'recruiter' && <Link to="/recruiter/profile" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">My Company</Link>}
+                                        {user?.role === 'recruiter' && <Link to="/admin/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">My Company</Link>}
                                         {user?.role === 'recruiter' && <Link to="/admin/jobs" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Jobs</Link>}
                                         {user?.role === 'student' && <Link to="/profile" className="block p-2 text-gray-700 hover:bg-blue-50 rounded text-sm">Profile</Link>}
                                         <button onClick={logoutHandler} className="w-full p-3 text-white bg-gradient-to-r from-rose-500 via-red-500 to-orange-600 hover:shadow-[0_20px_100px_rgba(239,68,68,0.4)] rounded-3xl text-sm font-medium shadow-[0_15px_70px_rgba(239,68,68,0.3)] transition-all card-3d hover:scale-105 active:scale-95">Logout</button>

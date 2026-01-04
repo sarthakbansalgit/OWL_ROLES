@@ -69,7 +69,7 @@ const Login = () => {
                 
                 // Redirect based on user role
                 if (response.data.user?.role === 'recruiter') {
-                    navigate('/recruiter/profile');
+                    navigate('/admin/jobs');
                 } else {
                     setShowProfilePopup(true);
                     setTimeout(() => {

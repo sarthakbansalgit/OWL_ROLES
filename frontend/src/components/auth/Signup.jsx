@@ -183,7 +183,7 @@ const Signup = () => {
                     
                     // Redirect based on role
                     if (input.role === 'recruiter') {
-                        navigate('/recruiter/profile');
+                        navigate('/admin/jobs');
                     } else {
                         navigate('/profile');
                     }
