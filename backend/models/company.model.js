@@ -7,7 +7,6 @@ class CompanyModel {
         name: {
           type: String,
           required: true,
-          unique: true,
         },
         description: {
           type: String,
@@ -33,6 +32,9 @@ class CompanyModel {
       },
       { timestamps: true }
     );
+
+    // Unique index on name and userId combination (each recruiter can have one unique name)
+    companySchema.index({ name: 1, userId: 1 }, { unique: true, sparse: true });
 
     this.Company = mongoose.model("Company", companySchema);
   }
