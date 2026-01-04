@@ -317,7 +317,7 @@ const Signup = () => {
     ];
 
     return (
-        <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-white page-transition">
+        <div className="relative min-h-screen overflow-hidden bg-white text-slate-900 page-transition">
             <Navbar />
 
             <div className="auth-aurora" />
@@ -347,7 +347,7 @@ const Signup = () => {
                             {heroHighlights.map(({ icon: Icon, title, description }) => (
                                 <div
                                     key={title}
-                                    className="auth-section-soft group relative overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-6 transition-transform hover:-translate-y-1 backdrop-blur-md"
+                                    className="auth-section-soft group relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-6 transition-transform hover:-translate-y-1 backdrop-blur-md"
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-br from-sky-400/10 via-blue-400/5 to-indigo-400/10 opacity-0 transition-opacity group-hover:opacity-100" />
                                     <div className="relative space-y-4">
@@ -363,7 +363,7 @@ const Signup = () => {
                             ))}
                         </div>
 
-                        <div className="auth-section-soft relative overflow-hidden rounded-3xl border border-white/20 bg-white/10 p-6 backdrop-blur-md">
+                        <div className="auth-section-soft relative overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-6 backdrop-blur-md">
                             <div className="absolute -top-10 -right-6 h-24 w-24 rounded-full bg-sky-500/20 blur-3xl" />
                             <div className="relative space-y-5">
                                 {journeySteps.map(({ step, title, detail }) => (
@@ -393,7 +393,7 @@ const Signup = () => {
                         </div>
                     </section>
 
-                    <section className="auth-section-card relative overflow-hidden border border-white/20 bg-gradient-to-b from-slate-800/70 to-slate-900/80 p-8 shadow-[0_35px_120px_rgba(0,0,0,0.5)] backdrop-blur-md">
+                    <section className="auth-section-card relative overflow-hidden border border-slate-200 bg-white p-8 shadow-lg backdrop-blur-md">
                         <div className="absolute -top-24 right-12 hidden h-44 w-44 rounded-full bg-sky-400/20 blur-3xl sm:block" />
                         <div className="absolute -bottom-28 left-8 hidden h-48 w-48 rounded-full bg-indigo-500/20 blur-3xl sm:block" />
 

@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { USER_API_END_POINT } from '@/utils/constant';
 import { setUser } from '@/redux/authSlice';
+import { setCompanies } from '@/redux/companySlice';
 import { toast } from 'sonner';
 import DropDown from '../ui/drop-down';
 // import UserFallBack from "@assets/user.png"
@@ -22,6 +23,7 @@ const Navbar = () => {
             const res = await axios.get(`${USER_API_END_POINT}/logout`, { withCredentials: true });
             if (res.data.success) {
                 dispatch(setUser(null));
+                dispatch(setCompanies([])); // Clear companies on logout
                 navigate("/");
                 toast.success(res.data.message);
             }

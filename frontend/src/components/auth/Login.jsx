@@ -211,7 +211,7 @@ const Login = () => {
                                         value={input.email}
                                         onChange={changeEventHandler}
                                         placeholder="you@example.com"
-                                        className="h-14 rounded-2xl border-2 border-sky-400/60 bg-white/30 px-5 text-white text-base placeholder:text-white/70 focus:border-sky-300 focus:bg-white/40 focus:ring-2 focus:ring-sky-300 backdrop-blur-md transition-all shadow-lg shadow-sky-500/20"
+                                        className="h-14 rounded-2xl border-2 border-sky-400/60 bg-white/30 px-5 text-black text-base placeholder:text-slate-400 focus:border-sky-300 focus:bg-white/40 focus:ring-2 focus:ring-sky-300 backdrop-blur-md transition-all shadow-lg shadow-sky-500/20"
                                         autoComplete="email"
                                         autoCapitalize="none"
                                         autoCorrect="off"
@@ -233,7 +233,7 @@ const Login = () => {
                                             value={input.password}
                                             onChange={changeEventHandler}
                                             placeholder="Enter your password"
-                                            className="h-14 rounded-2xl border-2 border-sky-400/60 bg-white/30 px-5 pr-14 text-white text-base placeholder:text-white/70 focus:border-sky-300 focus:bg-white/40 focus:ring-2 focus:ring-sky-300 backdrop-blur-md transition-all shadow-lg shadow-sky-500/20"
+                                            className="h-14 rounded-2xl border-2 border-sky-400/60 bg-white/30 px-5 pr-14 text-black text-base placeholder:text-slate-400 focus:border-sky-300 focus:bg-white/40 focus:ring-2 focus:ring-sky-300 backdrop-blur-md transition-all shadow-lg shadow-sky-500/20"
                                             autoComplete="current-password"
                                             required
                                         />

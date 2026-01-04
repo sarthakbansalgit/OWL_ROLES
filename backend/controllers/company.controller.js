@@ -80,10 +80,16 @@ class CompanyController {
   async getCompanyById(req, res, next) {
     try {
       const companyId = req.params.id;
+      const userId = req.id; // Authenticated user's ID
       const company = await Company.findOne({ _id: companyId, deleted: { $in: [false, null, undefined] } });
 
       if (!company) {
         return res.status(404).json({ message: "Company not found.", success: false });
+      }
+
+      // Verify that the authenticated user is the one who created this company
+      if (company.userId.toString() !== userId.toString()) {
+        return res.status(403).json({ message: "Unauthorized. You can only view companies you created.", success: false });
       }
 
       return res.status(200).json({ company, success: true });
@@ -98,11 +104,17 @@ class CompanyController {
       const { name, description, website, location } = req.body;
       const file = req.file;
       const companyId = req.params.id;
+      const userId = req.id; // Authenticated user's ID
 
       // Check if company exists and is not deleted
       const company = await Company.findById(companyId);
       if (!company || company.deleted) {
         return res.status(404).json({ message: "Company not found or has been deleted.", success: false });
+      }
+
+      // Verify that the authenticated user is the one who created this company
+      if (company.userId.toString() !== userId.toString()) {
+        return res.status(403).json({ message: "Unauthorized. You can only update companies you created.", success: false });
       }
 
       // If there's a logo file, upload to Cloudinary
@@ -130,6 +142,18 @@ class CompanyController {
   async deleteCompany(req, res, next) {
     try {
       const companyId = req.params.id;
+      const userId = req.id; // Authenticated user's ID
+  
+      // Check if company exists
+      const company = await Company.findById(companyId);
+      if (!company) {
+        return res.status(404).json({ message: "Company not found.", success: false });
+      }
+
+      // Verify that the authenticated user is the one who created this company
+      if (company.userId.toString() !== userId.toString()) {
+        return res.status(403).json({ message: "Unauthorized. You can only delete companies you created.", success: false });
+      }
   
       const deletedCompany = await Company.findByIdAndUpdate(companyId, { deleted: true }, { new: true });
   

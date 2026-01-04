@@ -2,11 +2,12 @@ import { setCompanies} from '@/redux/companySlice'
 import { COMPANY_API_END_POINT} from '@/utils/constant'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const useGetAllCompanies = () => {
     const dispatch = useDispatch();
     const [companyRefreshTrigger, setCompanyRefreshTrigger] = useState(0);
+    const { user } = useSelector(store => store.auth); // Listen to user changes
     
     // Function to trigger a refresh
     const refreshCompanies = () => {
@@ -23,10 +24,12 @@ const useGetAllCompanies = () => {
                 }
             } catch (error) {
                 console.log(error);
+                // If error, clear companies
+                dispatch(setCompanies([]));
             }
         }
         fetchCompanies();
-    }, [companyRefreshTrigger, dispatch]); 
+    }, [companyRefreshTrigger, dispatch, user]); // Added user as dependency 
     
     return { refreshCompanies };
 }
