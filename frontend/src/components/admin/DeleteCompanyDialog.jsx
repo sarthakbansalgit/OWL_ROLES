@@ -23,15 +23,16 @@ const DeleteCompanyDialog = ({ open, setOpen, companyId, onDeleteSuccess }) => {
 
             if (res.data.success) {
                 toast.success('Company deleted successfully');
-                if (typeof setOpen === 'function') {
-                    setOpen(false); 
-                } else if (typeof setOpen === 'object' && setOpen.open !== undefined) {
-                    setOpen({ open: false, companyId: null });
-                }
+                
+                // Close dialog
+                setOpen({ open: false, companyId: null });
                 
                 // Call the success callback to refresh the list
                 if (onDeleteSuccess && typeof onDeleteSuccess === 'function') {
-                    onDeleteSuccess();
+                    // Delay slightly to ensure dialog closes first
+                    setTimeout(() => {
+                        onDeleteSuccess();
+                    }, 300);
                 }
             }
         } catch (error) {
@@ -43,11 +44,7 @@ const DeleteCompanyDialog = ({ open, setOpen, companyId, onDeleteSuccess }) => {
     };
 
     const handleClose = () => {
-        if (typeof setOpen === 'function') {
-            setOpen(false);
-        } else if (typeof setOpen === 'object' && setOpen.open !== undefined) {
-            setOpen({ open: false, companyId: null });
-        }
+        setOpen({ open: false, companyId: null });
     };
 
     return (

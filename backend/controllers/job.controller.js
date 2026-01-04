@@ -1,4 +1,5 @@
 import Job from "../models/job.model.js";
+import Company from "../models/company.model.js";
 
 class JobController {
   // Admin posts a job
@@ -9,6 +10,12 @@ class JobController {
 
       if (!title || !description || !salary || !location || !jobType || !position || !companyId) {
         return res.status(400).json({ message: "Something is missing.", success: false });
+      }
+
+      // Check if company exists and is not deleted
+      const company = await Company.findById(companyId);
+      if (!company || company.deleted) {
+        return res.status(404).json({ message: "Company not found or has been deleted.", success: false });
       }
 
       const job = await Job.create({
@@ -41,13 +48,19 @@ class JobController {
         ],
       };
 
-      const jobs = await Job.find(query).populate({ path: "company" }).sort({ createdAt: -1 });
+      const jobs = await Job.find(query).populate({ 
+        path: "company",
+        match: { deleted: { $in: [false, null, undefined] } }
+      }).sort({ createdAt: -1 });
 
-      if (jobs.length === 0) {
-        return res.status(404).json({ message: "Jobs not found.", success: false });
+      // Filter out jobs where company was deleted
+      const filteredJobs = jobs.filter(job => job.company !== null);
+
+      if (filteredJobs.length === 0) {
+        return res.status(200).json({ jobs: [], success: true });
       }
 
-      return res.status(200).json({ jobs, success: true });
+      return res.status(200).json({ jobs: filteredJobs, success: true });
     } catch (error) {
       next(error);
     }
@@ -57,9 +70,9 @@ class JobController {
   async getJobById(req, res, next) {
     try {
       const jobId = req.params.id;
-      const job = await Job.findById(jobId).populate({ path: "applications" });
+      const job = await Job.findById(jobId).populate({ path: "applications" }).populate({ path: "company" });
 
-      if (!job) {
+      if (!job || !job.company || job.company.deleted) {
         return res.status(404).json({ message: "Job not found.", success: false });
       }
 
@@ -88,16 +101,22 @@ class JobController {
         return res.status(401).json({ message: "Unauthorized. Please login.", success: false });
       }
 
-      // Get only jobs created by this HR user
+      // Get only jobs created by this HR user with non-deleted companies
       const jobs = await Job.find({ created_by: userId })
         .sort({ createdAt: -1 })
-        .populate({ path: 'company' });
+        .populate({ 
+          path: 'company',
+          match: { deleted: { $in: [false, null, undefined] } }
+        });
 
-      if (jobs.length === 0) {
+      // Filter out jobs where company was deleted
+      const filteredJobs = jobs.filter(job => job.company !== null);
+
+      if (filteredJobs.length === 0) {
         return res.status(200).json({ message: "No jobs created by you yet.", jobs: [], success: true });
       }
 
-      return res.status(200).json({ jobs, success: true });
+      return res.status(200).json({ jobs: filteredJobs, success: true });
     } catch (error) {
       next(error);
     }

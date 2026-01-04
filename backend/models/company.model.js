@@ -26,6 +26,10 @@ class CompanyModel {
           ref: "User",
           required: false,
         },
+        deleted: {
+          type: Boolean,
+          default: false,
+        },
       },
       { timestamps: true }
     );

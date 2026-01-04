@@ -9,7 +9,7 @@ const router = express.Router();
 // Route to register a company (POST method)
 router.route("/register").post(companyController.registerCompany);
 
-// Route to get all companies for the authenticated user (GET method)
+// Route to get all companies for the authenticated user (GET method - no caching for fresh data)
 router.route("/get").get(companyController.getCompany);
 
 // Route to get a specific company by ID (GET method)

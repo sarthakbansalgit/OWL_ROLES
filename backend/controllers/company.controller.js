@@ -29,10 +29,10 @@ class CompanyController {
   async getCompany(req, res, next) {
     try {
       const userId = req.id; // Logged in user id
-      const fetchedCompanies = await Company.find({ userId });
+      const fetchedCompanies = await Company.find({ userId, deleted: { $in: [false, null, undefined] } });
   
       if (fetchedCompanies.length === 0) {
-        return res.status(404).json({ message: "Companies not found.", success: false });
+        return res.status(200).json({ companies: [], success: true });
       }
   
       const sortedCompanies = fetchedCompanies.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -47,7 +47,7 @@ class CompanyController {
   // Get all companies across users
   async getAllCompanies(req, res, next) {
     try {
-      const companies = await Company.find()
+      const companies = await Company.find({ deleted: { $in: [false, null, undefined] } })
         .select('name website location logo createdAt') 
         .populate({
           path: 'userId',
@@ -55,7 +55,7 @@ class CompanyController {
         });
 
       if (companies.length === 0) {
-        return res.status(404).json({ message: "No companies found.", success: false });
+        return res.status(200).json({ companies: [], success: true });
       }
 
       return res.status(200).json({ companies, success: true });
@@ -67,7 +67,7 @@ class CompanyController {
   // Get total number of Companies
   async companyCount(req, res, next) {
     try {
-        const totalCompanies = await companyModel.countDocuments(); 
+        const totalCompanies = await companyModel.countDocuments({ deleted: { $in: [false, null, undefined] } }); 
 
         return res.status(200).json({ count: totalCompanies, success: true });
     } catch (error) {
@@ -80,7 +80,7 @@ class CompanyController {
   async getCompanyById(req, res, next) {
     try {
       const companyId = req.params.id;
-      const company = await Company.findById(companyId);
+      const company = await Company.findOne({ _id: companyId, deleted: { $in: [false, null, undefined] } });
 
       if (!company) {
         return res.status(404).json({ message: "Company not found.", success: false });
@@ -97,6 +97,13 @@ class CompanyController {
     try {
       const { name, description, website, location } = req.body;
       const file = req.file;
+      const companyId = req.params.id;
+
+      // Check if company exists and is not deleted
+      const company = await Company.findById(companyId);
+      if (!company || company.deleted) {
+        return res.status(404).json({ message: "Company not found or has been deleted.", success: false });
+      }
 
       // If there's a logo file, upload to Cloudinary
       let logo;
@@ -107,7 +114,7 @@ class CompanyController {
       }
 
       const updateData = { name, description, website, location, ...(logo && { logo }) };
-      const updatedCompany = await Company.findByIdAndUpdate(req.params.id, updateData, { new: true });
+      const updatedCompany = await Company.findByIdAndUpdate(companyId, updateData, { new: true });
 
       if (!updatedCompany) {
         return res.status(404).json({ message: "Company not found.", success: false });
@@ -119,12 +126,12 @@ class CompanyController {
     }
   }
 
-  // To delete a company by company ID
+  // To delete a company by company ID (soft delete)
   async deleteCompany(req, res, next) {
     try {
       const companyId = req.params.id;
   
-      const deletedCompany = await Company.findByIdAndDelete(companyId);
+      const deletedCompany = await Company.findByIdAndUpdate(companyId, { deleted: true }, { new: true });
   
       if (!deletedCompany) {
         return res.status(404).json({ message: "Company not found.", success: false });
