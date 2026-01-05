@@ -444,14 +444,14 @@ const Signup = () => {
                         <div className="absolute -bottom-28 left-8 hidden h-48 w-48 rounded-full bg-indigo-500/20 blur-3xl sm:block" />
 
                         <div className="relative space-y-8">
-                            <header className="space-y-3 text-center lg:text-left">
-                                <span className="auth-mini-badge">
-                                    <CheckCircle2 className="h-4 w-4 text-sky-400" />
-                                    Step into brilliance
+                            <header className="space-y-3 text-center lg:text-left bg-gray-800/60 backdrop-blur-md rounded-3xl p-8 border border-gray-700/40 shadow-xl">
+                                <span className="auth-mini-badge bg-sky-500/25 border border-sky-400/50">
+                                    <CheckCircle2 className="h-4 w-4 text-sky-300" />
+                                    STEP INTO BRILLIANCE
                                 </span>
                                 <div className="space-y-2">
-                                    <h2 className="text-3xl font-semibold text-white drop-shadow-lg">Create your account</h2>
-                                    <p className="text-sm text-white drop-shadow">
+                                    <h2 className="text-4xl font-bold text-white drop-shadow-lg">Create your account</h2>
+                                    <p className="text-base text-gray-200 drop-shadow">
                                         Complete each section to unlock a vibrant dashboard, curated opportunities, and animated profile storytelling.
                                     </p>
                                 </div>
