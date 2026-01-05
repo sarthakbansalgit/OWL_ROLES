@@ -60,6 +60,9 @@ const UpdateCompanyDialog = ({ open, setOpen, company }) => {
 
         try {
             setLoading(true);
+            console.log('Updating company with ID:', company._id);
+            console.log('Update payload:', { name: input.name, description: input.description, website: input.website, location: input.location });
+            
             const res = await axios.put(`${COMPANY_API_END_POINT}/update/${company._id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -67,6 +70,8 @@ const UpdateCompanyDialog = ({ open, setOpen, company }) => {
                 withCredentials: true
             });
 
+            console.log('Company update response:', res.data);
+            
             if (res.data.success) {
                 // Use the returned company data from update response
                 dispatch(setCompany(res.data.company));
@@ -74,7 +79,8 @@ const UpdateCompanyDialog = ({ open, setOpen, company }) => {
                 setOpen(false);
             }
         } catch (error) {
-            console.log(error);
+            console.error('Company update error:', error);
+            console.error('Error response:', error.response?.data);
             toast.error(error.response?.data?.message || 'Failed to update company');
         } finally {
             setLoading(false);
