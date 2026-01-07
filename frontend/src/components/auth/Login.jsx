@@ -71,10 +71,7 @@ const Login = () => {
                 if (response.data.user?.role === 'recruiter') {
                     navigate('/hr/profile');
                 } else {
-                    setShowProfilePopup(true);
-                    setTimeout(() => {
-                        navigate('/profile');
-                    }, 3200);
+                    navigate('/browse');
                 }
             } else {
                 toast.error(response.data.message || 'Login failed, please try again.');
@@ -94,7 +91,8 @@ const Login = () => {
 
     useEffect(() => {
         if (user) {
-            navigate('/');
+            // Don't redirect if already navigating from login
+            // Let the login handler manage the redirect
         }
     }, [user, navigate]);
 

@@ -185,7 +185,7 @@ const Signup = () => {
                     if (input.role === 'recruiter') {
                         navigate('/hr/profile');
                     } else {
-                        navigate('/profile');
+                        navigate('/browse');
                     }
                 } else {
                     // If auto-login fails, redirect to manual login
@@ -467,7 +467,7 @@ const Signup = () => {
 
                                     <div className="grid gap-6 lg:gap-8">
                                         <div className="space-y-3 mt-12">
-                                            <Label className="flex items-center gap-2 text-sm font-semibold text-black">
+                                            <Label className="flex items-center gap-2 text-sm font-bold text-black bg-yellow-200 px-3 py-2 rounded-lg w-fit">
                                                 <UserIcon className="h-4 w-4 text-sky-600" />
                                                 Full name *
                                             </Label>
@@ -482,7 +482,7 @@ const Signup = () => {
                                         </div>
 
                                         <div className="space-y-3">
-                                            <Label className="flex items-center gap-2 text-sm font-semibold text-black">
+                                            <Label className="flex items-center gap-2 text-sm font-bold text-black bg-yellow-200 px-3 py-2 rounded-lg w-fit">
                                                 <Mail className="h-4 w-4 text-sky-600" />
                                                 Email *
                                             </Label>
@@ -497,7 +497,7 @@ const Signup = () => {
                                         </div>
 
                                         <div className="space-y-3">
-                                            <Label className="flex items-center gap-2 text-sm font-semibold text-black">
+                                            <Label className="flex items-center gap-2 text-sm font-bold text-black bg-yellow-200 px-3 py-2 rounded-lg w-fit">
                                                 <Phone className="h-4 w-4 text-sky-600" />
                                                 Phone number *
                                             </Label>

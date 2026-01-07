@@ -4,7 +4,7 @@ import Job from './Job';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchedQuery } from '@/redux/jobSlice';
 import useGetAllJobs from '@/hooks/useGetAllJobs';
-import { Search, Filter, X, DollarSign } from 'lucide-react';
+import { Search, Filter, X, DollarSign, Bookmark, TrendingUp, Award, FileText, Briefcase, Lightbulb, Target, Users } from 'lucide-react';
 
 const Browse = () => {
     useGetAllJobs(); // Ensure this hook fetches and sets the allJobs data
@@ -78,29 +78,79 @@ const Browse = () => {
             <div className='auth-orb auth-orb--two' />
             
             <div className='relative z-10'>
-                {/* Hero Section */}
-            <div className='bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500 py-12 md:py-16 relative overflow-hidden'>
-                <div className='absolute inset-0 opacity-20'>
-                    <div className='absolute top-0 right-1/4 w-96 h-96 bg-white/20 rounded-full blur-3xl animate-pulse' />
+                {/* Premium Hero Section */}
+                <div className='relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 py-16 md:py-24'>
+                    {/* Animated background elements */}
+                    <div className='absolute inset-0 overflow-hidden'>
+                        <div className='absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float' />
+                        <div className='absolute -bottom-20 -left-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-float-slow' />
+                    </div>
+                    
+                    <div className='relative max-w-7xl mx-auto px-4 z-20'>
+                        <div className='text-center mb-8 animate-fade-in'>
+                            <span className='inline-block px-4 py-2 bg-blue-500/20 border border-blue-400/50 rounded-full text-sm font-semibold text-blue-200 mb-6 backdrop-blur-sm'>✨ Career Opportunities Await</span>
+                            <h1 className='text-5xl md:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight'>
+                                Your Dream Role<br />
+                                <span className='bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent'>is Waiting</span>
+                            </h1>
+                            <p className='text-lg md:text-xl text-blue-100 max-w-3xl mx-auto mb-8'>Explore curated opportunities, connect with innovative companies, and take the next step in your career journey.</p>
+                            
+                            {/* CTA Buttons */}
+                            <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
+                                <button className='px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-bold text-lg shadow-[0_20px_60px_rgba(59,130,246,0.3)] hover:shadow-[0_30px_90px_rgba(59,130,246,0.5)] transform hover:scale-105 transition-all duration-300'>
+                                    Explore Jobs
+                                </button>
+                                <button className='px-8 py-4 bg-white/10 border border-white/30 text-white rounded-xl font-bold text-lg backdrop-blur-sm hover:bg-white/20 transition-all duration-300'>
+                                    Career Tips
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className='relative max-w-7xl mx-auto px-4 z-20'>
-                    <h1 className='font-bold text-4xl md:text-5xl lg:text-6xl text-white mb-4 slide-in-down'>Browse Opportunities</h1>
-                    <p className='text-blue-50 text-lg md:text-xl max-w-2xl slide-in-up'>Discover and apply to amazing job opportunities curated for your expertise</p>
-                </div>
-            </div>
 
-            <div className='max-w-7xl mx-auto px-4 py-12'>
-                {/* Search Bar */}
-                <div className='mb-8 scale-in'>
-                    <div className='relative'>
-                        <Search className='absolute left-4 top-1/2 transform -translate-y-1/2 text-sky-400 h-5 w-5' />
-                        <input
-                            type='text'
-                            placeholder='Search by job title or company...'
-                            value={searchInput}
-                            onChange={handleSearch}
-                            className='w-full pl-12 pr-4 py-4 md:py-5 border-2 border-slate-200 bg-white/90 rounded-xl focus:outline-none focus:border-sky-400 focus:ring-2 focus:ring-sky-400/30 transition-all text-base text-slate-900 placeholder:text-slate-500 shadow-lg hover:shadow-xl'
-                        />
+                {/* Quick Stats */}
+                <div className='max-w-7xl mx-auto px-4 -mt-8 relative z-20 mb-12'>
+                    <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
+                        <div className='bg-white/80 backdrop-blur-lg rounded-xl p-6 shadow-lg border border-white/50 animate-scale-in'>
+                            <div className='text-3xl font-bold text-blue-600 mb-2'>{filteredJobs.length}+</div>
+                            <div className='text-sm text-slate-600'>Active Jobs</div>
+                        </div>
+                        <div className='bg-white/80 backdrop-blur-lg rounded-xl p-6 shadow-lg border border-white/50 animate-scale-in' style={{animationDelay: '0.1s'}}>
+                            <div className='text-3xl font-bold text-cyan-600 mb-2'>500+</div>
+                            <div className='text-sm text-slate-600'>Companies</div>
+                        </div>
+                        <div className='bg-white/80 backdrop-blur-lg rounded-xl p-6 shadow-lg border border-white/50 animate-scale-in' style={{animationDelay: '0.2s'}}>
+                            <div className='text-3xl font-bold text-indigo-600 mb-2'>10K+</div>
+                            <div className='text-sm text-slate-600'>Placements</div>
+                        </div>
+                        <div className='bg-white/80 backdrop-blur-lg rounded-xl p-6 shadow-lg border border-white/50 animate-scale-in' style={{animationDelay: '0.3s'}}>
+                            <div className='text-3xl font-bold text-blue-600 mb-2'>24/7</div>
+                            <div className='text-sm text-slate-600'>Support</div>
+                        </div>
+                    </div>
+                </div>
+
+            <div className='max-w-7xl mx-auto px-4 py-16'>
+                {/* Enhanced Search Section */}
+                <div className='mb-12'>
+                    <div className='mb-6'>
+                        <h2 className='text-3xl font-bold text-slate-900 mb-2'>Find Your Perfect Role</h2>
+                        <p className='text-slate-600'>Filter and search through hundreds of opportunities</p>
+                    </div>
+                    
+                    {/* Glassmorphism Search Bar */}
+                    <div className='relative group'>
+                        <div className='absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-300' />
+                        <div className='relative'>
+                            <Search className='absolute left-5 top-1/2 transform -translate-y-1/2 text-blue-500 h-5 w-5' />
+                            <input
+                                type='text'
+                                placeholder='Search by job title or company...'
+                                value={searchInput}
+                                onChange={handleSearch}
+                                className='w-full pl-14 pr-5 py-4 bg-white/80 backdrop-blur-xl border-2 border-white/50 rounded-2xl focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-400/20 transition-all text-base text-slate-900 placeholder:text-slate-400 shadow-[0_8px_32px_rgba(59,130,246,0.1)] hover:shadow-[0_12px_48px_rgba(59,130,246,0.15)]'
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -220,37 +270,198 @@ const Browse = () => {
                 </div>
 
                 {/* Results Header */}
-                <div className='mb-8 md:mb-10 flex justify-between items-center scale-in'>
+                <div className='mb-12 flex justify-between items-center animate-fade-in'>
                     <div>
-                        <h2 className='font-bold text-2xl md:text-3xl text-slate-900'>Results</h2>
-                        <p className='text-base text-slate-600 mt-2'>
-                            Found <span className='font-bold text-sky-600 text-lg'>{filteredJobs.length}</span> {filteredJobs.length === 1 ? 'opportunity' : 'opportunities'}
+                        <h2 className='text-3xl font-bold text-slate-900'>Available Opportunities</h2>
+                        <p className='text-slate-600 mt-2'>
+                            Showing <span className='font-bold text-blue-600 text-lg'>{filteredJobs.length}</span> {filteredJobs.length === 1 ? 'opportunity' : 'opportunities'}
                         </p>
                     </div>
                 </div>
 
+                {/* Personalized Dashboard Section */}
+                {filteredJobs.length > 0 && (
+                    <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-12'>
+                        {/* Recommended Jobs Card */}
+                        <div className='bg-gradient-to-br from-blue-50 to-blue-100/50 backdrop-blur-lg rounded-2xl p-6 border border-blue-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group'>
+                            <div className='flex items-center gap-3 mb-4'>
+                                <div className='p-3 bg-blue-500/20 rounded-xl group-hover:scale-110 transition-transform'>
+                                    <Briefcase className='h-6 w-6 text-blue-600' />
+                                </div>
+                                <h3 className='text-lg font-bold text-slate-900'>Recommended</h3>
+                            </div>
+                            <p className='text-sm text-slate-700 mb-4'>Perfect matches based on your profile and skills</p>
+                            <div className='text-2xl font-bold text-blue-600'>{Math.ceil(filteredJobs.length * 0.3)}</div>
+                            <p className='text-xs text-slate-600 mt-2'>Personalized for you</p>
+                        </div>
+
+                        {/* Trending Skills Card */}
+                        <div className='bg-gradient-to-br from-cyan-50 to-cyan-100/50 backdrop-blur-lg rounded-2xl p-6 border border-cyan-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group'>
+                            <div className='flex items-center gap-3 mb-4'>
+                                <div className='p-3 bg-cyan-500/20 rounded-xl group-hover:scale-110 transition-transform'>
+                                    <TrendingUp className='h-6 w-6 text-cyan-600' />
+                                </div>
+                                <h3 className='text-lg font-bold text-slate-900'>Trending</h3>
+                            </div>
+                            <p className='text-sm text-slate-700 mb-4'>In-demand skills in the job market</p>
+                            <div className='text-2xl font-bold text-cyan-600'>{jobTypes.length}</div>
+                            <p className='text-xs text-slate-600 mt-2'>Job categories</p>
+                        </div>
+
+                        {/* Saved Jobs Card */}
+                        <div className='bg-gradient-to-br from-indigo-50 to-indigo-100/50 backdrop-blur-lg rounded-2xl p-6 border border-indigo-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group'>
+                            <div className='flex items-center gap-3 mb-4'>
+                                <div className='p-3 bg-indigo-500/20 rounded-xl group-hover:scale-110 transition-transform'>
+                                    <Bookmark className='h-6 w-6 text-indigo-600' />
+                                </div>
+                                <h3 className='text-lg font-bold text-slate-900'>Saved Jobs</h3>
+                            </div>
+                            <p className='text-sm text-slate-700 mb-4'>Your personal collection of dream roles</p>
+                            <div className='text-2xl font-bold text-indigo-600'>5</div>
+                            <p className='text-xs text-slate-600 mt-2'>Bookmarked</p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Jobs Grid */}
                 {filteredJobs.length === 0 ? (
-                    <div className='text-center py-20 md:py-32 scale-in'>
+                    <div className='text-center py-20 md:py-32 animate-fade-in'>
                         <div className='inline-block'>
-                            <div className='text-7xl mb-6 animate-bounce'>🔍</div>
-                            <h3 className='text-2xl md:text-3xl text-slate-900 font-bold mb-3'>No opportunities found</h3>
-                            <p className='text-base text-slate-600 mb-8 max-w-md'>Try adjusting your search terms or filters to discover amazing roles</p>
+                            <div className='text-8xl mb-6 animate-bounce-slow'>🎯</div>
+                            <h3 className='text-3xl md:text-4xl text-slate-900 font-bold mb-3'>No opportunities found</h3>
+                            <p className='text-lg text-slate-600 mb-8 max-w-md'>Try adjusting your search terms or filters to discover amazing roles</p>
                             <button
                                 onClick={clearFilters}
-                                className='px-8 py-3 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-600 text-white rounded-3xl font-medium transition-all shadow-[0_15px_60px_rgba(56,189,248,0.3)] hover:shadow-[0_25px_100px_rgba(56,189,248,0.5)] hover:scale-105 active:scale-95'
+                                className='px-8 py-4 bg-gradient-to-r from-blue-500 via-cyan-500 to-indigo-600 text-white rounded-xl font-bold text-lg shadow-[0_15px_60px_rgba(59,130,246,0.3)] hover:shadow-[0_25px_100px_rgba(59,130,246,0.5)] hover:scale-105 active:scale-95 transition-all'
                             >
-                                Clear Filters
+                                Clear Filters & Try Again
                             </button>
                         </div>
                     </div>
                 ) : (
-                    <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                        {filteredJobs.map((job, idx) => (
-                            <div key={job._id} className={`hover:-translate-y-2 transition-all duration-300 card-3d slide-in-up stagger-item-${(idx % 6) + 1}`}>
-                                <Job job={job} />
+                    <>
+                        {/* Premium Jobs Grid */}
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16'>
+                            {filteredJobs.map((job, idx) => (
+                                <div 
+                                    key={job._id} 
+                                    className={`group animate-fade-in hover:-translate-y-3 transition-all duration-300`}
+                                    style={{animationDelay: `${idx * 0.05}s`}}
+                                >
+                                    <Job job={job} />
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Load More CTA */}
+                        <div className='text-center py-12'>
+                            <p className='text-slate-600 text-lg mb-6'>Showing {filteredJobs.length} of {filteredJobs.length} opportunities</p>
+                            <button className='px-8 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white rounded-xl font-bold shadow-[0_15px_60px_rgba(59,130,246,0.3)] hover:shadow-[0_25px_100px_rgba(59,130,246,0.5)] hover:scale-105 transition-all duration-300'>
+                                Keep Exploring →
+                            </button>
+                        </div>
+                    </>
+                )}
+
+                {/* Career Tips & Tricks Section */}
+                {filteredJobs.length > 0 && (
+                    <div className='mt-20 pt-16 border-t border-slate-200'>
+                        <div className='mb-12 text-center'>
+                            <h2 className='text-4xl font-bold text-slate-900 mb-4'>Career Tips & Growth</h2>
+                            <p className='text-lg text-slate-600 max-w-2xl mx-auto'>Level up your career with these insider tips and strategies</p>
+                        </div>
+
+                        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-16'>
+                            {/* Resume Tips */}
+                            <div className='bg-gradient-to-br from-amber-50 to-orange-50/50 backdrop-blur-lg rounded-2xl p-8 border border-amber-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer'>
+                                <div className='mb-6'>
+                                    <div className='inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-xl mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform'>
+                                        <FileText className='h-7 w-7' />
+                                    </div>
+                                </div>
+                                <h3 className='text-xl font-bold text-slate-900 mb-3'>Perfect Resume</h3>
+                                <ul className='space-y-3 text-sm text-slate-700 mb-6'>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-amber-600 font-bold mt-0.5'>✓</span>
+                                        <span>Keep it to one page with metrics</span>
+                                    </li>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-amber-600 font-bold mt-0.5'>✓</span>
+                                        <span>Use action verbs and achievements</span>
+                                    </li>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-amber-600 font-bold mt-0.5'>✓</span>
+                                        <span>Tailor for each job application</span>
+                                    </li>
+                                </ul>
+                                <button className='w-full py-2 text-sm font-semibold text-amber-600 hover:bg-amber-100 rounded-lg transition-colors'>Learn More →</button>
                             </div>
-                        ))}
+
+                            {/* Interview Tips */}
+                            <div className='bg-gradient-to-br from-emerald-50 to-teal-50/50 backdrop-blur-lg rounded-2xl p-8 border border-emerald-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer'>
+                                <div className='mb-6'>
+                                    <div className='inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 text-white rounded-xl mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform'>
+                                        <Users className='h-7 w-7' />
+                                    </div>
+                                </div>
+                                <h3 className='text-xl font-bold text-slate-900 mb-3'>Interview Success</h3>
+                                <ul className='space-y-3 text-sm text-slate-700 mb-6'>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-emerald-600 font-bold mt-0.5'>✓</span>
+                                        <span>Research the company thoroughly</span>
+                                    </li>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-emerald-600 font-bold mt-0.5'>✓</span>
+                                        <span>Practice the STAR method</span>
+                                    </li>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-emerald-600 font-bold mt-0.5'>✓</span>
+                                        <span>Ask meaningful questions</span>
+                                    </li>
+                                </ul>
+                                <button className='w-full py-2 text-sm font-semibold text-emerald-600 hover:bg-emerald-100 rounded-lg transition-colors'>Learn More →</button>
+                            </div>
+
+                            {/* Skill Development */}
+                            <div className='bg-gradient-to-br from-violet-50 to-purple-50/50 backdrop-blur-lg rounded-2xl p-8 border border-violet-200/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group cursor-pointer'>
+                                <div className='mb-6'>
+                                    <div className='inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-violet-500 to-purple-500 text-white rounded-xl mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform'>
+                                        <Lightbulb className='h-7 w-7' />
+                                    </div>
+                                </div>
+                                <h3 className='text-xl font-bold text-slate-900 mb-3'>Skill Growth</h3>
+                                <ul className='space-y-3 text-sm text-slate-700 mb-6'>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-violet-600 font-bold mt-0.5'>✓</span>
+                                        <span>Learn trending technologies</span>
+                                    </li>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-violet-600 font-bold mt-0.5'>✓</span>
+                                        <span>Build impressive projects</span>
+                                    </li>
+                                    <li className='flex items-start gap-2'>
+                                        <span className='text-violet-600 font-bold mt-0.5'>✓</span>
+                                        <span>Get certifications & credentials</span>
+                                    </li>
+                                </ul>
+                                <button className='w-full py-2 text-sm font-semibold text-violet-600 hover:bg-violet-100 rounded-lg transition-colors'>Learn More →</button>
+                            </div>
+                        </div>
+
+                        {/* Final CTA Section */}
+                        <div className='bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 rounded-3xl p-12 text-center text-white overflow-hidden relative'>
+                            <div className='absolute inset-0 overflow-hidden'>
+                                <div className='absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-float' />
+                                <div className='absolute -bottom-20 -left-40 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-float-slow' />
+                            </div>
+                            <div className='relative z-10'>
+                                <h3 className='text-3xl md:text-4xl font-bold mb-4'>Ready to Launch Your Career?</h3>
+                                <p className='text-lg text-blue-100 mb-8 max-w-2xl mx-auto'>Apply to roles that match your skills, track your applications, and land your dream job today.</p>
+                                <button className='px-10 py-4 bg-gradient-to-r from-blue-400 to-cyan-400 text-slate-900 rounded-xl font-bold text-lg shadow-[0_20px_60px_rgba(59,130,246,0.4)] hover:shadow-[0_30px_100px_rgba(59,130,246,0.6)] hover:scale-105 active:scale-95 transition-all duration-300'>
+                                    Start Applying Now →
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
