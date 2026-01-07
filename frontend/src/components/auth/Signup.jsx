@@ -443,16 +443,15 @@ const Signup = () => {
                         <div className="absolute -top-24 right-12 hidden h-44 w-44 rounded-full bg-sky-400/20 blur-3xl sm:block" />
                         <div className="absolute -bottom-28 left-8 hidden h-48 w-48 rounded-full bg-indigo-500/20 blur-3xl sm:block" />
 
-                        <div className="relative space-y-8">
-                            <header className="space-y-3 text-center lg:text-left">
-                                <span className="auth-mini-badge bg-black border-black">
-                                    <CheckCircle2 className="h-4 w-4 text-sky-400" />
-                                    Step into brilliance
-                                </span>
-                                <div className="space-y-2">
-                                    <h2 className="text-3xl font-semibold text-white drop-shadow-lg">Create your account</h2>
-                                    <p className="text-sm text-black-200 drop-shadow">
-                                        Complete each section to unlock a vibrant dashboard, curated opportunities, and animated profile storytelling.
+                        <div className="relative space-y-16">
+                            <header className="space-y-4 text-center slide-in-down">
+                                <div className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white/80 backdrop-blur">
+                                    Welcome 
+                                 </div>
+                                <div className="space-y-1">
+                                    <h2 className="text-6xl font-bold text-white drop-shadow-lg">Create your account</h2>
+                                    <p className="text-xl text-white/90 font-medium drop-shadow">
+                                        Complete each section to unlock a vibrant
                                     </p>
                                 </div>
                             </header>
@@ -467,7 +466,7 @@ const Signup = () => {
                                     </div>
 
                                     <div className="grid gap-6 lg:gap-8">
-                                        <div className="space-y-3">
+                                        <div className="space-y-3 mt-12">
                                             <Label className="flex items-center gap-2 text-sm font-semibold text-black">
                                                 <UserIcon className="h-4 w-4 text-sky-600" />
                                                 Full name *
